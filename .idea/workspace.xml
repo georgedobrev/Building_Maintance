@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b7d2166-7696-4d68-bf08-bdbea510ed4e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blankfactor/building/maintenance/BuildingMaintenanceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blankfactor/building/maintenance/BuildingMaintenanceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/blankfactor/building/maintenance/BuildingMaintenanceApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/blankfactor/building/maintenance/BuildingMaintenanceApplication.class" afterDir="false" />
-    </list>
+    <list default="true" id="7b7d2166-7696-4d68-bf08-bdbea510ed4e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
