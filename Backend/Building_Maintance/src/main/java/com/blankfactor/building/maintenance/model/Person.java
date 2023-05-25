@@ -1,6 +1,6 @@
-package com.blankfactor.building.maintenance.person;
+package com.blankfactor.building.maintenance.model;
 
-import com.blankfactor.building.maintenance.apartment.Apartment;
+import com.blankfactor.building.maintenance.enums.AccessLevel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

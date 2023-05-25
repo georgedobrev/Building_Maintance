@@ -1,7 +1,7 @@
-package com.blankfactor.building.maintenance.apartment;
+package com.blankfactor.building.maintenance.model;
 
-import com.blankfactor.building.maintenance.building.Building;
-import com.blankfactor.building.maintenance.person.Person;
+import com.blankfactor.building.maintenance.model.Building;
+import com.blankfactor.building.maintenance.model.Person;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

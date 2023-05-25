@@ -1,4 +1,4 @@
-package com.blankfactor.building.maintenance.person;
+package com.blankfactor.building.maintenance.enums;
 
 public enum AccessLevel {
     admin,
