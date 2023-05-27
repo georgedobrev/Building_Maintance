@@ -1,0 +1,23 @@
+.button {
+  font: inherit;
+  cursor: pointer;
+  background-color: #7b7a7a;
+  color: white;
+  padding: 0.5rem 2rem;
+  border-radius: 5px;
+  font-weight: lighter;
+  font-size: large;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: auto;
+  border: none;
+
+  &:hover,
+  &:active {
+    background-color: #6b6b6b;
+  }
+  @media (max-width: 576px) {
+    width: 100%;
+  }
+}
