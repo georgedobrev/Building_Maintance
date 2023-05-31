@@ -12,12 +12,15 @@ import BuildingPic from "../../assets/backgroundBFM.jpg";
 import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
-export default function SignInSide() {
+const SignInSide = () => {
   const theme = useTheme();
+
   const handleSubmit = () => {
     console.log("Submitted");
   };
+
   const handleClickShowPassword = () => {};
+
   return (
     <>
       <CssBaseline />
@@ -55,7 +58,7 @@ export default function SignInSide() {
             },
             zIndex: 1,
             p: theme.spacing(3),
-            "& > *": { mb: 2 }, // Added this line
+            "& > *": { mb: 2 },
           }}
         >
           <Box
@@ -64,7 +67,7 @@ export default function SignInSide() {
               zIndex: 2,
               textAlign: "center",
               width: "80%",
-              "& > *": { mb: 2 }, // Added this line
+              "& > *": { mb: 2 },
             }}
           >
             <Typography
@@ -94,7 +97,7 @@ export default function SignInSide() {
             flexDirection: "column",
             justifyContent: "center",
             p: theme.spacing(3),
-            "& > *": { mb: 2 }, // Added this line
+            "& > *": { mb: 2 },
           }}
         >
           <Box
@@ -102,7 +105,7 @@ export default function SignInSide() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              "& > *": { mb: 2 }, // Added this line
+              "& > *": { mb: 2 },
             }}
           >
             <Typography
@@ -116,7 +119,7 @@ export default function SignInSide() {
               component="form"
               noValidate
               onSubmit={handleSubmit}
-              sx={{ mt: 1, width: "100%", "& > *": { mb: 2 } }} // Added this line
+              sx={{ mt: 1, width: "100%", "& > *": { mb: 2 } }}
             >
               <TextField
                 margin="normal"
@@ -164,7 +167,7 @@ export default function SignInSide() {
                   display: "flex",
                   justifyContent: "space-between",
                   mt: 1,
-                  "& > *": { mb: 2 }, // Added this line
+                  "& > *": { mb: 2 },
                 }}
               >
                 <Link href="#" variant="body2">
@@ -177,4 +180,6 @@ export default function SignInSide() {
       </Box>
     </>
   );
-}
+};
+
+export default SignInSide;

@@ -13,15 +13,19 @@ import About from "./pages/about/About";
 import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import createMyTheme from "./Theme";
+
 const currentUser = true;
+
 const NavbarWrapper = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
   return isLoginPage ? null : <Navbar currentUser={currentUser} />;
 };
+
 const App = () => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const theme = createMyTheme(isDarkMode);
+
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -42,4 +46,5 @@ const App = () => {
     </ThemeProvider>
   );
 };
+
 export default App;

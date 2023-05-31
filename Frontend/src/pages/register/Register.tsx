@@ -4,8 +4,10 @@ import Button from "@mui/material/Button";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import SelectField from "./SelectField";
+
 const Register = () => {
   const theme = useTheme();
+
   return (
     <Box
       display="flex"
