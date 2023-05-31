@@ -46,9 +46,9 @@ const SelectField = () => {
   const handleChange = ({
     target: { value },
   }: {
-    target: { value: string };
+    target: { value: string[] };
   }) => {
-    setNames(typeof value === "string" ? value.split(",") : value);
+    setNames(value);
   };
 
   return (
