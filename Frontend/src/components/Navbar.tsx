@@ -13,13 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/system";
-
-interface NavbarProps {
-  currentUser: boolean;
-  manager: boolean;
-  serviceCompanyAdmin: boolean;
-  serviceCompany: boolean;
-}
+import NavbarProps from "./NavbarProps";
 
 const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -43,16 +37,24 @@ const Navbar = ({
   serviceCompanyAdmin,
   serviceCompany,
 }: NavbarProps) => {
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLButtonElement>(
+    null
+  );
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLButtonElement>(
+    null
+  );
 
   const theme = useTheme();
 
-  const handleOpenNavMenu = (event: any) => {
+  const handleOpenNavMenu = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleOpenUserMenu = (event: any) => {
+  const handleOpenUserMenu = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     setAnchorElUser(event.currentTarget);
   };
 
@@ -220,7 +222,7 @@ const Navbar = ({
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "44px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
