@@ -23,4 +23,7 @@ public class PaymentDetails {
     @JoinColumn(name = "stripe_details_id")
     private StripeDetails stripeDetails;
 
+    @OneToOne(mappedBy = "paymentDetails", orphanRemoval = true)
+    private Building building;
+
 }
