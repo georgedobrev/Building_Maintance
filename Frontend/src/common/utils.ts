@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { ValidationError } from "yup";
 import { FormErrors, FormValues } from "../pages/register/RegisterInterfaces";
 import ValidationSchema from "../pages/register/ValidationSchema";
-import { ValidationError } from "yup";
 
  const useAuthValidations = () => {
 
@@ -36,9 +36,8 @@ import { ValidationError } from "yup";
       }
     }
   };
-
+  
   return { formValues, setFormValues, formErrors, validateField };
 };
-
 
 export default useAuthValidations;
