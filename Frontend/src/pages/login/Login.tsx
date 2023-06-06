@@ -1,22 +1,45 @@
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { IconButton, useTheme } from "@mui/material";
-import BuildingPic from "../../assets/backgroundBFM.jpg";
-import InputAdornment from "@mui/material/InputAdornment";
+import { ChangeEvent } from "react";
+import {
+  IconButton,
+  useTheme,
+  Box,
+  Button,
+  Checkbox,
+  CssBaseline,
+  FormControlLabel,
+  InputAdornment,
+  Link,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import BuildingPic from "../../assets/backgroundBFM.jpg";
+import { FormValues } from "./LoginInterfaces";
+import useAuthValidations from "../../common/utils";
 
 const SignInSide = () => {
   const theme = useTheme();
 
-  const handleSubmit = () => {
-    console.log("Submitted");
+  const { formValues, setFormValues, formErrors, validateField } =
+    useAuthValidations();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    Object.keys(formValues).forEach((field) =>
+      validateField(field as keyof FormValues)
+    );
+    console.log(formValues);
+  };
+
+  const handleChange = (
+    fieldName: keyof FormValues,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setFormValues({
+      ...formValues,
+      [fieldName]: event.target.value,
+    });
   };
 
   const handleClickShowPassword = () => {};
@@ -130,6 +153,13 @@ const SignInSide = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={formValues.email}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleChange("email", e)
+                }
+                onBlur={() => validateField("email")}
+                error={!!formErrors.email}
+                helperText={formErrors.email}
               />
               <TextField
                 margin="normal"
@@ -140,6 +170,13 @@ const SignInSide = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formValues.password}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleChange("password", e)
+                }
+                onBlur={() => validateField("password")}
+                error={!!formErrors.password}
+                helperText={formErrors.password}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">

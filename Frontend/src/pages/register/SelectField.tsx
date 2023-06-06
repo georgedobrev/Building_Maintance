@@ -1,10 +1,13 @@
-import * as React from "react";
-import { Theme, useTheme } from "@mui/material/styles";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import { useState } from "react";
+import {
+  Theme,
+  useTheme,
+  OutlinedInput,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -41,7 +44,7 @@ const getStyles = (name: string, personName: string[], theme: Theme) => {
 
 const SelectField = () => {
   const theme = useTheme();
-  const [names, setNames] = React.useState<string[]>([]);
+  const [names, setNames] = useState<string[]>([]);
 
   const handleChange = ({
     target: { value },

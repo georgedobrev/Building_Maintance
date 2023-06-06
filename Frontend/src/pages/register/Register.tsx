@@ -1,12 +1,32 @@
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
+import { ChangeEvent } from "react";
+import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import SelectField from "./SelectField";
+import useAuthValidations from "../../common/utils";
+import { FormValues } from "./RegisterInterfaces";
 
 const Register = () => {
   const theme = useTheme();
+
+  const { formValues, setFormValues, formErrors, validateField } =
+    useAuthValidations();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    Object.keys(formValues).forEach((field) =>
+      validateField(field as keyof FormValues)
+    );
+    console.log(formValues);
+  };
+
+  const handleChange = (
+    fieldName: keyof FormValues,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setFormValues({
+      ...formValues,
+      [fieldName]: event.target.value,
+    });
+  };
 
   return (
     <Box
@@ -33,6 +53,7 @@ const Register = () => {
       </Typography>
       <Box
         component="form"
+        onSubmit={handleSubmit}
         sx={{
           mt: "1%",
           height: "100vh",
@@ -47,22 +68,50 @@ const Register = () => {
           placeholder="First Name"
           variant="outlined"
           sx={{ width: "100%" }}
+          value={formValues.firstName}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handleChange("firstName", e)
+          }
+          onBlur={() => validateField("firstName")}
+          error={!!formErrors.firstName}
+          helperText={formErrors.firstName}
         />
         <TextField
           placeholder="Last Name"
           variant="outlined"
           sx={{ width: "100%" }}
+          value={formValues.lastName}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handleChange("lastName", e)
+          }
+          onBlur={() => validateField("lastName")}
+          error={!!formErrors.lastName}
+          helperText={formErrors.lastName}
         />
         <TextField
           placeholder="Email"
           variant="outlined"
           sx={{ width: "100%" }}
+          value={formValues.email}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handleChange("email", e)
+          }
+          onBlur={() => validateField("email")}
+          error={!!formErrors.email}
+          helperText={formErrors.email}
         />
         <TextField
           placeholder="Password"
           type="password"
           variant="outlined"
           sx={{ width: "100%" }}
+          value={formValues.password}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            handleChange("password", e)
+          }
+          onBlur={() => validateField("password")}
+          error={!!formErrors.password}
+          helperText={formErrors.password}
         />
         <SelectField />
         <Button
@@ -77,4 +126,5 @@ const Register = () => {
     </Box>
   );
 };
+
 export default Register;
