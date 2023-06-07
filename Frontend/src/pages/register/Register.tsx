@@ -1,11 +1,19 @@
 import { ChangeEvent } from "react";
-import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import SelectField from "./SelectField";
 import useAuthValidations from "../../common/utils";
 import { FormValues } from "./RegisterInterfaces";
 
 const Register = () => {
   const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
@@ -42,7 +50,7 @@ const Register = () => {
         component="h1"
         gutterBottom
         sx={{
-          mt: "8%",
+          mt: matches ? "16%" : "8%",
           fontFamily: theme.typography.fontFamily,
           fontWeight: 700,
           color: theme.palette.primary.main,
@@ -57,7 +65,7 @@ const Register = () => {
         sx={{
           mt: "1%",
           height: "100vh",
-          width: "40vw",
+          width: matches ? "100vw" : "40vw",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
