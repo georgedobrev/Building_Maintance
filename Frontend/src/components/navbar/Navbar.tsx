@@ -15,6 +15,8 @@ import {
   Tooltip,
   MenuItem,
 } from "@mui/material";
+import NavbarProps from "./NavbarProps";
+import DarkModeSwitch from "../DarkMode/DarkModeSwitch";
 
 const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -162,7 +164,11 @@ const Navbar = ({
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <StyledDropdownLink
-                    to={`/${page.replace(/\s/g, "").toLowerCase()}`}
+                    to={
+                      page === "Add User"
+                        ? "/register"
+                        : `/${page.replace(/\s/g, "").toLowerCase()}`
+                    }
                   >
                     {page}
                   </StyledDropdownLink>
@@ -207,13 +213,24 @@ const Navbar = ({
                   },
                 }}
               >
-                <StyledLink to={`/${page.replace(/\s/g, "").toLowerCase()}`}>
+                <StyledLink
+                  to={
+                    page === "Add User"
+                      ? "/register"
+                      : `/${page.replace(/\s/g, "").toLowerCase()}`
+                  }
+                >
                   {page}
                 </StyledLink>
               </Button>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Toggle Dark Mode">
+              <span style={{ marginRight: "12px" }}>
+                <DarkModeSwitch />
+              </span>
+            </Tooltip>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar

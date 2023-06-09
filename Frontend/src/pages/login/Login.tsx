@@ -205,18 +205,6 @@ const SignInSide = () => {
                 Log In
               </Button>
               <GoogleButton />
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mt: 1,
-                  "& > *": { mb: 2 },
-                }}
-              >
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Box>
             </Box>
           </Box>
         </Box>
