@@ -17,6 +17,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import BuildingPic from "../../assets/backgroundBFM.jpg";
 import { FormValues } from "./LoginInterfaces";
 import useAuthValidations from "../../common/utils";
+import GoogleButton from "./GoogleButton";
 
 const SignInSide = () => {
   const theme = useTheme();
@@ -52,7 +53,7 @@ const SignInSide = () => {
           display: "flex",
           width: "100vw",
           height: "100vh",
-          flexDirection: "row",
+          flexDirection: { xs: "column", sm: "row" },
           alignItems: "stretch",
         }}
       >
@@ -89,7 +90,7 @@ const SignInSide = () => {
               position: "relative",
               zIndex: 2,
               textAlign: "center",
-              width: "80%",
+              width: { xs: "100%", sm: "80%" },
               "& > *": { mb: 2 },
             }}
           >
@@ -103,7 +104,7 @@ const SignInSide = () => {
             <Typography
               component="p"
               variant="body1"
-              sx={{ width: "60%", mx: "auto", mt: 3 }}
+              sx={{ width: { xs: "80%", sm: "60%" }, mx: "auto", mt: 3 }}
             >
               This is the place to connect to your neighbours, track and manage
               payments, promote ideas and address issues you come accross.
@@ -142,7 +143,11 @@ const SignInSide = () => {
               component="form"
               noValidate
               onSubmit={handleSubmit}
-              sx={{ mt: 1, width: "100%", "& > *": { mb: 2 } }}
+              sx={{
+                mt: 1,
+                width: { xs: "80%", sm: "50%" },
+                "& > *": { mb: 2 },
+              }}
             >
               <TextField
                 margin="normal"
@@ -199,6 +204,7 @@ const SignInSide = () => {
               >
                 Log In
               </Button>
+              <GoogleButton />
               <Box
                 sx={{
                   display: "flex",
