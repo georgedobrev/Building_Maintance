@@ -1,4 +1,4 @@
-import * as React from "react";
+import { FC } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, Container } from "@mui/material";
 import NotificationCard from "../../components/UI/NotificationCard";
@@ -8,22 +8,22 @@ interface NotificationProps {
   currentUser: boolean;
 }
 
-function Notifications({ currentUser }: NotificationProps) {
+const Notifications: FC<NotificationProps> = ({ currentUser }) => {
   const notifications = useSelector(selectNotifications);
   return (
-    <React.Fragment>
+    <>
       <CssBaseline />
       <Container maxWidth="sm" sx={{}}>
-        {notifications.map((notification, index) => (
+        {notifications.map((notification) => (
           <NotificationCard
-            key={index}
+            key={notification.id}
             currentUser={currentUser}
             title={notification.title}
             description={notification.description}
           />
         ))}
       </Container>
-    </React.Fragment>
+    </>
   );
-}
+};
 export default Notifications;
