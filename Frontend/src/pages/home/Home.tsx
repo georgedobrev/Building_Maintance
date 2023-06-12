@@ -1,14 +1,22 @@
-import HomeProps from "./HomeProps";
+import React from "react";
 
-const Home: React.FC<HomeProps> = ({ dummyProp1 }) => {
+interface HomeProps {
+  manager: boolean;
+  currentUser: boolean;
+}
+
+const Home: React.FC<HomeProps> = ({ manager, currentUser }) => {
   return (
     <div>
-      <h1>TEST</h1>
-      <h1>Prop 1: {dummyProp1}</h1>
-      <h1>TEST</h1>
-      <h1>TEST</h1>
-      <h1>TEST</h1>
-      <h1>TEST</h1>
+      <h1>HOME</h1>
+      <h1>HOME</h1>
+      <h1>HOME</h1>
+      <h1>Manager: {manager}</h1>
+      <h1>currentUser: {currentUser}</h1>
+      <h1>HOME</h1>
+      <h1>HOME</h1>
+      <h1>HOME</h1>
+      <h1>HOME</h1>
     </div>
   );
 };
