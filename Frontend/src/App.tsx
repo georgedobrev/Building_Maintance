@@ -1,18 +1,12 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import Profile from "./pages/profile/Profile";
-import Account from "./pages/account/Account";
-import Pricing from "./pages/pricing/Pricing";
-import Products from "./pages/products/Products";
+import { useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
-import Payments from "./pages/payments/Payments";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-import Notifications from "./pages/announcements/Notifications";
-import About from "./pages/about/About";
-import Home from "./pages/home/Home";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import createMyTheme from "./Theme";
+import Home from "./pages/home/Home";
+import { RootState } from "../src/store/DarkMode/store";
 
 const currentUser = true;
 
@@ -23,7 +17,7 @@ const NavbarWrapper = () => {
 };
 
 const App = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const isDarkMode = useSelector((state: RootState) => state.theme.darkMode);
   const theme = createMyTheme(isDarkMode);
 
   return (
@@ -34,13 +28,6 @@ const App = () => {
           <Route path="/" element={<Home currentUser={currentUser} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/aboutus" element={<About />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/products" element={<Products />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
