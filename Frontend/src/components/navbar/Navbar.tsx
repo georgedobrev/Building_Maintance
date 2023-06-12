@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import NavbarProps from "./NavbarProps";
 import DarkModeSwitch from "../DarkMode/DarkModeSwitch";
+import "./Navbar.scss";
 
 const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -227,7 +228,7 @@ const Navbar = ({
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Toggle Dark Mode">
-              <span style={{ marginRight: "12px" }}>
+              <span className="dark-mode-switch">
                 <DarkModeSwitch />
               </span>
             </Tooltip>
