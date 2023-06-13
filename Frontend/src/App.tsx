@@ -3,17 +3,26 @@ import { useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-import Navbar from "./components/navbar/Navbar";
-import createMyTheme from "./Theme";
+import Notifications from "./pages/notifications/Notifications";
 import Home from "./pages/home/Home";
-import { RootState } from "../src/store/DarkMode/store";
+import Navbar from "./components/Navbar";
+import createMyTheme from "./Theme";
+import Announcements from "./pages/announcements/Announcements";
+import CreateAnnouncement from "./pages/announcements/CreateAnnouncement";
+import { RootState } from "./store/store";
+import Users from "./pages/users/Users";
 
-const currentUser = true;
+const currentUser = false;
+const manager = true;
 
 const NavbarWrapper = () => {
   const location = useLocation();
+
   const isLoginPage = location.pathname === "/login";
-  return isLoginPage ? null : <Navbar currentUser={currentUser} />;
+
+  return isLoginPage ? null : (
+    <Navbar manager={manager} currentUser={currentUser} />
+  );
 };
 
 const App = () => {
@@ -25,9 +34,29 @@ const App = () => {
       <BrowserRouter>
         <NavbarWrapper />
         <Routes>
-          <Route path="/" element={<Home currentUser={currentUser} />} />
+          <Route
+            path="/"
+            element={<Home manager={manager} currentUser={currentUser} />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          {currentUser && (
+            <Route
+              path="/notifications"
+              element={<Notifications currentUser={currentUser} />}
+            />
+          )}
+          {manager && (
+            <Route
+              path="/announcements"
+              element={<Announcements manager={manager} />}
+            />
+          )}
+          <Route
+            path="/create/announcements"
+            element={<CreateAnnouncement />}
+          />
+          <Route path="/users" element={<Users />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

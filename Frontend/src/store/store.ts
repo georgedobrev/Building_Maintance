@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import themeReducer from "./themeSlice";
+import themeReducer from "./DarkMode/themeSlice";
+import notificationReducer from "./notification/notificationSlice";
 
 export const store = configureStore({
   reducer: {
     theme: themeReducer,
+    notification: notificationReducer,
   },
 });
 
