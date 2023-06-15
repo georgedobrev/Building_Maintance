@@ -14,6 +14,7 @@ const ValidationSchema = yup.object().shape({
       /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]/,
       "Password must have at least one uppercase letter and one number"
     ),
+    building:yup.number().required("Building is required"),
 });
 
 export default ValidationSchema;

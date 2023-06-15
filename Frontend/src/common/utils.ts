@@ -3,16 +3,18 @@ import { ValidationError } from "yup";
 import { FormErrors, FormValues } from "../pages/register/RegisterInterfaces";
 import ValidationSchema from "../pages/register/ValidationSchema";
 
- const useAuthValidations = () => {
-
+const useAuthValidations = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
+    building: "",
   });
-  
+
   const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const setBuilding = (value: string | number) => {
+    setFormValues((prevState) => ({ ...prevState, building: value }));
+  };
 
   const validateField = async (fieldName: keyof FormValues) => {
     let value = formValues[fieldName];
@@ -36,8 +38,8 @@ import ValidationSchema from "../pages/register/ValidationSchema";
       }
     }
   };
-  
-  return { formValues, setFormValues, formErrors, validateField };
+
+  return { formValues, setFormValues, formErrors, validateField, setBuilding };
 };
 
 export default useAuthValidations;
