@@ -148,9 +148,8 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
                 {showComments ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </Button>
               <Typography variant="body2" sx={styles.commentTypography}>
-                {currentComment.length === 1
-                  ? `${currentComment.length} Comment`
-                  : `${currentComment.length} Comments`}
+                {currentComment.length}
+                {currentComment.length === 1 ? "Comment" : "Comments"}
               </Typography>
             </Box>
           )}

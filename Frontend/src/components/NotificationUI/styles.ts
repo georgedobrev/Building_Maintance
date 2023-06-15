@@ -3,7 +3,7 @@ import { Theme } from '@mui/material';
 export const getStyles = (theme: Theme) => {
   return {
     outerBox: {
-      marginTop: '16%',
+      marginTop: '82px',
     },
     card: {
       minWidth: 275,
@@ -66,7 +66,7 @@ export const getStyles = (theme: Theme) => {
     commentInnerBox: {
       border: '1px solid',
       borderColor: theme.palette.primary.main,
-      borderRadius: '5px',
+      borderRadius: '4px',
       marginTop: 1,
       marginBottom: 1,
       width: '75%',
