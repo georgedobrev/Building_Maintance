@@ -1,5 +1,4 @@
-import { useEffect, useState, FC } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, FC } from "react";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -16,31 +15,42 @@ import {
 import { addNotification } from "../../store/notification/notificationSlice";
 import "./CreateAnnouncement.scss";
 import { style } from "./ModalStyle";
+import users from "../users/Users.json";
 
-const BasicModal: FC = () => {
-  const [open, setOpen] = useState(false);
+interface CreateAnnouncementProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
   const [formData, setFormData] = useState({
-    id: 0,
+    id: Date.now(),
     title: "",
     description: "",
     assignTo: "",
+    date: new Date().toLocaleString(),
   });
   const theme = useTheme();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    navigate("/announcements");
   };
 
-  useEffect(() => {
-    handleOpen();
-  }, []);
-
   const handleSubmit = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      date: new Date().toLocaleString(),
+    }));
+
     dispatch(addNotification(formData));
+    setFormData({
+      id: Date.now(),
+      title: "",
+      description: "",
+      assignTo: "",
+      date: new Date().toLocaleString(),
+    });
     handleClose();
   };
 
@@ -54,66 +64,73 @@ const BasicModal: FC = () => {
   };
 
   return (
-    <>
-      <Button onClick={handleOpen}>Open modal</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            sx={{
-              color: theme.palette.primary.main,
-            }}
-          >
-            Create Notification
-          </Typography>
-          <TextField
-            margin="normal"
-            label="Title"
-            name="title"
-            value={formData.title}
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={{ ...style, display: "flex", flexDirection: "column" }}>
+        <Typography
+          id="modal-modal-title"
+          variant="h6"
+          component="h2"
+          sx={{
+            color: theme.palette.primary.main,
+          }}
+        >
+          Create Notification
+        </Typography>
+        <TextField
+          required
+          margin="normal"
+          label="Title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+        />
+        <TextField
+          required
+          margin="normal"
+          label="Description"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+        />
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="assign-to-label">Assign To</InputLabel>
+          <Select
+            required
+            labelId="assign-to-label"
+            id="assign-to-select"
+            name="assignTo"
+            value={formData.assignTo}
+            label="Assign To"
             onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
-            label="Description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-          />
-          <FormControl fullWidth margin="normal">
-            <InputLabel id="assign-to-label">Assign To</InputLabel>
-            <Select
-              labelId="assign-to-label"
-              id="assign-to-select"
-              name="assignTo"
-              value={formData.assignTo}
-              label="Assign To"
-              onChange={handleChange}
-            >
-              <MenuItem value={"Person 1"}>Person 1</MenuItem>
-              <MenuItem value={"Person 2"}>Person 2</MenuItem>
-            </Select>
-          </FormControl>
-          <Button
-            onClick={handleSubmit}
-            fullWidth
-            variant="contained"
-            color="primary"
-            className="announcement-submit"
           >
-            Submit
-          </Button>
-        </Box>
-      </Modal>
-    </>
+            {users.map((user) => (
+              <MenuItem key={user.id} value={user.id}>
+                {user.firstName} {user.lastName} building {user.buildingID} unit{" "}
+                {user.unitID}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button
+          onClick={handleSubmit}
+          fullWidth
+          variant="contained"
+          color="primary"
+          className="announcement-submit"
+          disabled={
+            !formData.title || !formData.description || !formData.assignTo
+          }
+        >
+          Submit
+        </Button>
+      </Box>
+    </Modal>
   );
 };
 
-export default BasicModal;
+export default CreateAnnouncement;

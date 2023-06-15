@@ -1,4 +1,5 @@
 export interface Notification {
+  date: string;
   id: number;
   title: string;
   description: string;

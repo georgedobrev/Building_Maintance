@@ -5,10 +5,9 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Notifications from "./pages/notifications/Notifications";
 import Home from "./pages/home/Home";
-import Navbar from "./components/Navbar";
+import Navbar from "../src/components/navbar/Navbar";
 import createMyTheme from "./Theme";
 import Announcements from "./pages/announcements/Announcements";
-import CreateAnnouncement from "./pages/announcements/CreateAnnouncement";
 import { RootState } from "./store/store";
 import Users from "./pages/users/Users";
 
@@ -49,13 +48,9 @@ const App = () => {
           {manager && (
             <Route
               path="/announcements"
-              element={<Announcements manager={manager} />}
+              element={<Announcements currentUser={currentUser} />}
             />
           )}
-          <Route
-            path="/create/announcements"
-            element={<CreateAnnouncement />}
-          />
           <Route path="/users" element={<Users />} />
         </Routes>
       </BrowserRouter>

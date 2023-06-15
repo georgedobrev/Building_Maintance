@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import { useDispatch } from "react-redux";
 import {
   Box,
   Button,
@@ -10,20 +11,22 @@ import {
 import SelectField from "./SelectField";
 import useAuthValidations from "../../common/utils";
 import { FormValues } from "./RegisterInterfaces";
+import { addUser } from "../../store/users/userSlice";
 
 const Register = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { formValues, setFormValues, formErrors, validateField } =
+  const { formValues, setFormValues, formErrors, validateField, setBuilding } =
     useAuthValidations();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     Object.keys(formValues).forEach((field) =>
       validateField(field as keyof FormValues)
     );
-    console.log(formValues);
+    dispatch(addUser(formValues));
   };
 
   const handleChange = (
@@ -108,20 +111,8 @@ const Register = () => {
           error={!!formErrors.email}
           helperText={formErrors.email}
         />
-        <TextField
-          placeholder="Password"
-          type="password"
-          variant="outlined"
-          sx={{ width: "100%" }}
-          value={formValues.password}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            handleChange("password", e)
-          }
-          onBlur={() => validateField("password")}
-          error={!!formErrors.password}
-          helperText={formErrors.password}
-        />
-        <SelectField />
+
+        <SelectField value={formValues.building} onChange={setBuilding} />
         <Button
           type="submit"
           variant="contained"

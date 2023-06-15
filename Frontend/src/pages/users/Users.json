@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe",
+    "password": "password1",
+    "email": "john@example.com",
+    "unitID": 101,
+    "companyID": 201,
+    "buildingID": 101
+  },
+  {
+    "id": 2,
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "username": "janedoe",
+    "password": "password2",
+    "email": "jane@example.com",
+    "unitID": 102,
+    "companyID": 202,
+    "buildingID": 102
+  },
+  {
+    "id": 3,
+    "firstName": "Alice",
+    "lastName": "Johnson",
+    "username": "alicejohnson",
+    "password": "password3",
+    "email": "alice@example.com",
+    "unitID": 103,
+    "companyID": 203,
+    "buildingID": 103
+  },
+  {
+    "id": 4,
+    "firstName": "Bob",
+    "lastName": "Smith",
+    "username": "bobsmith",
+    "password": "password4",
+    "email": "bob@example.com",
+    "unitID": 104,
+    "companyID": 204,
+    "buildingID": 104
+  },
+  {
+    "id": 5,
+    "firstName": "Charlie",
+    "lastName": "Brown",
+    "username": "charliebrown",
+    "password": "password5",
+    "email": "charlie@example.com",
+    "unitID": 105,
+    "companyID": 205,
+    "buildingID": 105
+  }
+]

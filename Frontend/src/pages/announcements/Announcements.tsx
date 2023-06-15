@@ -1,14 +1,16 @@
-import { Link } from "react-router-dom";
 import { useTheme, Box, Button } from "@mui/material";
+import { useState } from "react";
 import Notifications from "../notifications/Notifications";
 import CampaignOutlinedIcon from "@mui/icons-material/CampaignOutlined";
+import CreateAnnouncement from "./CreateAnnouncement";
 
 interface AnnouncementsProps {
-  manager: boolean;
+  currentUser: boolean;
 }
 
-const Announcements = ({ manager }: AnnouncementsProps) => {
+const Announcements = ({ currentUser }: AnnouncementsProps) => {
   const theme = useTheme();
+  const [open, setOpen] = useState(false);
 
   return (
     <Box
@@ -20,24 +22,22 @@ const Announcements = ({ manager }: AnnouncementsProps) => {
         width: "100%",
       }}
     >
-      {manager && (
-        <Link to="/create/announcements">
-          <Button
-            sx={{
-              color:
-                theme.palette.mode === "dark"
-                  ? theme.palette.primary.main
-                  : theme.palette.primary.main,
-            }}
-            size="large"
-            startIcon={<CampaignOutlinedIcon />}
-          >
-            Create Announcement
-          </Button>
-        </Link>
-      )}
+      <Button
+        sx={{
+          color:
+            theme.palette.mode === "dark"
+              ? theme.palette.primary.main
+              : theme.palette.primary.main,
+        }}
+        size="large"
+        startIcon={<CampaignOutlinedIcon />}
+        onClick={() => setOpen(true)}
+      >
+        Create Announcement
+      </Button>
       <Box sx={{ mt: -10, width: "100%" }}>
-        <Notifications />
+        <CreateAnnouncement open={open} setOpen={setOpen} />
+        <Notifications currentUser={currentUser} />
       </Box>
     </Box>
   );
