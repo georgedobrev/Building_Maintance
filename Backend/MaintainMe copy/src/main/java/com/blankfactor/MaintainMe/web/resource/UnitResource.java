@@ -10,13 +10,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class UnitResource {
-    private Long id;
+
+    private Long buildingId;
     private Integer unitNumber;
     private Float invoiceAmount;
     private Float sqm;
     private Float idealSqm;
     private Integer residents;
     private Integer taxablePets;
-    private List<RegistrationRequest> users;
-
+    private Long unitTypeId;
 }

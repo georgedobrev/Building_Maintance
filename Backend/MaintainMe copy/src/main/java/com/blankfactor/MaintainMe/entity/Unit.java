@@ -25,7 +25,7 @@ public class Unit {
     @Column(name = "unit_number", nullable = false)
     private Integer unitNumber;
 
-    @Column(name = "invoice_amount", nullable = false)
+    @Column(name = "invoice_amount")
     private Float invoiceAmount;
 
     @Column(name = "sqm", nullable = false)
@@ -34,10 +34,10 @@ public class Unit {
     @Column(name = "ideal_sqm", nullable = false)
     private Float idealSqm;
 
-    @Column(name = "residents", nullable = false)
+    @Column(name = "residents")
     private Integer residents;
 
-    @Column(name = "taxable_pets", nullable = false)
+    @Column(name = "taxable_pets")
     private Integer taxablePets;
 
 

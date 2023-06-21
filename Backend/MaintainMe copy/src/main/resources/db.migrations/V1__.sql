@@ -64,10 +64,10 @@ VALUES (1, 'USER'), (2, 'ADMIN');
 CREATE TABLE unit
 (
     ideal_sqm      FLOAT(12) NOT NULL,
-    invoice_amount FLOAT(12) NOT NULL,
-    residents      INT       NOT NULL,
+    invoice_amount FLOAT(12) ,
+    residents      INT       ,
     sqm            FLOAT(12) NOT NULL,
-    taxable_pets   INT       NOT NULL,
+    taxable_pets   INT       ,
     unit_number    INT       NOT NULL,
     building_id    BIGINT    NOT NULL,
     id             BIGINT AUTO_INCREMENT NOT NULL,
