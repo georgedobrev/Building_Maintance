@@ -46,10 +46,6 @@ public class Notification {
     @JoinColumn(name = "sender_id", nullable = false)
     private User user;
 
-
-
-
-    @JsonIgnore
     @OneToMany(mappedBy = "notification", orphanRemoval = true)
     @OrderBy("date DESC")
     private List<Comment> comments = new ArrayList<>();

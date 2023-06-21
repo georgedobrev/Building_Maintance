@@ -11,6 +11,7 @@ import com.blankfactor.MaintainMe.web.exception.InvalidCommentException;
 import com.blankfactor.MaintainMe.web.exception.InvalidNotificationException;
 import com.blankfactor.MaintainMe.web.resource.*;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -41,9 +42,11 @@ public class CommentService {
 
         try {
 
+            User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
             var comment = Comment.builder()
                     .text(commentRequest.getText())
-                    .user(user)
+                    .user(authUser)
                     .notification(notification)
                     .date(date)
                     .build();
