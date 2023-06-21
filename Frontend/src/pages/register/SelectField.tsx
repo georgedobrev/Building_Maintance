@@ -1,10 +1,14 @@
-import * as React from "react";
-import { Theme, useTheme } from "@mui/material/styles";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import { useState } from "react";
+import {
+  Theme,
+  useTheme,
+  OutlinedInput,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
+import Users from "../users/Users.json";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -17,18 +21,7 @@ const MenuProps = {
   },
 };
 
-const buildings = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
+const buildings = Users.map((user) => user.buildingID);
 
 const getStyles = (name: string, personName: string[], theme: Theme) => {
   return {
@@ -39,16 +32,21 @@ const getStyles = (name: string, personName: string[], theme: Theme) => {
   };
 };
 
-const SelectField = () => {
+interface SelectFieldProps {
+  value: number | string;
+  onChange: (value: number) => void;
+}
+
+const SelectField: React.FC<SelectFieldProps> = ({ value, onChange }) => {
   const theme = useTheme();
-  const [names, setNames] = React.useState<string[]>([]);
+  const [names, setNames] = useState<string[]>([]);
 
   const handleChange = ({
     target: { value },
   }: {
-    target: { value: string[] };
+    target: { value: unknown };
   }) => {
-    setNames(value);
+    onChange(value as number);
   };
 
   return (
@@ -57,8 +55,7 @@ const SelectField = () => {
       <Select
         labelId="demo-multiple-name-label"
         id="demo-multiple-name"
-        multiple
-        value={names}
+        value={value}
         onChange={handleChange}
         input={<OutlinedInput label="Name" />}
         MenuProps={MenuProps}

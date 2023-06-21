@@ -1,29 +1,31 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import Profile from "./pages/profile/Profile";
-import Account from "./pages/account/Account";
-import Pricing from "./pages/pricing/Pricing";
-import Products from "./pages/products/Products";
+import { useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
-import Payments from "./pages/payments/Payments";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-import Notifications from "./pages/announcements/Notifications";
-import About from "./pages/about/About";
+import Notifications from "./pages/notifications/Notifications";
 import Home from "./pages/home/Home";
-import Navbar from "./components/Navbar";
+import Navbar from "../src/components/navbar/Navbar";
 import createMyTheme from "./Theme";
+import Announcements from "./pages/announcements/Announcements";
+import { RootState } from "./store/store";
+import Users from "./pages/users/Users";
 
-const currentUser = true;
+const currentUser = false;
+const manager = true;
 
 const NavbarWrapper = () => {
   const location = useLocation();
+
   const isLoginPage = location.pathname === "/login";
-  return isLoginPage ? null : <Navbar currentUser={currentUser} />;
+
+  return isLoginPage ? null : (
+    <Navbar manager={manager} currentUser={currentUser} />
+  );
 };
 
 const App = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const isDarkMode = useSelector((state: RootState) => state.theme.darkMode);
   const theme = createMyTheme(isDarkMode);
 
   return (
@@ -31,16 +33,25 @@ const App = () => {
       <BrowserRouter>
         <NavbarWrapper />
         <Routes>
-          <Route path="/" element={<Home currentUser={currentUser} />} />
+          <Route
+            path="/"
+            element={<Home manager={manager} currentUser={currentUser} />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/aboutus" element={<About />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/products" element={<Products />} />
+          {currentUser && (
+            <Route
+              path="/notifications"
+              element={<Notifications currentUser={currentUser} />}
+            />
+          )}
+          {manager && (
+            <Route
+              path="/announcements"
+              element={<Announcements currentUser={currentUser} />}
+            />
+          )}
+          <Route path="/users" element={<Users />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

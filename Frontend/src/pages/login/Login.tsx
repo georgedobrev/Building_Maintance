@@ -1,22 +1,46 @@
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { IconButton, useTheme } from "@mui/material";
-import BuildingPic from "../../assets/backgroundBFM.jpg";
-import InputAdornment from "@mui/material/InputAdornment";
+import { ChangeEvent } from "react";
+import {
+  IconButton,
+  useTheme,
+  Box,
+  Button,
+  Checkbox,
+  CssBaseline,
+  FormControlLabel,
+  InputAdornment,
+  Link,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import BuildingPic from "../../assets/backgroundBFM.jpg";
+import { FormValues } from "./LoginInterfaces";
+import useAuthValidations from "../../common/utils";
+import GoogleButton from "./GoogleButton";
 
 const SignInSide = () => {
   const theme = useTheme();
 
-  const handleSubmit = () => {
-    console.log("Submitted");
+  const { formValues, setFormValues, formErrors, validateField } =
+    useAuthValidations();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    Object.keys(formValues).forEach((field) =>
+      validateField(field as keyof FormValues)
+    );
+    console.log(formValues);
+  };
+
+  const handleChange = (
+    fieldName: keyof FormValues,
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setFormValues({
+      ...formValues,
+      [fieldName]: event.target.value,
+    });
   };
 
   const handleClickShowPassword = () => {};
@@ -29,7 +53,7 @@ const SignInSide = () => {
           display: "flex",
           width: "100vw",
           height: "100vh",
-          flexDirection: "row",
+          flexDirection: { xs: "column", sm: "row" },
           alignItems: "stretch",
         }}
       >
@@ -66,7 +90,7 @@ const SignInSide = () => {
               position: "relative",
               zIndex: 2,
               textAlign: "center",
-              width: "80%",
+              width: { xs: "100%", sm: "80%" },
               "& > *": { mb: 2 },
             }}
           >
@@ -80,7 +104,7 @@ const SignInSide = () => {
             <Typography
               component="p"
               variant="body1"
-              sx={{ width: "60%", mx: "auto", mt: 3 }}
+              sx={{ width: { xs: "80%", sm: "60%" }, mx: "auto", mt: 3 }}
             >
               This is the place to connect to your neighbours, track and manage
               payments, promote ideas and address issues you come accross.
@@ -119,7 +143,11 @@ const SignInSide = () => {
               component="form"
               noValidate
               onSubmit={handleSubmit}
-              sx={{ mt: 1, width: "100%", "& > *": { mb: 2 } }}
+              sx={{
+                mt: 1,
+                width: { xs: "80%", sm: "50%" },
+                "& > *": { mb: 2 },
+              }}
             >
               <TextField
                 margin="normal"
@@ -130,6 +158,13 @@ const SignInSide = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={formValues.email}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleChange("email", e)
+                }
+                onBlur={() => validateField("email")}
+                error={!!formErrors.email}
+                helperText={formErrors.email}
               />
               <TextField
                 margin="normal"
@@ -140,6 +175,13 @@ const SignInSide = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formValues.password}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  handleChange("password", e)
+                }
+                onBlur={() => validateField("password")}
+                error={!!formErrors.password}
+                helperText={formErrors.password}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -162,18 +204,7 @@ const SignInSide = () => {
               >
                 Log In
               </Button>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mt: 1,
-                  "& > *": { mb: 2 },
-                }}
-              >
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Box>
+              <GoogleButton />
             </Box>
           </Box>
         </Box>
