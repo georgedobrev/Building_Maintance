@@ -8,21 +8,23 @@ import com.blankfactor.MaintainMe.web.resource.RegistrationRequest;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 //Controller for user registration and log in authentication
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public AuthenticationController(UserService userService) {
-        this.userService = userService;
-    }
+    //private final Principal principal;
 
     @PostMapping("/register")
     public ResponseEntity registerUser(@Valid @RequestBody RegistrationRequest registrationRequest){
@@ -37,7 +39,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginBody){
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginBody, Principal principal){
         String jwt=userService.loginUser(loginBody);
         if(jwt==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -59,13 +61,14 @@ public class AuthenticationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-
-
     }
+
+
 
     @GetMapping("/me")
     public User getLoggedInUserProfile(@AuthenticationPrincipal User user){ //when spring calls this method it will
         // automatically go into the get Authentication it will cast it onto the user and inject it as a parameter
+
 
         return user;
 

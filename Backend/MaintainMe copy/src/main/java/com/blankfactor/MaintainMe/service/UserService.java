@@ -8,6 +8,9 @@ import com.blankfactor.MaintainMe.web.assembler.BuildingAssembler;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.*;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,16 +82,28 @@ public class UserService {
 
 
 
-public String loginUser(LoginRequest loginBody){
-    Optional<User> optionalUser= localUserRepository.findByUsernameIgnoreCase(loginBody.getUsername());
-    if(optionalUser.isPresent()){
-        User user=optionalUser.get();
-        if(encryptionService.verifyPassword(loginBody.getPassword(),user.getPassword())){
-            return jwtService.generateJWT(user);
-        }
+    public String loginUser(LoginRequest loginBody) {
+        Optional<User> optionalUser = localUserRepository.findByUsernameIgnoreCase(loginBody.getUsername());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
+                // Create authentication token with the user's details
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
+                // Set the created authentication in the security context
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+                context.setAuthentication(authentication);
+                SecurityContextHolder.setContext(context);
+                System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+                // Return the authenticated user or generate JWT here
+                return jwtService.generateJWT(user);
+            }
+        }
+        // Throw an exception or return an error response for invalid credentials
+        throw new RuntimeException("Invalid credentials");
     }
-    return null;
-}
+
 
 }

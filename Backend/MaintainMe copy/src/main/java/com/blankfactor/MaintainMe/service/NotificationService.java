@@ -12,10 +12,20 @@ import com.blankfactor.MaintainMe.web.resource.NotificationByBuildingRequest;
 import com.blankfactor.MaintainMe.web.resource.NotificationDeleteRequest;
 import com.blankfactor.MaintainMe.web.resource.NotificationEditRequest;
 import com.blankfactor.MaintainMe.web.resource.NotificationRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -39,17 +49,18 @@ public class NotificationService {
                 .orElseThrow(() -> new Exception("Building not found"));
 
 
-        User user= userRepository.findById(notificationRequest.getUserId())
-                .orElseThrow(() -> new Exception("User not found"));
-
-
         try {
+
+            User authUser = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+            Date date = new Date();
+            
             var notification = Notification.builder()
                     .messageTitle(notificationRequest.getMessageTitle())
                     .information(notificationRequest.getInformation())
-                    .date(notificationRequest.getDate())
+                    .date(date)
                     .building(building)
-                    .user(user)
+                    .user(authUser)
                     .build();
 
             notificationRepository.save(notification);

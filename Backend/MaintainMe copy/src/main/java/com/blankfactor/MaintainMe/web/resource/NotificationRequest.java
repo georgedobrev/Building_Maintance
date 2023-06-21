@@ -21,11 +21,8 @@ public class NotificationRequest {
         @NotEmpty
         private String information;
 
-        private Date date;
-
         private Long buildingId;
 
-        private Long userId;
 
 
 }
