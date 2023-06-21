@@ -24,21 +24,30 @@ CREATE TABLE building
 
 CREATE TABLE comment
 (
-    date            date         NOT NULL,
+    date            DATE NOT NULL,
     id              BIGINT AUTO_INCREMENT NOT NULL,
-    notification_id BIGINT       NOT NULL,
+    notification_id BIGINT NOT NULL,
     text            VARCHAR(255) NOT NULL,
-    CONSTRAINT PK_COMMENT PRIMARY KEY (id)
+    sender_id       BIGINT NOT NULL,
+    CONSTRAINT PK_COMMENT PRIMARY KEY (id),
+    CONSTRAINT FK_COMMENT_SENDER FOREIGN KEY (sender_id) REFERENCES user(id),
+    CONSTRAINT FK_COMMENT_NOTIFICATION FOREIGN KEY (notification_id) REFERENCES notification(id)
 );
+
 
 CREATE TABLE notification
 (
-    date        date         NOT NULL,
+    date        DATE NOT NULL,
     id          BIGINT AUTO_INCREMENT NOT NULL,
     information VARCHAR(255) NOT NULL,
     message     VARCHAR(255) NOT NULL,
-    CONSTRAINT PK_NOTIFICATION PRIMARY KEY (id)
+    building_id BIGINT NOT NULL,
+    sender_id   BIGINT NOT NULL,
+    CONSTRAINT PK_NOTIFICATION PRIMARY KEY (id),
+    CONSTRAINT FK_NOTIFICATION_BUILDING FOREIGN KEY (building_id) REFERENCES building(id),
+    CONSTRAINT FK_NOTIFICATION_SENDER FOREIGN KEY (sender_id) REFERENCES user(id)
 );
+
 
 CREATE TABLE `role`
 (

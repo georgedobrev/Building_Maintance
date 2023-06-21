@@ -1,15 +1,17 @@
 package com.blankfactor.MaintainMe.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "comment")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +28,9 @@ public class Comment {
     @ManyToOne(optional = false)
     @JoinColumn(name = "notification_id", nullable = false)
     private Notification notification;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User user;
 
 }
