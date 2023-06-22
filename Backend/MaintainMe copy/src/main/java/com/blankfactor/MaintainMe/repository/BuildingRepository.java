@@ -9,4 +9,6 @@ public interface BuildingRepository extends ListCrudRepository<Building,Long> {
 
 
 
+
+
 }
