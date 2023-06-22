@@ -7,10 +7,7 @@ import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.Optional;
 
-public interface BuildingRepository extends JpaRepository<Building,Long> {
+public interface BuildingRepository extends ListCrudRepository<Building,Long> {
     Building findByAddress(Address address);
-
-
-
 
 }

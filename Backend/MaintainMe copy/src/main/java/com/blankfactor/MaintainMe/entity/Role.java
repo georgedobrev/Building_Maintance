@@ -2,6 +2,7 @@ package com.blankfactor.MaintainMe.entity;
 
 import com.blankfactor.MaintainMe.enums.UserRole;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

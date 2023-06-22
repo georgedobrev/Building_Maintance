@@ -23,21 +23,13 @@ public class BuildingController {
         this.buildingAssembler = buildingAssembler;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<BuildingResource>> getBuildings() {
-        List<Building> buildings = buildingService.getAllBuildings();
-        List<BuildingResource> result = new ArrayList<>();
-
-        for (Building building : buildings) {
-
-            result.add(buildingAssembler.toResource(building));
-        }
-
-        return ResponseEntity.ok(result);
+    @GetMapping("/all")
+    public ResponseEntity<List<Building>> getBuildings() {
+        return ResponseEntity.ok( buildingService.getAllBuildings());
     }
 
 
-    @PostMapping()
+    @PostMapping("/create")
     public ResponseEntity<BuildingResource> createBuilding(@RequestBody BuildingResource buildingResource) {
         Building createdBuilding = buildingService.createBuilding(buildingAssembler.fromResource(buildingResource));
         return ResponseEntity.status(HttpStatus.CREATED).body(buildingAssembler.toResource(createdBuilding));

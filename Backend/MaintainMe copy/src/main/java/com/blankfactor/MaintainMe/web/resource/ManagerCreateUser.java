@@ -1,16 +1,17 @@
 package com.blankfactor.MaintainMe.web.resource;
 
+import com.blankfactor.MaintainMe.entity.Building;
+import com.blankfactor.MaintainMe.entity.Unit;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class ManagerRegistrationRequest {
+public class ManagerCreateUser {
 
-    BuildingResource buildingResource;
     RegistrationRequest registrationRequest;
+    Building building;
+    Unit unit;
 }
