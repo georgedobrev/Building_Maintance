@@ -37,7 +37,7 @@ public class BuildingController {
     }
 
 
-    @PostMapping()
+    @PostMapping("/create")
     public ResponseEntity<BuildingResource> createBuilding(@RequestBody BuildingResource buildingResource) {
         Building createdBuilding = buildingService.createBuilding(buildingAssembler.fromResource(buildingResource));
         return ResponseEntity.status(HttpStatus.CREATED).body(buildingAssembler.toResource(createdBuilding));
