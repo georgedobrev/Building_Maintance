@@ -24,16 +24,8 @@ public class BuildingController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<BuildingResource>> getBuildings() {
-        List<Building> buildings = buildingService.getAllBuildings();
-        List<BuildingResource> result = new ArrayList<>();
-
-        for (Building building : buildings) {
-
-            result.add(buildingAssembler.toResource(building));
-        }
-
-        return ResponseEntity.ok(result);
+    public ResponseEntity<List<Building>> getBuildings() {
+        return ResponseEntity.ok( buildingService.getAllBuildings());
     }
 
 
