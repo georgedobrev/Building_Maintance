@@ -14,6 +14,8 @@ public interface LocalUserRepository extends ListCrudRepository<User,Long> {
 
     Optional<User> findByEmailIgnoreCase(String email);
 
+    User getUserByEmail(String email);
+
 
 
 

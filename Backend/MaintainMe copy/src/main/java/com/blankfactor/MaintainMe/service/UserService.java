@@ -8,11 +8,13 @@ import com.blankfactor.MaintainMe.web.assembler.BuildingAssembler;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.*;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,27 +23,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    private LocalUserRepository localUserRepository;
-    private EncryptionService encryptionService;
-    private JWTService jwtService;
-    private AddressRepository addressRepository;
-    private BuildingRepository buildingRepository;
+    private final LocalUserRepository localUserRepository;
+    private final EncryptionService encryptionService;
+    private final JWTService jwtService;
+    private final  AddressRepository addressRepository;
+    private final BuildingRepository buildingRepository;
 
-    private UserRoleBuildingRepository userRoleBuildingRepository;
+    private final UserRoleBuildingRepository userRoleBuildingRepository;
 
     ManagerCreateUser managerCreateUser;
 
 
-    public UserService(LocalUserRepository localUserRepository, EncryptionService encryptionService, JWTService jwtService, AddressRepository addressRepository, BuildingRepository buildingRepository, UserRoleBuildingRepository userRoleBuildingRepository) {
-        this.localUserRepository = localUserRepository;
-        this.encryptionService = encryptionService;
-        this.jwtService = jwtService;
-        this.addressRepository = addressRepository;
-        this.buildingRepository = buildingRepository;
-        this.userRoleBuildingRepository = userRoleBuildingRepository;
-    }
 
     public User registerUser(RegistrationRequest registrationRequest) throws UserAlreadyExistsException {
         if (localUserRepository.findByEmailIgnoreCase(registrationRequest.getEmail()).isPresent() ||

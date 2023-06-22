@@ -2,6 +2,7 @@ package com.blankfactor.MaintainMe.web.controller;
 
 import com.blankfactor.MaintainMe.entity.Building;
 import com.blankfactor.MaintainMe.entity.UserRoleBuilding;
+import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.LoginRequest;
 import com.blankfactor.MaintainMe.web.resource.LoginResponse;
@@ -10,6 +11,7 @@ import com.blankfactor.MaintainMe.web.resource.RegistrationRequest;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,13 +25,13 @@ import java.util.Optional;
 //Controller for user registration and log in authentication
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
 
-    private UserService userService;
+    private final UserService userService;
+    private final LocalUserRepository repository;
 
-    public AuthenticationController(UserService userService) {
-        this.userService = userService;
-    }
+
 
     @PostMapping("/register")
     public ResponseEntity registerUser(@Valid @RequestBody RegistrationRequest registrationRequest){
@@ -51,8 +53,11 @@ public class AuthenticationController {
         }
         else {
 
+            User user  = repository.getUserByEmail(loginBody.getEmail());
+
             LoginResponse response=new LoginResponse();
             response.setJwt(jwt);
+            response.setUser(user);
             return ResponseEntity.ok(response);
 
         }
