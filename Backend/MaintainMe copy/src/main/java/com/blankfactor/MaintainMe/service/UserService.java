@@ -91,7 +91,7 @@ public class UserService {
     }
 
 public String loginUser(LoginRequest loginBody){
-    Optional<User> optionalUser= localUserRepository.findByUsernameIgnoreCase(loginBody.getUsername());
+    Optional<User> optionalUser= localUserRepository.findByEmailIgnoreCase(loginBody.getEmail());
     if(optionalUser.isPresent()){
         User user=optionalUser.get();
         if(encryptionService.verifyPassword(loginBody.getPassword(),user.getPassword())){
