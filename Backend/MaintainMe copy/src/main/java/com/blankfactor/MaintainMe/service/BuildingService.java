@@ -25,8 +25,9 @@ public class BuildingService {
         this.addressRepository = addressRepository;
     }
 
-    public List<Building> getAllBuildings() {
-        return buildingRepository.findAll();
+    public List<Building> getAllBuildings(){
+        List<Building> buildings = buildingRepository.findAll();
+        return buildings;
     }
 
     public Building createBuilding(Building building) {

@@ -27,8 +27,6 @@ public class NotificationService {
     private final LocalUserRepository userRepository;
 
 
-
-
     public List<Notification> getAllNotificationsByBuilding(NotificationByBuildingRequest request){
         return notificationRepository.getNotificationByBuildingId(request.getId());
     }

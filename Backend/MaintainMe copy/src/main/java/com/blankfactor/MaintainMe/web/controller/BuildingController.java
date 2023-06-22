@@ -23,7 +23,7 @@ public class BuildingController {
         this.buildingAssembler = buildingAssembler;
     }
 
-    @GetMapping()
+    @GetMapping("/all")
     public ResponseEntity<List<BuildingResource>> getBuildings() {
         List<Building> buildings = buildingService.getAllBuildings();
         List<BuildingResource> result = new ArrayList<>();
