@@ -1,11 +1,12 @@
 package com.blankfactor.MaintainMe.web.controller;
 
 import com.blankfactor.MaintainMe.entity.Comment;
-import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.service.CommentService;
 import com.blankfactor.MaintainMe.web.exception.InvalidCommentException;
-import com.blankfactor.MaintainMe.web.exception.InvalidNotificationException;
-import com.blankfactor.MaintainMe.web.resource.*;
+import com.blankfactor.MaintainMe.web.resource.Comment.CommentByNotificationRequest;
+import com.blankfactor.MaintainMe.web.resource.Comment.CommentRequest;
+import com.blankfactor.MaintainMe.web.resource.Comment.EditCommentRequest;
+import com.blankfactor.MaintainMe.web.resource.Notification.DeleteCommentRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

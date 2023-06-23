@@ -1,4 +1,4 @@
-package com.blankfactor.MaintainMe.web.resource;
+package com.blankfactor.MaintainMe.web.resource.Login;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

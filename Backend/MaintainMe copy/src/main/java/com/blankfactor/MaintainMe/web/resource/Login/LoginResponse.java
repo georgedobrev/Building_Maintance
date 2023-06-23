@@ -1,4 +1,4 @@
-package com.blankfactor.MaintainMe.web.resource;
+package com.blankfactor.MaintainMe.web.resource.Login;
 
 import com.blankfactor.MaintainMe.entity.User;
 import lombok.AllArgsConstructor;

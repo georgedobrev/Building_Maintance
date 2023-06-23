@@ -60,10 +60,3 @@ public class BuildingController {
         return ResponseEntity.ok(updatedBuildingResource);
     }
     }
-
-
-
-
-
-
-

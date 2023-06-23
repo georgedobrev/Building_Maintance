@@ -2,6 +2,7 @@ package com.blankfactor.MaintainMe.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.blankfactor.MaintainMe.entity.Role;
 import com.blankfactor.MaintainMe.entity.User;
 import jakarta.annotation.PostConstruct;
 import lombok.Setter;
@@ -30,6 +31,7 @@ public class JWTService {
     public String generateJWT(User user){
         return JWT.create()
                 .withClaim(USERNAME_KEY,user.getUsername())
+                //.withClaim("claims", user.getRole) todo
                 .withExpiresAt(new Date(System.currentTimeMillis()+(1000*expiryInSeconds)))
                 .withIssuer(issuer)
                 .sign(algorithm);

@@ -1,4 +1,4 @@
-package com.blankfactor.MaintainMe.web.resource;
+package com.blankfactor.MaintainMe.web.resource.Notification;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

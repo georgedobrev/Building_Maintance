@@ -1,6 +1,5 @@
 package com.blankfactor.MaintainMe.service;
 
-import com.blankfactor.MaintainMe.entity.Building;
 import com.blankfactor.MaintainMe.entity.Comment;
 import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.entity.User;
@@ -8,8 +7,10 @@ import com.blankfactor.MaintainMe.repository.CommentRepository;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.NotificationRepository;
 import com.blankfactor.MaintainMe.web.exception.InvalidCommentException;
-import com.blankfactor.MaintainMe.web.exception.InvalidNotificationException;
-import com.blankfactor.MaintainMe.web.resource.*;
+import com.blankfactor.MaintainMe.web.resource.Comment.CommentByNotificationRequest;
+import com.blankfactor.MaintainMe.web.resource.Comment.CommentRequest;
+import com.blankfactor.MaintainMe.web.resource.Comment.EditCommentRequest;
+import com.blankfactor.MaintainMe.web.resource.Notification.DeleteCommentRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

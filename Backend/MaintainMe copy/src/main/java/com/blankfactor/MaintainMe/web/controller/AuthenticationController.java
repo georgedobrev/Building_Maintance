@@ -1,11 +1,9 @@
 package com.blankfactor.MaintainMe.web.controller;
 
-import com.blankfactor.MaintainMe.entity.Building;
-import com.blankfactor.MaintainMe.entity.UserRoleBuilding;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
-import com.blankfactor.MaintainMe.web.resource.LoginRequest;
-import com.blankfactor.MaintainMe.web.resource.LoginResponse;
+import com.blankfactor.MaintainMe.web.resource.Login.LoginRequest;
+import com.blankfactor.MaintainMe.web.resource.Login.LoginResponse;
 import com.blankfactor.MaintainMe.web.resource.ManagerRegistrationRequest;
 import com.blankfactor.MaintainMe.web.resource.RegistrationRequest;
 import com.blankfactor.MaintainMe.entity.User;
@@ -18,9 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 //Controller for user registration and log in authentication
 @RestController

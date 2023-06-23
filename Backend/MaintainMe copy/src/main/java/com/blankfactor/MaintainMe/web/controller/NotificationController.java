@@ -1,13 +1,12 @@
 package com.blankfactor.MaintainMe.web.controller;
 
-import com.blankfactor.MaintainMe.entity.Building;
 import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.service.NotificationService;
 import com.blankfactor.MaintainMe.web.exception.InvalidNotificationException;
-import com.blankfactor.MaintainMe.web.resource.NotificationByBuildingRequest;
-import com.blankfactor.MaintainMe.web.resource.NotificationDeleteRequest;
-import com.blankfactor.MaintainMe.web.resource.NotificationEditRequest;
-import com.blankfactor.MaintainMe.web.resource.NotificationRequest;
+import com.blankfactor.MaintainMe.web.resource.Notification.NotificationByBuildingRequest;
+import com.blankfactor.MaintainMe.web.resource.Notification.NotificationDeleteRequest;
+import com.blankfactor.MaintainMe.web.resource.Notification.NotificationEditRequest;
+import com.blankfactor.MaintainMe.web.resource.Notification.NotificationRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
