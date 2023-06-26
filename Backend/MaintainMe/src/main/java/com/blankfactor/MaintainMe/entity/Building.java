@@ -1,10 +1,13 @@
 package com.blankfactor.MaintainMe.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -20,24 +23,22 @@ public class Building {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToOne(optional = false, orphanRemoval = true)
+
+    @OneToOne(fetch =FetchType.EAGER, cascade =CascadeType.ALL,optional = false, orphanRemoval = true)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @Column(name = "floors", nullable = false)
     private Integer floors;
 
-    @Column(name = "entrances")
+    @Column(name = "entrances", nullable = false)
     private Integer entrances;
 
-    @ManyToMany
-    @JoinTable(name = "building_taxes",
-            joinColumns = @JoinColumn(name = "building_id"),
-            inverseJoinColumns = @JoinColumn(name = "taxes_id"))
-    private Set<Tax> taxes = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "building", orphanRemoval = true)
+    private List<Unit> units = new ArrayList<>();
 
-    @OneToOne(optional = false, orphanRemoval = true)
-    @JoinColumn(name = "payment_details_id", nullable = false)
-    private PaymentDetails paymentDetails;
+
+    @OneToMany(mappedBy = "building", orphanRemoval = true)
+    private List<UserRoleBuilding> userRoleBuildings = new ArrayList<>();
 
 }
