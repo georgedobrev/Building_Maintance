@@ -12,8 +12,11 @@ import com.blankfactor.MaintainMe.web.resource.Comment.CommentRequest;
 import com.blankfactor.MaintainMe.web.resource.Comment.EditCommentRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.DeleteCommentRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +25,6 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final LocalUserRepository userRepository;
     private final NotificationRepository notificationRepository;
 
     public List<Comment> getCommentByNotificationId(CommentByNotificationRequest request){
@@ -32,19 +34,18 @@ public class CommentService {
 
     public Comment sendComment(CommentRequest commentRequest) throws Exception {
 
-        User user= userRepository.findById(commentRequest.getUserId())
-                .orElseThrow(() -> new Exception("User not found"));
+        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         Notification notification = notificationRepository.findById(commentRequest.getNotificationId())
                 .orElseThrow(() -> new Exception("Notification not found"));
 
+
         Date date = new Date();
 
         try {
-
             var comment = Comment.builder()
                     .text(commentRequest.getText())
-                    .user(user)
+                    .user(authUser)
                     .notification(notification)
                     .date(date)
                     .build();
