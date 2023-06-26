@@ -366,3 +366,4 @@ FodyWeavers.xsd
 **/.idea
 **/out
 **/target
+.jpb/
