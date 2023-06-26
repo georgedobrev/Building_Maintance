@@ -29,21 +29,7 @@ public class AuthenticationController {
 
     private final UserService userService;
     private final LocalUserRepository repository;
-    private final UnitService unitService;
 
-
-
-    @PostMapping("/register")
-    public ResponseEntity registerUser(@Valid @RequestBody RegistrationRequest registrationRequest){
-        try {
-            userService.registerUser(registrationRequest);
-            return ResponseEntity.ok().build();
-        } catch (UserAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
-
-    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginBody){
@@ -63,35 +49,4 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/register/manager")
-    public ResponseEntity registerManager(@Valid @RequestBody ManagerRegistrationRequest managerRegistrationRequest){
-        try {
-            userService.registerManager(managerRegistrationRequest);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
-
-    }
-
-    @GetMapping("/me")
-    public User getLoggedInUserProfile(@AuthenticationPrincipal User user){ //when spring calls this method it will
-        // automatically go into the get Authentication it will cast it onto the user and inject it as a parameter
-
-        return user;
-
-
-    }
-
-    @GetMapping("/managed/buildings")
-    public Collection<Map<String, Object>> getBuildings(){
-       return userService.getBuildingsManagedByLoggedManager();
-    }
-
-    @GetMapping("/role")
-    public Map<String, Object> getRoleInBuilding() {
-        return userService.getRoleInBuilding();
-    }
-    
 }
