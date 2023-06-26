@@ -89,9 +89,6 @@ public class AuthenticationController {
        return userService.getBuildingsManagedByLoggedManager();
     }
 
-    @GetMapping("/managed/buildings/{buildingId}/units")
-    public List<Unit> getUnitsByBuilding(@PathVariable("buildingId") Long buildingId) {
-        return unitService.getUnitsByBuildingId(buildingId);
-    }
+
 
 }
