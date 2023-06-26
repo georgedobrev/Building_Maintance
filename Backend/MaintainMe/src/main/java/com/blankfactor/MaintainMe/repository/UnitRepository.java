@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface UnitRepository extends ListCrudRepository<Unit,Long>{
     List<Unit> findByUsers(User users);
+    List<Unit> findByBuildingId(Long buildingId);
 
 }

@@ -5,7 +5,9 @@ import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.UnitRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UnitService {
@@ -27,10 +29,13 @@ public class UnitService {
 
       return unitRepository.save(unit);
 
-
-
-
-
     }
+
+    public List<Unit> getUnitsByBuildingId(Long buildingId) {
+        List<Unit> units = unitRepository.findByBuildingId(buildingId);
+
+        return units;
+    }
+
 }
 

@@ -1,6 +1,8 @@
 package com.blankfactor.MaintainMe.web.controller;
 
+import com.blankfactor.MaintainMe.entity.Unit;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
+import com.blankfactor.MaintainMe.service.UnitService;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.Login.LoginRequest;
 import com.blankfactor.MaintainMe.web.resource.Login.LoginResponse;
@@ -16,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 //Controller for user registration and log in authentication
@@ -26,6 +29,7 @@ public class AuthenticationController {
 
     private final UserService userService;
     private final LocalUserRepository repository;
+    private final UnitService unitService;
 
 
 
@@ -85,6 +89,9 @@ public class AuthenticationController {
        return userService.getBuildingsManagedByLoggedManager();
     }
 
-    //@GetMapping("/managed/buildings/{id}")
+    @GetMapping("/managed/buildings/{buildingId}/units")
+    public List<Unit> getUnitsByBuilding(@PathVariable("buildingId") Long buildingId) {
+        return unitService.getUnitsByBuildingId(buildingId);
+    }
 
 }

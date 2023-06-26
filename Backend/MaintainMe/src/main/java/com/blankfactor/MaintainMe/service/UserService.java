@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,13 +28,12 @@ public class UserService {
     private final LocalUserRepository localUserRepository;
     private final EncryptionService encryptionService;
     private final JWTService jwtService;
-    private final  AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
     private final BuildingRepository buildingRepository;
 
     private final UserRoleBuildingRepository userRoleBuildingRepository;
 
     ManagerCreateUser managerCreateUser;
-
 
 
     public User registerUser(RegistrationRequest registrationRequest) throws UserAlreadyExistsException {
@@ -58,22 +58,22 @@ public class UserService {
 
 
         BuildingResource buildingResource = request.getBuildingResource();
-        BuildingAssembler buildingAssembler=new BuildingAssembler();
+        BuildingAssembler buildingAssembler = new BuildingAssembler();
         Building building = buildingAssembler.fromResource(buildingResource);
         Building savedBuilding = buildingRepository.save(building);
         User user = registerUser(request.getRegistrationRequest());
 
-        Role role= new Role();
+        Role role = new Role();
         role.setId(2L);
 
-        UserRoleBuilding userRoleBuilding=new UserRoleBuilding(user,role,savedBuilding);
+        UserRoleBuilding userRoleBuilding = new UserRoleBuilding(user, role, savedBuilding);
 
         userRoleBuildingRepository.save(userRoleBuilding);
 
 
     }
 
-    public    Collection<Map<String, Object>>  getBuildingsManagedByLoggedManager() {
+    public Collection<Map<String, Object>> getBuildingsManagedByLoggedManager() {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Role role = new Role();
@@ -83,30 +83,32 @@ public class UserService {
 
     }
 
-public String loginUser(LoginRequest loginBody){
-    Optional<User> optionalUser= localUserRepository.findByEmailIgnoreCase(loginBody.getEmail());
-    if(optionalUser.isPresent()){
-        User user=optionalUser.get();
-        if(encryptionService.verifyPassword(loginBody.getPassword(),user.getPassword())){
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(authentication);
-            SecurityContextHolder.setContext(context);
-            System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-            return jwtService.generateJWT(user);
+
+
+        public String loginUser(LoginRequest loginBody) {
+        Optional<User> optionalUser = localUserRepository.findByEmailIgnoreCase(loginBody.getEmail());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+                context.setAuthentication(authentication);
+                SecurityContextHolder.setContext(context);
+                System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+                return jwtService.generateJWT(user);
+            }
+
         }
-
+        return null;
     }
-    return null;
-}
 
-public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
+    public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
 
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding();
-        User user=registerUser(managerCreateUser.getRegistrationRequest());
+        User user = registerUser(managerCreateUser.getRegistrationRequest());
         Building building = managerCreateUser.getBuilding();
-        Role role =new Role();
+        Role role = new Role();
         role.setId(1L);
         userRoleBuilding.setUser(user);
         userRoleBuilding.setBuilding(building);
@@ -115,7 +117,7 @@ public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAl
         userRoleBuildingRepository.save(userRoleBuilding);
 
         localUserRepository.save(user);
-}
+    }
 
 
 }
