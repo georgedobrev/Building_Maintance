@@ -12,10 +12,14 @@ import com.blankfactor.MaintainMe.web.resource.Notification.NotificationByBuildi
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationDeleteRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationEditRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,8 +28,6 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final BuildingRepository buildingRepository;
-    private final LocalUserRepository userRepository;
-
 
     public List<Notification> getAllNotificationsByBuilding(NotificationByBuildingRequest request){
         return notificationRepository.getNotificationByBuildingId(request.getId());
@@ -36,18 +38,17 @@ public class NotificationService {
         Building building =  buildingRepository.findById(notificationRequest.getBuildingId())
                 .orElseThrow(() -> new Exception("Building not found"));
 
+        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        User user= userRepository.findById(notificationRequest.getUserId())
-                .orElseThrow(() -> new Exception("User not found"));
-
+        Date date = new Date();
 
         try {
             var notification = Notification.builder()
                     .messageTitle(notificationRequest.getMessageTitle())
                     .information(notificationRequest.getInformation())
-                    .date(notificationRequest.getDate())
+                    .date(date)
                     .building(building)
-                    .user(user)
+                    .user(authUser)
                     .build();
 
             notificationRepository.save(notification);
