@@ -15,14 +15,15 @@ public interface UserRoleBuildingRepository extends JpaRepository<UserRoleBuildi
             "INNER JOIN UserRoleBuilding urb ON b.id = urb.building.id " +
             "WHERE urb.user.id = :userId AND urb.role.id = :roleId")
     Collection<Map<String, Object>> getBuildingDataByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
+
+    @Query("SELECT urb.role.id AS roleId, urb.building.name AS buildingName FROM UserRoleBuilding urb WHERE urb.user.id = ?1")
+    Map<String, Object> findRoleAndBuildingByUserId(Long userId);
 }
 
 
 
 
 
-
-    //List<UserRoleBuilding> findByUserAndRole(Optional user, Role role);
 
 
 

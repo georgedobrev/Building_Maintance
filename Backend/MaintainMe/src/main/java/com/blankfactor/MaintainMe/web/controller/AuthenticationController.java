@@ -89,6 +89,9 @@ public class AuthenticationController {
        return userService.getBuildingsManagedByLoggedManager();
     }
 
-
-
+    @GetMapping("/role")
+    public Map<String, Object> getRoleInBuilding() {
+        return userService.getRoleInBuilding();
+    }
+    
 }
