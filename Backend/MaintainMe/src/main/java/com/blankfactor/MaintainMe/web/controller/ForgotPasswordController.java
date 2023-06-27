@@ -2,6 +2,7 @@ package com.blankfactor.MaintainMe.web.controller;
 
 import com.blankfactor.MaintainMe.entity.PasswordResetToken;
 import com.blankfactor.MaintainMe.entity.User;
+import com.blankfactor.MaintainMe.repository.ResetTokenRepository;
 import com.blankfactor.MaintainMe.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -24,6 +25,7 @@ import javax.json.JsonReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 @RestController
 @AllArgsConstructor
@@ -31,6 +33,8 @@ public class ForgotPasswordController {
 
     private final JavaMailSender mailSender;
     private final UserService userService;
+
+    private ResetTokenRepository tokenRepository;
 
 //    @GetMapping("/forgot_password")
 //    public String showForgotPasswordForm() {
@@ -123,9 +127,13 @@ public class ForgotPasswordController {
 
         User user = userService.getByResetPasswordToken(token);
 
+        PasswordResetToken checkToken = tokenRepository.getPasswordResetTokenByEmail(user.getEmail());
+
         model.addAttribute("title", "Reset your password");
 
-        if (user == null) {
+        Date date = new Date();
+
+        if (user == null || checkToken.getExpiryDate().before(date)) {
             model.addAttribute("message", "Invalid Token");
             return "message";
         } else {
