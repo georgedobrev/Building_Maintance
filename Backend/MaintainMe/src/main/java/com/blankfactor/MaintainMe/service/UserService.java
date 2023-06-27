@@ -1,18 +1,16 @@
 package com.blankfactor.MaintainMe.service;
 
 import com.blankfactor.MaintainMe.entity.*;
-import com.blankfactor.MaintainMe.repository.AddressRepository;
-import com.blankfactor.MaintainMe.repository.BuildingRepository;
-import com.blankfactor.MaintainMe.repository.UserRoleBuildingRepository;
+import com.blankfactor.MaintainMe.repository.*;
 import com.blankfactor.MaintainMe.web.assembler.BuildingAssembler;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.*;
-import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.web.resource.Login.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +30,7 @@ public class UserService {
     private final BuildingRepository buildingRepository;
 
     private final UserRoleBuildingRepository userRoleBuildingRepository;
+    private final ResetTokenRepository resetTokenRepository;
 
     ManagerCreateUser managerCreateUser;
 
@@ -127,5 +126,38 @@ public class UserService {
         Map<String, Object>  roleInBuilding= userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
         return roleInBuilding;
     }
+
+    public void updateResetPasswordToken(String token, String email) throws Exception {
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+
+
+        User user = localUserRepository.getUserByEmail(email);
+        System.out.println("print " + user);
+
+        if (user != null) {
+            System.out.println("ok");
+            passwordResetToken.setUser(user);
+            passwordResetToken.setToken(token);
+            localUserRepository.save(user);
+        } else {
+            throw new Exception("Could not find any customer with the email " + email);
+        }
+    }
+
+    public User getByResetPasswordToken(String token) {
+        return resetTokenRepository.getUserByToken(token);
+    }
+
+    public void updatePassword(User user, String newPassword) {
+
+        user.setPassword(encryptionService.encryptPassword(newPassword));
+
+        PasswordResetToken passwordResetToken = resetTokenRepository.getPasswordResetTokenByEmail(user.getEmail());
+        resetTokenRepository.delete(passwordResetToken);
+
+        localUserRepository.save(user);
+    }
+
 
 }
