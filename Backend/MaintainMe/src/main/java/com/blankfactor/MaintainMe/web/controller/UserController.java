@@ -4,6 +4,7 @@ import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.service.UserService;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
+import com.blankfactor.MaintainMe.web.resource.ManagerCreateUser;
 import com.blankfactor.MaintainMe.web.resource.ManagerRegistrationRequest;
 import com.blankfactor.MaintainMe.web.resource.RegistrationRequest;
 import jakarta.validation.Valid;
@@ -34,7 +35,12 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }
 
+    @PostMapping("/manage/register/user")
+    public ResponseEntity<String> createManagerUser(@Valid @RequestBody ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
+            userService.ManagerCreateUser(managerCreateUser);
+            return ResponseEntity.ok("User created successfully by the manager");
 
     }
 
@@ -65,6 +71,7 @@ public class UserController {
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+
 
 
     }
