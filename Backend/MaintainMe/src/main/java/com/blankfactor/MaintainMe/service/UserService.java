@@ -123,6 +123,7 @@ public class UserService {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
+
         Map<String, Object>  roleInBuilding= userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
         return roleInBuilding;
     }

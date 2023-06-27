@@ -16,6 +16,6 @@ public class LoginResponse {
 
     private User user;
 
-    private Map<String, Object> roleInBuilding;
+   // private Map<String, Object> roleInBuilding;
 
 }
