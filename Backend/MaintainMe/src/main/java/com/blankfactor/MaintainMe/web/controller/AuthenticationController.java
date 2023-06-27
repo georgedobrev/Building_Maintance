@@ -44,6 +44,7 @@ public class AuthenticationController {
             LoginResponse response=new LoginResponse();
             response.setJwt(jwt);
             response.setUser(user);
+            response.setRoleInBuilding(userService.getRoleInBuilding());
             return ResponseEntity.ok(response);
 
         }
