@@ -6,6 +6,7 @@ import com.blankfactor.MaintainMe.web.assembler.BuildingAssembler;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.*;
 import com.blankfactor.MaintainMe.web.resource.Login.LoginRequest;
+import com.blankfactor.MaintainMe.web.utilities.RandomPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -113,6 +114,10 @@ public class UserService {
         userRoleBuilding.setUser(user);
         userRoleBuilding.setBuilding(building);
         userRoleBuilding.setRole(role);
+
+        user.setPassword(encryptionService.encryptPassword(RandomPassword.generateRandomPassword()));
+        localUserRepository.save(user);
+        System.out.println(user.getPassword());
 
         String subject = "Account Registration";
         String body = "Hello " + user.getUsername() + ",\n\n"
