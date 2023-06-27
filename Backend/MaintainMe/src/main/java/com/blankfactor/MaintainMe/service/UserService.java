@@ -14,10 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -127,18 +125,29 @@ public class UserService {
         return roleInBuilding;
     }
 
+    @Transactional
     public void updateResetPasswordToken(String token, String email) throws Exception {
 
         PasswordResetToken passwordResetToken = new PasswordResetToken();
 
 
         User user = localUserRepository.getUserByEmail(email);
+        resetTokenRepository.deleteAllByUser_Id(user.getId());
+
         System.out.println("print " + user);
 
         if (user != null) {
-            System.out.println("ok");
+
+            Calendar date = Calendar.getInstance();
+            System.out.println("Current Date and TIme : " + date.getTime());
+            long timeInSecs = date.getTimeInMillis();
+            Date expDate = new Date(timeInSecs + (30 * 60 * 1000));
+            System.out.println("After adding 30 mins : " + expDate);
+
             passwordResetToken.setUser(user);
             passwordResetToken.setToken(token);
+            passwordResetToken.setExpiryDate(expDate);
+            resetTokenRepository.save(passwordResetToken);
             localUserRepository.save(user);
         } else {
             throw new Exception("Could not find any customer with the email " + email);
@@ -146,9 +155,9 @@ public class UserService {
     }
 
     public User getByResetPasswordToken(String token) {
-        return resetTokenRepository.getUserByToken(token);
+        Long userId = resetTokenRepository.getUserIdByToken(token);
+        return localUserRepository.findById(userId).orElse(null);
     }
-
     public void updatePassword(User user, String newPassword) {
 
         user.setPassword(encryptionService.encryptPassword(newPassword));

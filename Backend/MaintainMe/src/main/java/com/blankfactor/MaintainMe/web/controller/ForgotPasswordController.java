@@ -1,5 +1,6 @@
 package com.blankfactor.MaintainMe.web.controller;
 
+import com.blankfactor.MaintainMe.entity.PasswordResetToken;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.service.UserService;
 import jakarta.mail.MessagingException;
@@ -31,14 +32,13 @@ public class ForgotPasswordController {
     private final JavaMailSender mailSender;
     private final UserService userService;
 
-    @GetMapping("/forgot_password")
-    public String showForgotPasswordForm() {
-        return null;
-    }
+//    @GetMapping("/forgot_password")
+//    public String showForgotPasswordForm() {
+//        return null;
+//    }
 
     @PostMapping("/forgot_password")
         public String processForgotPassword(HttpServletRequest request, Model model) throws IOException {
-
 
         BufferedReader reader = request.getReader();
         JsonReader jsonReader = Json.createReader(reader);
@@ -46,6 +46,7 @@ public class ForgotPasswordController {
 
         String email = jsonObject.getString("email");
         String token = RandomStringUtils.randomAlphabetic(10);
+
 
             try {
                 userService.updateResetPasswordToken(token, email);
@@ -90,26 +91,38 @@ public class ForgotPasswordController {
     }
 
 
-    @GetMapping("/reset_password")
-    public String showResetPasswordForm(@Param(value = "token") String token, Model model) {
-        User user = userService.getByResetPasswordToken(token);
-        model.addAttribute("token", token);
-
-        if (user == null) {
-            model.addAttribute("message", "Invalid Token");
-            return "message";
-        }
-
-        return "reset_password_form";
-    }
+//    @GetMapping("/reset_password")
+//    public String showResetPasswordForm(@Param(value = "token") String token, Model model) {
+//        User user = userService.getByResetPasswordToken(token);
+//        model.addAttribute("token", token);
+//
+//        if (user == null) {
+//            model.addAttribute("message", "Invalid Token");
+//            return "message";
+//        }
+//
+//        return "reset_password_form";
+//    }
 
     @PostMapping("/reset_password")
-    public String processResetPassword(HttpServletRequest request, Model model) {
-        String token = request.getParameter("token");
-        String password = request.getParameter("password");
+    public String processResetPassword(HttpServletRequest request, Model model) throws IOException {
+
+
+        BufferedReader reader = request.getReader();
+        JsonReader jsonReader = Json.createReader(reader);
+        JsonObject jsonObject = jsonReader.readObject();
+
+        String token = jsonObject.getString("token");
+        String password = jsonObject.getString("password");
+
+
+        System.out.println("token " + token);
+        System.out.println("password " + password);
+
 
 
         User user = userService.getByResetPasswordToken(token);
+
         model.addAttribute("title", "Reset your password");
 
         if (user == null) {
@@ -117,10 +130,11 @@ public class ForgotPasswordController {
             return "message";
         } else {
             userService.updatePassword(user, password);
-
             model.addAttribute("message", "You have successfully changed your password.");
         }
 
+
+        System.out.println(model);
         return "message";
     }
 }
