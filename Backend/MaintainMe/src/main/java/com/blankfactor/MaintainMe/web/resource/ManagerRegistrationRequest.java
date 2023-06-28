@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class ManagerRegistrationRequest {
 
     BuildingResource buildingResource;
-    RegistrationRequest registrationRequest;
+    RegistrationRequestManager registrationRequestManager;
 }

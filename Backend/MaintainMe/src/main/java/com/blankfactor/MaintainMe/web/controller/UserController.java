@@ -6,7 +6,7 @@ import com.blankfactor.MaintainMe.service.UserService;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.ManagerCreateUser;
 import com.blankfactor.MaintainMe.web.resource.ManagerRegistrationRequest;
-import com.blankfactor.MaintainMe.web.resource.RegistrationRequest;
+import com.blankfactor.MaintainMe.web.resource.RegistrationRequestManager;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,9 +69,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity registerUser(@Valid @RequestBody RegistrationRequest registrationRequest){
+    public ResponseEntity registerUser(@Valid @RequestBody RegistrationRequestManager registrationRequestManager){
         try {
-            userService.registerUser(registrationRequest);
+            userService.register(registrationRequestManager);
             return ResponseEntity.ok().build();
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

@@ -1,7 +1,5 @@
 package com.blankfactor.MaintainMe.web.resource;
 
-import com.blankfactor.MaintainMe.entity.Building;
-import com.blankfactor.MaintainMe.entity.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ManagerCreateUser {
 
-    RegistrationRequest registrationRequest;
+    RegistrationRequestUser registrationRequestUser;
     Long buildingID;
     Long unitId;
 }
