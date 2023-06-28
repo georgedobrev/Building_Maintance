@@ -10,4 +10,6 @@ import org.springframework.data.repository.ListCrudRepository;
 public interface BuildingRepository extends JpaRepository<Building,Long> {
     Building findByAddress(Address address);
 
+
+
 }
