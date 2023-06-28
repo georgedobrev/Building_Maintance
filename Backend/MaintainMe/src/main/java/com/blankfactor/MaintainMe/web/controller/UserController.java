@@ -37,11 +37,18 @@ public class UserController {
         }
     }
 
+    //TODO try and catch block for already existing user
+
     @PostMapping("/manage/register/user")
-    public ResponseEntity<String> createManagerUser(@Valid @RequestBody ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
+    public ResponseEntity<String> createManagerUser(@Valid @RequestBody ManagerCreateUser managerCreateUser)
+            throws UserAlreadyExistsException {
+        try {
             userService.ManagerCreateUser(managerCreateUser);
             return ResponseEntity.ok("User created successfully by the manager");
-
+        } catch (UserAlreadyExistsException e) {
+            // Handle the exception and return an appropriate response
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        }
     }
 
     @GetMapping("/me")
