@@ -9,7 +9,7 @@ import lombok.*;
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public class RegistrationRequest {
+    public class RegistrationRequestManager {
         @NotBlank
         @Size(min = 6,max = 20)
         private String username;

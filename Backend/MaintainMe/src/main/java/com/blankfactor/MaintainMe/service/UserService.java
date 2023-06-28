@@ -6,16 +6,15 @@ import com.blankfactor.MaintainMe.web.assembler.BuildingAssembler;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.*;
 import com.blankfactor.MaintainMe.web.resource.Login.LoginRequest;
+import com.blankfactor.MaintainMe.web.utilities.GmailChecker;
 import com.blankfactor.MaintainMe.web.utilities.RandomPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -36,18 +35,18 @@ public class UserService {
     private final UnitRepository unitRepository;
 
 
-    public User registerUser(RegistrationRequest registrationRequest) throws UserAlreadyExistsException {
-        if (localUserRepository.findByEmailIgnoreCase(registrationRequest.getEmail()).isPresent() ||
-                localUserRepository.findByUsernameIgnoreCase(registrationRequest.getUsername()).isPresent()) {
+    public User register(RegistrationRequestManager registrationRequestManager) throws UserAlreadyExistsException {
+        if (localUserRepository.findByEmailIgnoreCase(registrationRequestManager.getEmail()).isPresent() ||
+                localUserRepository.findByUsernameIgnoreCase(registrationRequestManager.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException();
         }
 
         User user = new User();
-        user.setEmail(registrationRequest.getEmail());
-        user.setFirstName(registrationRequest.getFirstName());
-        user.setLastName(registrationRequest.getLastName());
-        user.setUsername(registrationRequest.getUsername());
-        user.setPassword(encryptionService.encryptPassword(registrationRequest.getPassword()));
+        user.setEmail(registrationRequestManager.getEmail());
+        user.setFirstName(registrationRequestManager.getFirstName());
+        user.setLastName(registrationRequestManager.getLastName());
+        user.setUsername(registrationRequestManager.getUsername());
+        user.setPassword(encryptionService.encryptPassword(registrationRequestManager.getPassword()));
         return localUserRepository.save(user);
 
 
@@ -61,7 +60,7 @@ public class UserService {
         BuildingAssembler buildingAssembler = new BuildingAssembler();
         Building building = buildingAssembler.fromResource(buildingResource);
         Building savedBuilding = buildingRepository.save(building);
-        User user = registerUser(request.getRegistrationRequest());
+        User user = register(request.getRegistrationRequestManager());
 
         Role role = new Role();
         role.setId(2L);
@@ -107,7 +106,13 @@ public class UserService {
     public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
 
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding();
-        User user = registerUser(managerCreateUser.getRegistrationRequest());
+        User user = new User();
+        user.setEmail(managerCreateUser.getRegistrationRequestUser().getEmail());
+        user.setFirstName(managerCreateUser.getRegistrationRequestUser().getFirstName());
+        user.setLastName(managerCreateUser.getRegistrationRequestUser().getLastName());
+        user.setUsername(managerCreateUser.getRegistrationRequestUser().getUsername());
+
+
         Building building = buildingRepository.findById(managerCreateUser.getBuildingID()).orElse(null);
         Role role = new Role();
         role.setId(1L);
@@ -116,21 +121,35 @@ public class UserService {
         userRoleBuilding.setBuilding(building);
         userRoleBuilding.setRole(role);
 
-        user.setPassword(encryptionService.encryptPassword(RandomPassword.generateRandomPassword()));
-        localUserRepository.save(user);
-        System.out.println(user.getPassword());
+        String email = user.getEmail();
+        boolean isGoogleMail = GmailChecker.isGoogleEmail(email);
 
-        String subject = "Account Registration";
-        String body = "Hello " + user.getUsername() + ",\n\n"
-                + "Your account has been created. Here are your credentials:\n"
-                + "Username: " + user.getUsername() + "\n"
-                + "Password: " + managerCreateUser.getRegistrationRequest().getPassword()+ "\n\n"
-                + "Please login and change your password for security reasons.";
+        String subject;
+        String body;
+
+        if (isGoogleMail) {
+            user.setPassword("GooglePasswordPlaceHolder");
+            subject = "Account Registration - Google Login";
+            body = "Hello " + user.getUsername() + ",\n\n"
+                    + "Your account has been created. You can log in to the app using your Google profile.\n"
+                    + "Click the following link to log in: " + "https://example.com/google-login";
+        } else {
+            user.setPassword(RandomPassword.generateRandomPassword());
+            // Send email with a link to login and the credentials (username and randomly generated password)
+            subject = "Account Registration - Login Credentials";
+            body = "Hello " + user.getUsername() + ",\n\n"
+                    + "Your account has been created. Here are your credentials:\n"
+                    + "Username: " + user.getUsername() + "\n"
+                    + "Password: " + user.getPassword()+ "\n\n"
+                    + "Please login and change your password for security reasons.";
+        }
+
+        localUserRepository.save(user);
 
         emailService.sendEmail(user.getEmail(), subject, body);
 
         userRoleBuildingRepository.save(userRoleBuilding);
-        localUserRepository.save(user);
+
     }
 
     public  Map<String, Object>  getRoleInBuilding(){
