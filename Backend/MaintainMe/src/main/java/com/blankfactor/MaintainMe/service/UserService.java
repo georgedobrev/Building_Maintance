@@ -6,6 +6,7 @@ import com.blankfactor.MaintainMe.web.assembler.BuildingAssembler;
 import com.blankfactor.MaintainMe.web.exception.UserAlreadyExistsException;
 import com.blankfactor.MaintainMe.web.resource.*;
 import com.blankfactor.MaintainMe.web.resource.Login.LoginRequest;
+import com.blankfactor.MaintainMe.web.utilities.RandomPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -27,10 +28,12 @@ public class UserService {
     private final AddressRepository addressRepository;
     private final BuildingRepository buildingRepository;
 
+    private final EmailService emailService;
     private final UserRoleBuildingRepository userRoleBuildingRepository;
     private final ResetTokenRepository resetTokenRepository;
 
     ManagerCreateUser managerCreateUser;
+    private final UnitRepository unitRepository;
 
 
     public User registerUser(RegistrationRequest registrationRequest) throws UserAlreadyExistsException {
@@ -100,19 +103,33 @@ public class UserService {
         return null;
     }
 
+    @Transactional
     public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
 
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding();
         User user = registerUser(managerCreateUser.getRegistrationRequest());
-        Building building = managerCreateUser.getBuilding();
+        Building building = buildingRepository.findById(managerCreateUser.getBuildingID()).orElse(null);
         Role role = new Role();
         role.setId(1L);
+        user.setUnit(unitRepository.findById(managerCreateUser.getUnitId()).orElse(null));
         userRoleBuilding.setUser(user);
         userRoleBuilding.setBuilding(building);
         userRoleBuilding.setRole(role);
 
-        userRoleBuildingRepository.save(userRoleBuilding);
+        user.setPassword(encryptionService.encryptPassword(RandomPassword.generateRandomPassword()));
+        localUserRepository.save(user);
+        System.out.println(user.getPassword());
 
+        String subject = "Account Registration";
+        String body = "Hello " + user.getUsername() + ",\n\n"
+                + "Your account has been created. Here are your credentials:\n"
+                + "Username: " + user.getUsername() + "\n"
+                + "Password: " + managerCreateUser.getRegistrationRequest().getPassword()+ "\n\n"
+                + "Please login and change your password for security reasons.";
+
+        emailService.sendEmail(user.getEmail(), subject, body);
+
+        userRoleBuildingRepository.save(userRoleBuilding);
         localUserRepository.save(user);
     }
 

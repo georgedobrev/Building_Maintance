@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class ManagerCreateUser {
 
     RegistrationRequest registrationRequest;
-    Building building;
-    Unit unit;
+    Long buildingID;
+    Long unitId;
 }

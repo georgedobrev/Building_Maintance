@@ -1,0 +1,11 @@
+   String randomPassword = generateRandomPassword();
+        user.setPassword(randomPassword);
+
+        String subject = "Account Registration";
+        String body = "Hello " + user.getUsername() + ",\n\n"
+                + "Your account has been created. Here are your credentials:\n"
+                + "Username: " + user.getUsername() + "\n"
+                + "Password: " + randomPassword + "\n\n"
+                + "Please login and change your password for security reasons.";
+
+        emailService.sendEmail(user.getEmail(), subject, body);
