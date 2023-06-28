@@ -11,13 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +30,8 @@ public class UserService {
 
     private final EmailService emailService;
     private final UserRoleBuildingRepository userRoleBuildingRepository;
+    private final ResetTokenRepository resetTokenRepository;
+
     ManagerCreateUser managerCreateUser;
     private final UnitRepository unitRepository;
 
@@ -140,5 +141,49 @@ public class UserService {
         Map<String, Object>  roleInBuilding= userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
         return roleInBuilding;
     }
+
+    @Transactional
+    public void updateResetPasswordToken(String token, String email) throws Exception {
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+
+
+        User user = localUserRepository.getUserByEmail(email);
+        resetTokenRepository.deleteAllByUser_Id(user.getId());
+
+        System.out.println("print " + user);
+
+        if (user != null) {
+
+            Calendar date = Calendar.getInstance();
+            System.out.println("Current Date and TIme : " + date.getTime());
+            long timeInSecs = date.getTimeInMillis();
+            Date expDate = new Date(timeInSecs + (30 * 60 * 1000));
+            System.out.println("After adding 30 mins : " + expDate);
+
+            passwordResetToken.setUser(user);
+            passwordResetToken.setToken(token);
+            passwordResetToken.setExpiryDate(expDate);
+            resetTokenRepository.save(passwordResetToken);
+            localUserRepository.save(user);
+        } else {
+            throw new Exception("Could not find any customer with the email " + email);
+        }
+    }
+
+    public User getByResetPasswordToken(String token) {
+        Long userId = resetTokenRepository.getUserIdByToken(token);
+        return localUserRepository.findById(userId).orElse(null);
+    }
+    public void updatePassword(User user, String newPassword) {
+
+        user.setPassword(encryptionService.encryptPassword(newPassword));
+
+        PasswordResetToken passwordResetToken = resetTokenRepository.getPasswordResetTokenByEmail(user.getEmail());
+        resetTokenRepository.delete(passwordResetToken);
+
+        localUserRepository.save(user);
+    }
+
 
 }
