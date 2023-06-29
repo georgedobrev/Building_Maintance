@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -200,6 +201,29 @@ public class UserService {
 
         localUserRepository.save(user);
     }
+
+    private String getEmailFromToken(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
+        Map<String, Object> attributes = oAuth2AuthenticationToken.getPrincipal().getAttributes();
+        return (String) attributes.get("email");
+    }
+
+    public void authenticate(User user){
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+
+    public User getCurrentUser(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
+        String email = getEmailFromToken(oAuth2AuthenticationToken);
+        User user = localUserRepository.findByEmailIgnoreCase(email).orElse(null);
+        authenticate(user);
+        return user;
+    }
+
+
 
 
 }
