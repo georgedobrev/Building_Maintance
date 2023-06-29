@@ -128,7 +128,7 @@ public class UserService {
         String body;
 
         if (isGoogleMail) {
-            user.setPassword("GooglePasswordPlaceHolder");
+            user.setPassword(RandomPassword.generateRandomPassword());
             subject = "Account Registration - Google Login";
             body = "Hello " + user.getUsername() + ",\n\n"
                     + "Your account has been created. You can log in to the app using your Google profile.\n"
