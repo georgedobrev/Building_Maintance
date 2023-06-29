@@ -35,8 +35,8 @@ public class JWTRequestFilter extends OncePerRequestFilter {
         if(tokenHeader!=null && tokenHeader.startsWith("Bearer ")){ // does it start with Bearer
             String token= tokenHeader.substring(7); //then we brake it into a token since the token starts form the 7th character
             try{
-                String username =jwtService.getUsername(token);//we try to decode it and get the username
-                Optional<User> optionalUser= localUserRepository.findByUsernameIgnoreCase(username);//we take the username and we try to find it
+                String email =jwtService.getEmail(token);//we try to decode it and get the username
+                Optional<User> optionalUser= localUserRepository.findByEmailIgnoreCase(email);//we take the username and we try to find it
                 if(optionalUser.isPresent()){
                     User user=optionalUser.get();
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,null,new ArrayList<>());//if the user is present we build the authentication

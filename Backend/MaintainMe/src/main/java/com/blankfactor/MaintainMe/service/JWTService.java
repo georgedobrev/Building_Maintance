@@ -30,7 +30,7 @@ public class JWTService {
 
     public String generateJWT(User user){
         return JWT.create()
-                .withClaim(USERNAME_KEY,user.getUsername())
+                .withClaim(USERNAME_KEY,user.getEmail())
                 //.withClaim("claims", user.getRole) todo
                 .withExpiresAt(new Date(System.currentTimeMillis()+(1000*expiryInSeconds)))
                 .withIssuer(issuer)
@@ -38,7 +38,7 @@ public class JWTService {
 
     }
 
-    public String getUsername(String token){
+    public String getEmail(String token){
         return JWT.decode(token).getClaim(USERNAME_KEY).asString(); //we get a lot of claims ,so we need to specify
         // that it is a string
     }

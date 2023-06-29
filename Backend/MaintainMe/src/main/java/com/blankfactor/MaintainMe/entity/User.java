@@ -3,7 +3,6 @@ package com.blankfactor.MaintainMe.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +24,6 @@ public class User {
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
 
     @JsonIgnore
     @Column(name = "password", nullable = false)
@@ -76,13 +72,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getPassword() {
         return password;
