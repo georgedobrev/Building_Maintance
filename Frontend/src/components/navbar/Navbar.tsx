@@ -35,12 +35,7 @@ const StyledDropdownLink = styled(Link)(({ theme }) => ({
       : theme.palette.primary.main,
 }));
 
-const Navbar = ({
-  currentUser,
-  manager,
-  serviceCompanyAdmin,
-  serviceCompany,
-}: NavbarProps) => {
+const Navbar = ({ currentUser, manager }: NavbarProps) => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLButtonElement>(
     null
   );
@@ -71,26 +66,24 @@ const Navbar = ({
   };
 
   let pages = ["Notifications", "Payments"];
-  let settings = ["Profile", "Account", "Logout"];
+  let settings = ["Profile", "Logout"];
 
   if (!currentUser) {
-    pages = ["About us", "Pricing", "Login"];
+    pages = ["About us", "Pricing", "New Manager", "Login"];
     settings = ["Login", "Products"];
   }
 
   if (manager) {
-    pages = ["Announcements", "Users", "Add User", "Payments", "Auctions"];
-    settings = ["Profile", "Account", "Logout"];
-  }
-
-  if (serviceCompanyAdmin) {
-    pages = ["Companies", "Add Company"];
-    settings = ["Profile", "Account", "Logout"];
-  }
-
-  if (serviceCompany) {
-    pages = ["Auctions", "Requests"];
-    settings = ["Profile", "Account", "Logout"];
+    pages = [
+      "Announcements",
+      "Users",
+      "Add User",
+      "Buildings",
+      "Add Building",
+      "Add Unit",
+      "Auctions",
+    ];
+    settings = ["Profile", "Logout"];
   }
 
   return (
@@ -218,6 +211,10 @@ const Navbar = ({
                   to={
                     page === "Add User"
                       ? "/register"
+                      : page === "New Manager"
+                      ? "/register-admin"
+                      : page === "Add Unit"
+                      ? "/add-unit"
                       : `/${page.replace(/\s/g, "").toLowerCase()}`
                   }
                 >
@@ -259,9 +256,15 @@ const Navbar = ({
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">
-                    <StyledDropdownLink to={`/${setting.toLowerCase()}`}>
-                      {setting}
-                    </StyledDropdownLink>
+                    {setting.toLowerCase() === "logout" ? (
+                      <StyledDropdownLink to="/login">
+                        {setting}
+                      </StyledDropdownLink>
+                    ) : (
+                      <StyledDropdownLink to={`/${setting.toLowerCase()}`}>
+                        {setting}
+                      </StyledDropdownLink>
+                    )}
                   </Typography>
                 </MenuItem>
               ))}

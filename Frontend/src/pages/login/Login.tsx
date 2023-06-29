@@ -8,11 +8,11 @@ import {
   CssBaseline,
   FormControlLabel,
   InputAdornment,
-  Link,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
+import { fetchWrapper } from "../../services/callsWrapper";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import BuildingPic from "../../assets/backgroundBFM.jpg";
 import { FormValues } from "./LoginInterfaces";
@@ -25,12 +25,28 @@ const SignInSide = () => {
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+
     Object.keys(formValues).forEach((field) =>
       validateField(field as keyof FormValues)
     );
-    console.log(formValues);
+
+    const user = {
+      email: formValues.email,
+      password: formValues.password,
+    };
+    console.log(JSON.stringify(user));
+
+    try {
+      const response = await fetchWrapper.post(
+        "http://localhost:8086/auth/login",
+        user
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const handleChange = (

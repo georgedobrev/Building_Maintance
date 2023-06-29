@@ -1,13 +1,26 @@
-import { Theme } from '@mui/material';
+import { Theme } from "@mui/material";
 
 export const getStyles = (theme: Theme) => {
   return {
     outerBox: {
-      marginTop: '82px',
+      marginTop: "82px",
+      marginBottom: theme.spacing(8),
+    },
+    avatar: {
+      marginRight: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      width: theme.spacing(3),
+      height: theme.spacing(3),
+    },
+    commentContentBox: {
+      display: "flex",
+      alignItems: "center",
+      marginBottom: theme.spacing(1),
     },
     card: {
       minWidth: 275,
-      backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[900] : 'whitesmoke',
+      backgroundColor:
+        theme.palette.mode === "dark" ? theme.palette.grey[900] : "whitesmoke",
     },
     subtitleTypography: {
       color: theme.palette.primary.main,
@@ -20,29 +33,36 @@ export const getStyles = (theme: Theme) => {
       color: theme.palette.primary.main,
     },
     innerBox: {
-      position: 'relative',
+      position: "relative",
     },
     textField: {
-      color: theme.palette.mode === 'dark' ? theme.palette.primary.main : 'inherit',
-      '& .MuiOutlinedInput-input': {
-        color: theme.palette.mode === 'dark' ? theme.palette.primary.main : 'inherit',
+      color:
+        theme.palette.mode === "dark" ? theme.palette.primary.main : "inherit",
+      "& .MuiOutlinedInput-input": {
+        color:
+          theme.palette.mode === "dark"
+            ? theme.palette.primary.main
+            : "inherit",
       },
     },
     sendButton: {
-      position: 'absolute',
+      position: "absolute",
       bottom: 0,
       right: 0,
-      margin: '0 10px 10px 0',
+      margin: "0 10px 10px 0",
       color: theme.palette.primary.main,
     },
     commentBox: {
-      display: 'flex',
-      alignItems: 'center',
+      display: "flex",
+      alignItems: "center",
       marginTop: 1,
       marginBottom: 1,
     },
     commentButton: {
-      color: theme.palette.mode === 'dark' ? theme.palette.primary.main : theme.palette.primary.main,
+      color:
+        theme.palette.mode === "dark"
+          ? theme.palette.primary.main
+          : theme.palette.primary.main,
       paddingLeft: 1,
     },
     commentTypography: {
@@ -50,52 +70,64 @@ export const getStyles = (theme: Theme) => {
       marginLeft: 1,
     },
     messageButton: {
-      marginLeft: 'auto',
+      marginLeft: "auto",
       color: theme.palette.primary.main,
     },
     deleteButton: {
-      marginLeft: 'auto',
+      marginLeft: "auto",
       color: theme.palette.primary.main,
     },
     commentSectionBox: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
       paddingLeft: 2,
     },
     commentInnerBox: {
-      border: '1px solid',
+      border: "1px solid",
       borderColor: theme.palette.primary.main,
-      borderRadius: '4px',
+      borderRadius: "4px",
       marginTop: 1,
       marginBottom: 1,
-      width: '75%',
-      position: 'relative',
+      width: "75%",
+      position: "relative",
     },
     editTextField: {
-      color: theme.palette.mode === 'dark' ? theme.palette.primary.main : 'inherit',
-      '& .MuiOutlinedInput-input': {
-        color: theme.palette.mode === 'dark' ? theme.palette.primary.main : 'inherit',
+      color:
+        theme.palette.mode === "dark" ? theme.palette.primary.main : "inherit",
+      "& .MuiOutlinedInput-input": {
+        color:
+          theme.palette.mode === "dark"
+            ? theme.palette.primary.main
+            : "inherit",
+      },
+      "& .MuiOutlinedInput-root": {
+        border: "none",
+        boxShadow: "none",
+        "&:hover": {
+          border: "none",
+        },
       },
     },
+
     commentBodyTypography: {
       color: theme.palette.primary.main,
       padding: 1,
     },
     deleteCommentButton: {
-      position: 'absolute',
+      position: "absolute",
       right: 2,
       bottom: 2,
       color: theme.palette.primary.main,
     },
     editButton: {
-      position: 'absolute',
+      position: "absolute",
       right: 40,
       bottom: 2,
       color: theme.palette.primary.main,
     },
     confirmEditButton: {
-      position: 'absolute',
+      position: "absolute",
       right: 70,
       bottom: 2,
       color: theme.palette.primary.main,

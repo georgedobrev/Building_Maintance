@@ -1,0 +1,67 @@
+import homePagePic from "../../assets/homePageView.jpg";
+import logo from "../../assets/blankfactor-logo.svg";
+
+const Payments = () => {
+  return (
+    <div
+      style={{
+        position: "relative",
+        height: "100vh",
+        width: "100vw",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          height: "100%",
+          width: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          zIndex: 1,
+        }}
+      />
+      <img
+        src={homePagePic}
+        alt="Background"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          height: "100%",
+          width: "100%",
+          transform: "translate(-50%, -50%)",
+          objectFit: "cover",
+          zIndex: 0,
+        }}
+      />
+      <img
+        src={logo}
+        alt="Company Logo"
+        style={{
+          position: "absolute",
+          top: "40%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 2,
+        }}
+      />
+      <h2
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          color: "#ffffff",
+          textAlign: "center",
+          zIndex: 2,
+        }}
+      >
+        The Payments view for BlankFactor's Maintenance app is coming soon...
+      </h2>
+    </div>
+  );
+};
+
+export default Payments;

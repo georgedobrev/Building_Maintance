@@ -7,13 +7,30 @@ const useAuthValidations = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     firstName: "",
     lastName: "",
+    username: "",
     email: "",
+    password: "",
     building: "",
+    unit: "",
+    buildingName: "",
+    country: "",
+    region: "",
+    city: "",
+    district: "",
+    postalCode: "",
+    streetName: "",
+    streetNumber: "",
+    floors: "",
+    entrances: "",
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const setBuilding = (value: string | number) => {
     setFormValues((prevState) => ({ ...prevState, building: value }));
+  };
+
+  const setUnit = (value: string | number) => {
+    setFormValues((prevState) => ({ ...prevState, unit: value }));
   };
 
   const validateField = async (fieldName: keyof FormValues) => {
@@ -39,7 +56,14 @@ const useAuthValidations = () => {
     }
   };
 
-  return { formValues, setFormValues, formErrors, validateField, setBuilding };
+  return {
+    formValues,
+    setFormValues,
+    formErrors,
+    validateField,
+    setBuilding,
+    setUnit,
+  };
 };
 
 export default useAuthValidations;

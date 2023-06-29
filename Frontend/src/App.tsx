@@ -10,9 +10,13 @@ import createMyTheme from "./Theme";
 import Announcements from "./pages/announcements/Announcements";
 import { RootState } from "./store/store";
 import Users from "./pages/users/Users";
-
+import AddBuilding from "./pages/addBuilding/AddBuilding";
+import AdminRegister from "./pages/register/AdminRegister";
+import AddUnit from "./pages/addUnit/AddUnit";
+import Payments from "./pages/payments/Payments";
+import Footer from "./components/Footer/Footer";
 const currentUser = false;
-const manager = true;
+const manager = false;
 
 const NavbarWrapper = () => {
   const location = useLocation();
@@ -38,12 +42,18 @@ const App = () => {
             element={<Home manager={manager} currentUser={currentUser} />}
           />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/register"
+            element={<Register currentUser={currentUser} manager={manager} />}
+          />
           {currentUser && (
-            <Route
-              path="/notifications"
-              element={<Notifications currentUser={currentUser} />}
-            />
+            <>
+              <Route
+                path="/notifications"
+                element={<Notifications currentUser={currentUser} />}
+              />
+              <Route path="/payments" element={<Payments />} />
+            </>
           )}
           {manager && (
             <Route
@@ -51,8 +61,19 @@ const App = () => {
               element={<Announcements currentUser={currentUser} />}
             />
           )}
+          {manager && <Route path="/add-unit" element={<AddUnit />} />}
+          {manager && <Route path="/addbuilding" element={<AddBuilding />} />}
+          {!currentUser && !manager && (
+            <Route
+              path="/register-admin"
+              element={
+                <AdminRegister currentUser={currentUser} manager={manager} />
+              }
+            />
+          )}
           <Route path="/users" element={<Users />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </ThemeProvider>
   );
