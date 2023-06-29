@@ -12,9 +12,7 @@ import lombok.*;
 @Builder
 public class RegistrationRequestUser {
 
-        @NotBlank
-        @Size(min = 6,max = 20)
-        private String username;
+
         @NotBlank
         @Size(min = 8,max = 50)
         @NotBlank

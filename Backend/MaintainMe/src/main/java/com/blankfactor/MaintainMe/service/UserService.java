@@ -36,16 +36,14 @@ public class UserService {
 
 
     public User register(RegistrationRequestManager registrationRequestManager) throws UserAlreadyExistsException {
-        if (localUserRepository.findByEmailIgnoreCase(registrationRequestManager.getEmail()).isPresent() ||
-                localUserRepository.findByUsernameIgnoreCase(registrationRequestManager.getUsername()).isPresent()) {
-            throw new UserAlreadyExistsException();
+        if (localUserRepository.findByEmailIgnoreCase(registrationRequestManager.getEmail()).isPresent()){
+        throw new UserAlreadyExistsException();
         }
 
         User user = new User();
         user.setEmail(registrationRequestManager.getEmail());
         user.setFirstName(registrationRequestManager.getFirstName());
         user.setLastName(registrationRequestManager.getLastName());
-        user.setUsername(registrationRequestManager.getUsername());
         user.setPassword(encryptionService.encryptPassword(registrationRequestManager.getPassword()));
         return localUserRepository.save(user);
 
@@ -83,14 +81,13 @@ public class UserService {
     }
 
 
-
-        public String loginUser(LoginRequest loginBody) {
+    public String loginUser(LoginRequest loginBody) {
         Optional<User> optionalUser = localUserRepository.findByEmailIgnoreCase(loginBody.getEmail());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+                        new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);
@@ -110,8 +107,6 @@ public class UserService {
         user.setEmail(managerCreateUser.getRegistrationRequestUser().getEmail());
         user.setFirstName(managerCreateUser.getRegistrationRequestUser().getFirstName());
         user.setLastName(managerCreateUser.getRegistrationRequestUser().getLastName());
-        user.setUsername(managerCreateUser.getRegistrationRequestUser().getUsername());
-
 
         Building building = buildingRepository.findById(managerCreateUser.getBuildingID()).orElse(null);
         Role role = new Role();
@@ -129,18 +124,19 @@ public class UserService {
 
         if (isGoogleMail) {
             user.setPassword(RandomPassword.generateRandomPassword());
-            subject = "Account Registration - Google Login";
-            body = "Hello " + user.getUsername() + ",\n\n"
-                    + "Your account has been created. You can log in to the app using your Google profile.\n"
+            subject = "Account Registration - Login Credentials";
+            body = "Hello " + user.getFirstName() + ",\n\n"
+                    + "Your account has been created. Here are your credentials:\n"
+                    + "Password: " + user.getPassword() + "\n\n"
+                    + "Your account has been created. You can log in to the app using your Google profile or Your Credentials.\n"
                     + "Click the following link to log in: " + "https://example.com/google-login";
         } else {
             user.setPassword(RandomPassword.generateRandomPassword());
             // Send email with a link to login and the credentials (username and randomly generated password)
             subject = "Account Registration - Login Credentials";
-            body = "Hello " + user.getUsername() + ",\n\n"
+            body = "Hello " + user.getFirstName() + ",\n\n"
                     + "Your account has been created. Here are your credentials:\n"
-                    + "Username: " + user.getUsername() + "\n"
-                    + "Password: " + user.getPassword()+ "\n\n"
+                    + "Password: " + user.getPassword() + "\n\n"
                     + "Please login and change your password for security reasons.";
         }
 
@@ -152,12 +148,12 @@ public class UserService {
 
     }
 
-    public  Map<String, Object>  getRoleInBuilding(){
+    public Map<String, Object> getRoleInBuilding() {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
 
-        Map<String, Object>  roleInBuilding= userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
+        Map<String, Object> roleInBuilding = userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
         return roleInBuilding;
     }
 
@@ -194,6 +190,7 @@ public class UserService {
         Long userId = resetTokenRepository.getUserIdByToken(token);
         return localUserRepository.findById(userId).orElse(null);
     }
+
     public void updatePassword(User user, String newPassword) {
 
         user.setPassword(encryptionService.encryptPassword(newPassword));

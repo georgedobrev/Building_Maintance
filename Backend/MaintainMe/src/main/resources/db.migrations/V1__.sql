@@ -95,11 +95,9 @@ CREATE TABLE user
     email      VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name  VARCHAR(255) NOT NULL,
-    password   VARCHAR(255) NOT NULL,
-    username   VARCHAR(255) NOT NULL,
+    password   VARCHAR(255) ,
     CONSTRAINT PK_USER PRIMARY KEY (id),
     UNIQUE (email),
-    UNIQUE (username)
 );
 
 CREATE TABLE user_role_building
