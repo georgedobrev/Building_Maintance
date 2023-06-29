@@ -23,7 +23,4 @@ public class NotificationRequest {
 
         private Long buildingId;
 
-        private Long userId;
-
-
 }

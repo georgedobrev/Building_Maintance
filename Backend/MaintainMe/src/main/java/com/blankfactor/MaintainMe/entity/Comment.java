@@ -5,8 +5,7 @@ import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Builder
 @Table(name = "comment")
