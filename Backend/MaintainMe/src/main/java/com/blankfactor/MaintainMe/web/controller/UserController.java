@@ -27,35 +27,11 @@ public class UserController {
         this.repository = repository;
     }
 
-    @PostMapping("/register/manager")
-    public ResponseEntity registerManager(@Valid @RequestBody ManagerRegistrationRequest managerRegistrationRequest){
-        try {
-            userService.registerManager(managerRegistrationRequest);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
-
-    @PostMapping("/manage/register/user")
-    public ResponseEntity<String> createManagerUser(@Valid @RequestBody ManagerCreateUser managerCreateUser)
-            throws UserAlreadyExistsException {
-        try {
-            userService.ManagerCreateUser(managerCreateUser);
-            return ResponseEntity.ok("User created successfully by the manager");
-        } catch (UserAlreadyExistsException e) {
-            // Handle the exception and return an appropriate response
-            return ResponseEntity.status(HttpStatus.OK).body("User already exists");
-        }
-    }
-
     @GetMapping("/me")
     public User getLoggedInUserProfile(@AuthenticationPrincipal User user){ //when spring calls this method it will
         // automatically go into the get Authentication it will cast it onto the user and inject it as a parameter
 
         return user;
-
-
     }
 
     @GetMapping("/managed/buildings")
