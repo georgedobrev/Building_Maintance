@@ -1,5 +1,6 @@
 package com.blankfactor.MaintainMe.web.resource;
 
+import com.blankfactor.MaintainMe.entity.User;
 import lombok.*;
 
 import java.util.List;
@@ -19,4 +20,5 @@ public class UnitResource {
     private Integer residents;
     private Integer taxablePets;
     private Long unitTypeId;
+    private List<User> owners;
 }

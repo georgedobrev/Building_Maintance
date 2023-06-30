@@ -27,6 +27,7 @@ public class UnitAssembler {
         unit.setIdealSqm(resource.getIdealSqm());
         unit.setResidents(resource.getResidents());
         unit.setTaxablePets(resource.getTaxablePets());
+        unit.setOwners(resource.getOwners());
         Building building = buildingRepository.getById(resource.getBuildingId());
         UnitType unitType= unitTypeRepository.getById(resource.getUnitTypeId());
 
