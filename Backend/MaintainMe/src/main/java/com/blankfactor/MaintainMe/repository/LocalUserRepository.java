@@ -12,7 +12,7 @@ import java.util.Optional;
 //creates CRUD Repository for the user with all sorts of methods and since my user has an ID
 // of type Long I pass the Identifier as Long
 public interface LocalUserRepository extends ListCrudRepository<User,Long> {
-    Optional<User> findByUsernameIgnoreCase(String username);
+
 
     Optional<User> findByEmailIgnoreCase(String email);
     @Query(value = "SELECT * FROM User u WHERE u.email = :email", nativeQuery = true)

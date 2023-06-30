@@ -42,11 +42,10 @@ public class ProfileService {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        authUser.setUsername(request.getUsername());
+        authUser.setEmail(request.getEmail());
         authUser.setPassword(encryptionService.encryptPassword(request.getPassword()));
         authUser.setFirstName(request.getFirstName());
         authUser.setLastName(request.getLastName());
-        authUser.setEmail(request.getEmail());
 
         userRepository.save(authUser);
         return null;
