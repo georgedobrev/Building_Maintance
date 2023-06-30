@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ValidationError } from "yup";
-import { FormErrors, FormValues } from "../pages/register/RegisterInterfaces";
+import { FormErrors, FormValues } from "./RegisterInterfaces";
 import ValidationSchema from "../pages/register/ValidationSchema";
 
 const useAuthValidations = () => {

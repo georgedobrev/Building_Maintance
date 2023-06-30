@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import SelectField from "./SelectField";
 import useAuthValidations from "../../common/utils";
-import { FormValues } from "./RegisterInterfaces";
+import { FormValues } from "../../common/RegisterInterfaces";
 import { addUser } from "../../store/users/userSlice";
 import Users from "../users/Users.json";
 

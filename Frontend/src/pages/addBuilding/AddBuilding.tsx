@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import { fetchWrapper } from "../../services/callsWrapper";
 import useAuthValidations from "../../common/utils";
-import { FormValues } from "../register/RegisterInterfaces";
+import { FormValues } from "../../common/RegisterInterfaces";
+import apiService from "../../services/apiService";
 interface Country {
   name: {
     common: string;
@@ -31,7 +32,6 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "floors",
 ];
 
-const api_all_countries = "https://restcountries.com/v3.1/all";
 
 const AddBuilding: React.FC<FormValues> = () => {
   const theme = useTheme();
@@ -45,7 +45,7 @@ const AddBuilding: React.FC<FormValues> = () => {
   useEffect(() => {
     const fetchCountryNames = async () => {
       try {
-        const data = await fetchWrapper.get(api_all_countries);
+        const data = apiService.getAllCountries();
         const names = data.map((country: Country) => country.name.common);
         const sortedCountries = names.sort((a: string, b: string) =>
           a.localeCompare(b)
@@ -94,13 +94,9 @@ const AddBuilding: React.FC<FormValues> = () => {
     console.log(building);
 
     try {
-      const response = await fetchWrapper.post(
-        "http://localhost:8086/building/create",
-        building
-      );
-      console.log(response);
+      await apiService.addBuilding(building);
+      navigate("/");
     } catch (error) {
-      console.error("Error:", error);
     }
     navigate("/");
   };

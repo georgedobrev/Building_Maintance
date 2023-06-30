@@ -10,8 +10,8 @@ import {
   Autocomplete,
 } from "@mui/material";
 import useAuthValidations from "../../common/utils";
-import { FormValues } from "../register/RegisterInterfaces";
-import { fetchWrapper } from "../../services/callsWrapper";
+import { FormValues } from "../../common/RegisterInterfaces";
+import apiService from "../../services/apiService";
 
 interface Country {
   name: {
@@ -34,7 +34,6 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "entrances",
   "floors",
 ];
-const api_all_countries = "https://restcountries.com/v3.1/all";
 
 const AdminRegister: React.FC<FormValues> = () => {
   const theme = useTheme();
@@ -47,7 +46,7 @@ const AdminRegister: React.FC<FormValues> = () => {
   useEffect(() => {
     const fetchCountryNames = async () => {
       try {
-        const data = await fetchWrapper.get(api_all_countries);
+        const data = apiService.getAllCountries();
         const names = data.map((country: Country) => country.name.common);
         const sortedCountries = names.sort((a: string, b: string) =>
           a.localeCompare(b)
@@ -101,15 +100,10 @@ const AdminRegister: React.FC<FormValues> = () => {
         lastName: formValues.lastName,
       },
     };
-    console.log(building);
     try {
-      await fetchWrapper.post(
-        "http://localhost:8080/user/register/manager",
-        building
-      );
+      await apiService.registerManager(building);
       navigate("/");
     } catch (error) {
-      console.error("Error:", error);
     }
   };
 

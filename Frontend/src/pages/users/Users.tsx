@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
   Collapse,
@@ -21,18 +22,23 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import paymentData from "./Payments.json";
 import { Payment } from "../../store/payment/paymentSlice";
-import { useSelector } from "react-redux";
 import { selectUsers } from "../../store/users/userSlice";
 
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  buildingID: number;
+  unitID: number;
+}
+
 const createData = (
-  id: number,
-  first_name: string,
-  last_name: string,
-  email: string,
-  unitId: number,
-  buildingId: string | number,
+  user: User,
   paymentHistory: Payment[]
 ) => {
+  const { id, firstName: first_name, lastName: last_name, email, buildingID: buildingId, unitID: unitId } = user;
+  
   return {
     id,
     first_name,
