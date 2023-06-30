@@ -6,11 +6,8 @@ import {
   TextField,
   Typography,
   Modal,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   useTheme,
+  Autocomplete,
 } from "@mui/material";
 import { addNotification } from "../../store/notification/notificationSlice";
 import "./CreateAnnouncement.scss";
@@ -97,25 +94,23 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
           value={formData.description}
           onChange={handleChange}
         />
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="assign-to-label">Assign To</InputLabel>
-          <Select
-            required
-            labelId="assign-to-label"
-            id="assign-to-select"
-            name="assignTo"
-            value={formData.assignTo}
-            label="Assign To"
-            onChange={handleChange}
-          >
-            {users.map((user) => (
-              <MenuItem key={user.id} value={user.id}>
-                {user.firstName} {user.lastName} building {user.buildingID} unit{" "}
-                {user.unitID}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Autocomplete
+          id="combo-box-demo"
+          options={users}
+          getOptionLabel={(option) =>
+            `${option.firstName} ${option.lastName} building ${option.buildingID} unit ${option.unitID}`
+          }
+          renderInput={(params) => (
+            <TextField {...params} label="Assign To" margin="normal" />
+          )}
+          value={users.find((user) => user.id === Number(formData.assignTo))}
+          onChange={(event, newValue) => {
+            setFormData((prevState) => ({
+              ...prevState,
+              assignTo: newValue ? newValue.id.toString() : "",
+            }));
+          }}
+        />
         <Button
           onClick={handleSubmit}
           fullWidth

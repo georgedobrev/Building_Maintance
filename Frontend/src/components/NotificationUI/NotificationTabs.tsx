@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Tabs, Tab } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import { styled } from "@mui/system";
 import { useDispatch } from "react-redux";
 
@@ -19,7 +20,9 @@ export default function DisabledTabs() {
   const [value, setValue] = React.useState(0);
   const dispatch = useDispatch();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {};
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   return (
     <StyledTabs

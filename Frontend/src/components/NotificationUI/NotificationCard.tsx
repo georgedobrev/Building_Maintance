@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
+  Avatar,
   Card,
   CardActions,
   CardContent,
@@ -10,6 +11,7 @@ import {
   Typography,
   useTheme,
   Tooltip,
+  FormHelperText,
 } from "@mui/material";
 import {
   MessageOutlinedIcon,
@@ -44,6 +46,8 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const [showComments, setShowComments] = useState(false);
   const [editCommentId, setEditCommentId] = useState<null | number>(null);
   const [editCommentText, setEditCommentText] = useState("");
+  const [commentError, setCommentError] = useState(false);
+  const [editCommentError, setEditCommentError] = useState(false);
 
   const currentComment = useSelector((state: RootState) =>
     state.comment.filter((comment: Comment) => comment.notificationId === id)
@@ -66,6 +70,11 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   };
 
   const handleSendClick = () => {
+    if (comment.trim() === "") {
+      setCommentError(true);
+      return;
+    }
+
     dispatch(
       addComment({
         id: Date.now(),
@@ -75,6 +84,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       })
     );
     setComment("");
+    setCommentError(false);
   };
 
   const handleDeleteComment = (commentId: number) => {
@@ -84,22 +94,41 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const handleEditClick = (commentId: number, currentText: string) => {
     setEditCommentId(commentId);
     setEditCommentText(currentText);
+    setEditCommentError(false);
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditCommentText(e.target.value);
+    setEditCommentError(false);
+  };
+
+  const handleEditBlur = () => {
+    if (editCommentText.trim() === "") {
+      setEditCommentError(true);
+    } else {
+      setEditCommentId(null);
+    }
   };
 
   const handleEditConfirm = () => {
     if (editCommentId !== null) {
+      if (editCommentText.trim() === "") {
+        setEditCommentError(true);
+        return;
+      }
+
       dispatch(editComment({ id: editCommentId, text: editCommentText }));
-      setEditCommentId(null);
-      setEditCommentText("");
+
+      setTimeout(() => {
+        setEditCommentId(null);
+        setEditCommentText("");
+      }, 500);
     }
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
+    setCommentError(false);
   };
 
   return (
@@ -126,6 +155,8 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
           {showMessageInput && (
             <Box sx={styles.innerBox}>
               <TextField
+                error={commentError}
+                helperText={commentError ? "Can't post an empty comment" : ""}
                 multiline
                 rows={2}
                 variant="outlined"
@@ -149,7 +180,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
               </Button>
               <Typography variant="body2" sx={styles.commentTypography}>
                 {currentComment.length}
-                {currentComment.length === 1 ? "Comment" : "Comments"}
+                {currentComment.length === 1 ? " Comment" : " Comments"}
               </Typography>
             </Box>
           )}
@@ -161,36 +192,57 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
           >
             <MessageOutlinedIcon />
           </Button>
-          <Button
-            sx={styles.deleteButton}
-            size="small"
-            onClick={handleDeleteClick}
-            title="Delete notification"
-          >
-            <DeleteOutlineOutlinedIcon />
-          </Button>
+          {!currentUser && (
+            <Button
+              sx={styles.deleteButton}
+              size="small"
+              onClick={handleDeleteClick}
+              title="Delete notification"
+            >
+              <DeleteOutlineOutlinedIcon />
+            </Button>
+          )}
         </CardActions>
 
         <Box sx={styles.commentSectionBox}>
           {showComments &&
             currentComment.map((comment: Comment) => (
               <Box key={comment.id} sx={styles.commentInnerBox}>
-                {editCommentId === comment.id ? (
-                  <TextField
-                    multiline
-                    rows={2}
-                    variant="outlined"
-                    placeholder="Edit a comment..."
-                    fullWidth
-                    value={editCommentText}
-                    onChange={handleEditChange}
-                    sx={styles.editTextField}
+                <Box sx={styles.commentContentBox}>
+                  <Avatar
+                    alt="Remy Sharp"
+                    src="https://images.pexels.com/photos/1851164/pexels-photo-1851164.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    sx={styles.avatar}
                   />
-                ) : (
-                  <Typography variant="body2" sx={styles.commentBodyTypography}>
-                    {comment.text}
-                  </Typography>
-                )}
+                  <Box>
+                    {editCommentId === comment.id ? (
+                      <TextField
+                        error={editCommentError}
+                        helperText={
+                          editCommentError
+                            ? "Can't edit to an empty comment"
+                            : ""
+                        }
+                        multiline
+                        rows={2}
+                        variant="outlined"
+                        placeholder="Edit a comment..."
+                        fullWidth
+                        defaultValue={editCommentText}
+                        onChange={handleEditChange}
+                        onBlur={handleEditBlur}
+                        sx={styles.editTextField}
+                      />
+                    ) : (
+                      <Typography
+                        variant="body2"
+                        sx={styles.commentBodyTypography}
+                      >
+                        {comment.text}
+                      </Typography>
+                    )}
+                  </Box>
+                </Box>
                 <Button
                   sx={styles.deleteCommentButton}
                   size="small"

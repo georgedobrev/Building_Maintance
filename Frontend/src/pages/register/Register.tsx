@@ -1,5 +1,6 @@
-import { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -7,26 +8,65 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Autocomplete,
 } from "@mui/material";
 import SelectField from "./SelectField";
 import useAuthValidations from "../../common/utils";
 import { FormValues } from "./RegisterInterfaces";
 import { addUser } from "../../store/users/userSlice";
+import Users from "../users/Users.json";
 
-const Register = () => {
+const REQUIRED_FIELDS: (keyof FormValues)[] = [
+  "firstName",
+  "lastName",
+  "email",
+  "building",
+  "unit",
+];
+
+const Register: React.FC<FormValues> = () => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down("sm"));
+  const buildings = Array.from(new Set(Users.map((user) => user.buildingID)));
+  const units = Array.from(new Set(Users.map((user) => user.unitID)));
 
-  const { formValues, setFormValues, formErrors, validateField, setBuilding } =
-    useAuthValidations();
+  const {
+    formValues,
+    setFormValues,
+    formErrors,
+    validateField,
+    setBuilding,
+    setUnit,
+  } = useAuthValidations();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     Object.keys(formValues).forEach((field) =>
       validateField(field as keyof FormValues)
     );
-    dispatch(addUser(formValues));
+
+    const userValues = Object.fromEntries(
+      REQUIRED_FIELDS.map((field) => [field, formValues[field]])
+    );
+
+    const randomIdGenerator = Math.random();
+
+    const newUser = {
+      ...userValues,
+      id: randomIdGenerator,
+      unitID: formValues.unit,
+    };
+
+    dispatch(addUser(newUser));
+    navigate("/users");
+  };
+
+  const areAllFieldsFilled = (
+    requiredFields: (keyof FormValues)[]
+  ): boolean => {
+    return requiredFields.every((field) => formValues[field] !== "");
   };
 
   const handleChange = (
@@ -43,17 +83,17 @@ const Register = () => {
     <Box
       display="flex"
       flexDirection="column"
-      justifyContent="center"
       alignItems="center"
-      minHeight={`calc(100vh - 64px)`}
+      height="100vh"
       bgcolor={theme.palette.background.default}
+      overflow="auto"
     >
       <Typography
         variant="h4"
         component="h1"
         gutterBottom
         sx={{
-          mt: matches ? "16%" : "8%",
+          mt: "8%",
           fontFamily: theme.typography.fontFamily,
           fontWeight: 700,
           color: theme.palette.primary.main,
@@ -68,11 +108,11 @@ const Register = () => {
         sx={{
           mt: "1%",
           height: "100vh",
-          width: matches ? "100vw" : "40vw",
+          width: "40vw",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 6,
+          gap: 3,
         }}
       >
         <TextField
@@ -111,13 +151,31 @@ const Register = () => {
           error={!!formErrors.email}
           helperText={formErrors.email}
         />
-
-        <SelectField value={formValues.building} onChange={setBuilding} />
+        <Autocomplete
+          id="combo-box-demo"
+          options={buildings}
+          sx={{ width: "100%" }}
+          getOptionLabel={(option) => option}
+          renderInput={(params) => (
+            <TextField {...params} label="Building" margin="normal" />
+          )}
+          value={formValues.building}
+          onChange={(event, newValue) =>
+            setBuilding(newValue?.toString() || "")
+          }
+        />
+        <SelectField
+          label="Unit"
+          items={units}
+          value={formValues.unit}
+          onChange={setUnit}
+        />
         <Button
           type="submit"
           variant="contained"
           color="primary"
           sx={{ width: "100%" }}
+          disabled={!areAllFieldsFilled(REQUIRED_FIELDS)}
         >
           Register
         </Button>

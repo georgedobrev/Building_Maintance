@@ -19,31 +19,28 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
-import usersData from "./Users.json";
+import paymentData from "./Payments.json";
+import { Payment } from "../../store/payment/paymentSlice";
+import { useSelector } from "react-redux";
+import { selectUsers } from "../../store/users/userSlice";
 
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-  buildingID: number;
-  unitID: number;
-}
-
-const createData = (user: User) => {
+const createData = (
+  id: number,
+  first_name: string,
+  last_name: string,
+  email: string,
+  unitId: number,
+  buildingId: string | number,
+  paymentHistory: Payment[]
+) => {
   return {
-    ...user,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
+    id,
+    first_name,
+    last_name,
+    email,
+    unitId,
+    buildingId,
+    history: paymentHistory,
   };
 };
 
@@ -63,16 +60,16 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{row.firstName}</TableCell>
-        <TableCell>{row.lastName}</TableCell>
+        <TableCell>{row.first_name}</TableCell>
+        <TableCell>{row.last_name}</TableCell>
         <TableCell>{row.email}</TableCell>
-        <TableCell>{row.buildingID}</TableCell>
-        <TableCell>{row.unitID}</TableCell>
+        <TableCell>{row.buildingId}</TableCell>
+        <TableCell>{row.unitId}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 2 }}>
+            <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
                 Payment Details
               </Typography>
@@ -92,12 +89,16 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
                       <TableCell component="th" scope="row">
                         {historyRow.date}
                       </TableCell>
-                      <TableCell>{"Ivoice number goes here "}</TableCell>
+                      <TableCell>{historyRow.invoiceNumber}</TableCell>
                       <TableCell align="right">
-                        {"Building tax/repair tax here"}
+                        {historyRow.paymentType}
                       </TableCell>
-                      <TableCell align="right">{"Paypal"}</TableCell>
-                      <TableCell align="right">{"Total BGN paid"}</TableCell>
+                      <TableCell align="right">
+                        {historyRow.paymentMethod}
+                      </TableCell>
+                      <TableCell align="right">
+                        {historyRow.totalPrice}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -110,13 +111,30 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
   );
 };
 
-const rows = usersData.map((user) => createData(user));
-
 const CollapsibleTable: FC = () => {
-  const theme = useTheme();
-  const [buildingFilter, setBuildingFilter] = useState<number | null>(null);
+  const usersData = useSelector(selectUsers);
 
-  const applyFilter = (buildingId: number) => {
+  const rows = usersData.map((user) => {
+    const paymentHistory = paymentData.filter(
+      (payment) => payment.id === user.id
+    );
+    return createData(
+      user.id,
+      user.firstName,
+      user.lastName,
+      user.email,
+      user.unitID,
+      user.building,
+      paymentHistory
+    );
+  });
+
+  const theme = useTheme();
+  const [buildingFilter, setBuildingFilter] = useState<string | number | null>(
+    null
+  );
+
+  const applyFilter = (buildingId: string | number) => {
     setBuildingFilter(buildingId);
   };
 
@@ -125,20 +143,19 @@ const CollapsibleTable: FC = () => {
   };
 
   const filteredRows = buildingFilter
-    ? rows.filter((row) => row.buildingID === buildingFilter)
+    ? rows.filter((row) => row.buildingId === buildingFilter)
     : rows;
 
-  const buildingIds = Array.from(new Set(rows.map((row) => row.buildingID)));
+  const buildingIds = Array.from(new Set(rows.map((row) => row.buildingId)));
 
   return (
     <Box height="100vh" width="100%" bgcolor={theme.palette.background.default}>
       <Box
         display="flex"
         flexDirection="column"
-        justifyContent="center"
         alignItems="center"
         height="100%"
-        marginTop="0%"
+        marginTop="64px"
         p={1}
         bgcolor={theme.palette.background.default}
       >
@@ -153,7 +170,7 @@ const CollapsibleTable: FC = () => {
           <Select
             sx={{ border: "none" }}
             value={buildingFilter || ""}
-            onChange={(e) => applyFilter(Number(e.target.value))}
+            onChange={(e) => applyFilter(e.target.value)}
             startAdornment={
               <IconButton disableRipple disableFocusRipple>
                 <FilterAltOutlinedIcon />
@@ -187,7 +204,7 @@ const CollapsibleTable: FC = () => {
             </TableHead>
             <TableBody>
               {filteredRows.map((row) => (
-                <Row key={row.firstName} row={row} />
+                <Row key={row.first_name} row={row} />
               ))}
             </TableBody>
           </Table>
