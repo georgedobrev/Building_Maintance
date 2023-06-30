@@ -1,6 +1,9 @@
 package com.blankfactor.MaintainMe.web.resource;
 
+import com.blankfactor.MaintainMe.entity.User;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,5 +19,6 @@ public class UpdateUnitResource {
     private Float idealSqm;
     private Integer residents;
     private Integer taxablePets;
+    private List<User> owners;
 
 }

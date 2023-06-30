@@ -49,6 +49,7 @@ public class UnitService {
         existingUnit.setIdealSqm(updateUnitResource.getIdealSqm());
         existingUnit.setResidents(updateUnitResource.getResidents());
         existingUnit.setTaxablePets(updateUnitResource.getTaxablePets());
+        existingUnit.setOwners(updateUnitResource.getOwners());
 
         return unitRepository.save(existingUnit);
     }
