@@ -20,7 +20,6 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
-import paymentData from "./Payments.json";
 import { Payment } from "../../store/payment/paymentSlice";
 import { selectUsers } from "../../store/users/userSlice";
 
@@ -33,12 +32,16 @@ interface User {
   unitID: number;
 }
 
-const createData = (
-  user: User,
-  paymentHistory: Payment[]
-) => {
-  const { id, firstName: first_name, lastName: last_name, email, buildingID: buildingId, unitID: unitId } = user;
-  
+const createData = (user: User, paymentHistory: Payment[]) => {
+  const {
+    id,
+    firstName: first_name,
+    lastName: last_name,
+    email,
+    buildingID: buildingId,
+    unitID: unitId,
+  } = user;
+
   return {
     id,
     first_name,

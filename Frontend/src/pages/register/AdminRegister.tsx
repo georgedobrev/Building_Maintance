@@ -46,14 +46,14 @@ const AdminRegister: React.FC<FormValues> = () => {
   useEffect(() => {
     const fetchCountryNames = async () => {
       try {
-        const data = apiService.getAllCountries();
+        const data = await apiService.getAllCountries();
         const names = data.map((country: Country) => country.name.common);
         const sortedCountries = names.sort((a: string, b: string) =>
           a.localeCompare(b)
         );
         setCountryNames(sortedCountries);
       } catch (error) {
-        console.error(error);
+        throw error;
       }
     };
 
@@ -103,8 +103,7 @@ const AdminRegister: React.FC<FormValues> = () => {
     try {
       await apiService.registerManager(building);
       navigate("/");
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const areAllFieldsFilled = (

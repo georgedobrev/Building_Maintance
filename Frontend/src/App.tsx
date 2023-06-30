@@ -12,8 +12,6 @@ import { RootState } from "./store/store";
 import Users from "./pages/users/Users";
 import AddBuilding from "./pages/addBuilding/AddBuilding";
 import AdminRegister from "./pages/register/AdminRegister";
-import AddUnit from "./pages/addUnit/AddUnit";
-import Payments from "./pages/payments/Payments";
 import Footer from "./components/Footer/Footer";
 const currentUser = false;
 const manager = false;

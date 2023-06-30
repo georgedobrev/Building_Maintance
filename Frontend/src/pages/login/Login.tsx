@@ -12,12 +12,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { fetchWrapper } from "../../services/callsWrapper";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import BuildingPic from "../../assets/backgroundBFM.jpg";
 import { FormValues } from "./LoginInterfaces";
 import useAuthValidations from "../../common/utils";
 import GoogleButton from "./GoogleButton";
+import { authService } from "../../services/authService";
 
 const SignInSide = () => {
   const theme = useTheme();
@@ -36,17 +36,10 @@ const SignInSide = () => {
       email: formValues.email,
       password: formValues.password,
     };
-    console.log(JSON.stringify(user));
-
     try {
-      const response = await fetchWrapper.post(
-        "http://localhost:8080/auth/login",
-        user
-      );
-      console.log(response);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+      const response = await authService.login(user);
+      localStorage.setItem("token", response.jwt);
+    } catch (error) {}
   };
 
   const handleChange = (

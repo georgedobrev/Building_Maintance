@@ -1,5 +1,0 @@
-{
-    "api_all_countries": "https://restcountries.com/v3.1/all",
-    "register_manager": "http://localhost:8080/user/register/manager",
-    "add_building": "http://localhost:8080/building/create"
-}

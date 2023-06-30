@@ -9,7 +9,6 @@ import {
   useMediaQuery,
   Autocomplete,
 } from "@mui/material";
-import { fetchWrapper } from "../../services/callsWrapper";
 import useAuthValidations from "../../common/utils";
 import { FormValues } from "../../common/RegisterInterfaces";
 import apiService from "../../services/apiService";
@@ -32,7 +31,6 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "floors",
 ];
 
-
 const AddBuilding: React.FC<FormValues> = () => {
   const theme = useTheme();
   const [countryNames, setCountryNames] = useState([]);
@@ -45,14 +43,14 @@ const AddBuilding: React.FC<FormValues> = () => {
   useEffect(() => {
     const fetchCountryNames = async () => {
       try {
-        const data = apiService.getAllCountries();
+        const data = await apiService.getAllCountries();
         const names = data.map((country: Country) => country.name.common);
         const sortedCountries = names.sort((a: string, b: string) =>
           a.localeCompare(b)
         );
         setCountryNames(sortedCountries);
       } catch (error) {
-        console.error(error);
+        throw error;
       }
     };
 
@@ -91,13 +89,11 @@ const AddBuilding: React.FC<FormValues> = () => {
         streetNumber: formValues.streetNumber,
       },
     };
-    console.log(building);
 
     try {
       await apiService.addBuilding(building);
       navigate("/");
-    } catch (error) {
-    }
+    } catch (error) {}
     navigate("/");
   };
 
