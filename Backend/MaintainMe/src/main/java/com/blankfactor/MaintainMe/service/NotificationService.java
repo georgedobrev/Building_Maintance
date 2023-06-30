@@ -32,7 +32,6 @@ public class NotificationService {
         return notificationRepository.getNotificationByBuildingId(request.getId());
     }
 
-
     public Notification sendNotification(NotificationRequest notificationRequest) throws Exception {
 
         Building building =  buildingRepository.findById(notificationRequest.getBuildingId())
