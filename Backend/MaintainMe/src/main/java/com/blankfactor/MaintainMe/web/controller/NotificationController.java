@@ -21,36 +21,25 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-//    @GetMapping("/all")
-//    public List<Notification> getNotifications(){
-//        return notificationService.getAllNotifications();
-//    }
-
     @GetMapping("/building")
     public List<Notification> getNotificationsByBuildingId(@RequestBody NotificationByBuildingRequest request) {
         return notificationService.getAllNotificationsByBuilding(request);
     }
 
-//    @GetMapping("building/{buildingId}")
-//    public List<Notification> getNotificationsByBuildingId(@PathVariable Long buildingId) {
-//        return notificationService.getAllNotificationsByBuilding(buildingId);
-//    }
-
-    @PostMapping("/sendNotification")
+    @PostMapping("/send")
     public ResponseEntity<Notification> sendNotification( @RequestBody NotificationRequest request) throws Exception {
         return ResponseEntity.ok(notificationService.sendNotification(request));
     }
 
-    @PostMapping("/editNotification")
+    @PostMapping("/edit")
     public ResponseEntity<Notification> editNotification(@RequestBody NotificationEditRequest request) throws Exception {
         return ResponseEntity.ok(notificationService.editNotification(request));
     }
 
-    @PostMapping("/deleteNotification")
+    @PostMapping("/delete")
     public ResponseEntity<Notification> deleteNotification(@RequestBody NotificationDeleteRequest request) {
         return ResponseEntity.ok(notificationService.deleteNotification(request));
     }
-
 
     @ExceptionHandler(InvalidNotificationException.class)
     public ResponseEntity<String> handleInvalidNotificationException(InvalidNotificationException ex) {

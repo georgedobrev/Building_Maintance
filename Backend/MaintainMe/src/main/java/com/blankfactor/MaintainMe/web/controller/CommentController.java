@@ -26,17 +26,17 @@ public class CommentController {
         return commentService.getCommentByNotificationId(request);
     }
 
-    @PostMapping("/sendComment")
+    @PostMapping("/send")
     public ResponseEntity<Comment> sendComment(@RequestBody CommentRequest request) throws Exception {
         return ResponseEntity.ok(commentService.sendComment(request));
     }
 
-    @PostMapping("/editComment")
+    @PostMapping("/edit")
     public ResponseEntity<Comment> editComment(@RequestBody EditCommentRequest request) throws Exception {
         return ResponseEntity.ok(commentService.editComment(request));
     }
 
-    @PostMapping("/deleteCommente")
+    @PostMapping("/delete")
     public ResponseEntity<Comment> deleteComment(@RequestBody DeleteCommentRequest request) throws Exception {
         return ResponseEntity.ok(commentService.deleteComment(request));
     }

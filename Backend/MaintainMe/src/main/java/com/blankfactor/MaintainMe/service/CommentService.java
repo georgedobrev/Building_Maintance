@@ -4,7 +4,6 @@ import com.blankfactor.MaintainMe.entity.Comment;
 import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.CommentRepository;
-import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.NotificationRepository;
 import com.blankfactor.MaintainMe.web.exception.InvalidCommentException;
 import com.blankfactor.MaintainMe.web.resource.Comment.CommentByNotificationRequest;
@@ -15,8 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,14 +28,12 @@ public class CommentService {
         return commentRepository.getCommentByNotificationId(request.getId());
     }
 
-
     public Comment sendComment(CommentRequest commentRequest) throws Exception {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         Notification notification = notificationRepository.findById(commentRequest.getNotificationId())
                 .orElseThrow(() -> new Exception("Notification not found"));
-
 
         Date date = new Date();
 
@@ -64,10 +59,8 @@ public class CommentService {
         Comment comment = commentRepository.findById(editCommentRequest.getCommentId())
                 .orElseThrow(() -> new Exception("Notification not found"));
 
-
         comment.setText(editCommentRequest.getText());
         commentRepository.save(comment);
-
 
         return null;
     }

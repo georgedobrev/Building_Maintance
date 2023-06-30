@@ -71,35 +71,6 @@ public class UserService {
 
     }
 
-    public Collection<Map<String, Object>> getBuildingsManagedByLoggedManager() {
-
-        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        Role role = new Role();
-        role.setId(2L);
-        Collection<Map<String, Object>> buildingId = userRoleBuildingRepository.getBuildingDataByUserIdAndRoleId(authUser.getId(), role.getId());
-        return buildingId;
-
-    }
-
-
-    public String loginUser(LoginRequest loginBody) {
-        Optional<User> optionalUser = localUserRepository.findByEmailIgnoreCase(loginBody.getEmail());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
-                context.setAuthentication(authentication);
-                SecurityContextHolder.setContext(context);
-                System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-                return jwtService.generateJWT(user);
-            }
-
-        }
-        return null;
-    }
-
     @Transactional
     public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
 
@@ -149,14 +120,18 @@ public class UserService {
 
     }
 
-    public Map<String, Object> getRoleInBuilding() {
+    public String loginUser(LoginRequest loginBody) {
+        Optional<User> optionalUser = localUserRepository.findByEmailIgnoreCase(loginBody.getEmail());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
+              authenticate(user);
+            }
 
-        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-
-        Map<String, Object> roleInBuilding = userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
-        return roleInBuilding;
+        }
+        return null;
     }
+
 
     @Transactional
     public void updateResetPasswordToken(String token, String email) throws Exception {
@@ -207,14 +182,28 @@ public class UserService {
         return (String) attributes.get("email");
     }
 
-    public void authenticate(User user){
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+
+    public Collection<Map<String, Object>> getBuildingsManagedByLoggedManager() {
+
+        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        Role role = new Role();
+        role.setId(2L);
+        Collection<Map<String, Object>> buildingId = userRoleBuildingRepository.getBuildingDataByUserIdAndRoleId(authUser.getId(), role.getId());
+        return buildingId;
+
     }
+
+
+    public Map<String, Object> getRoleInBuilding() {
+
+        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+
+        Map<String, Object> roleInBuilding = userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
+        return roleInBuilding;
+    }
+
 
     public User getCurrentUser(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
         String email = getEmailFromToken(oAuth2AuthenticationToken);
@@ -222,6 +211,16 @@ public class UserService {
         authenticate(user);
         return user;
     }
+
+    public void authenticate(User user){
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+    }
+
+
 
 
 
