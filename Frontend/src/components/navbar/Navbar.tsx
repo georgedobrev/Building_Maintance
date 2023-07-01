@@ -254,7 +254,15 @@ const Navbar = ({ currentUser, manager }: NavbarProps) => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    if (setting.toLowerCase() === "logout") {
+                      localStorage.removeItem("token");
+                    }
+                  }}
+                >
                   <Typography textAlign="center">
                     {setting.toLowerCase() === "logout" ? (
                       <StyledDropdownLink to="/login">
