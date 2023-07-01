@@ -1,4 +1,5 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   IconButton,
   useTheme,
@@ -21,6 +22,8 @@ import { authService } from "../../services/authService";
 
 const SignInSide = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
@@ -38,8 +41,18 @@ const SignInSide = () => {
     };
     try {
       const response = await authService.login(user);
-      localStorage.setItem("token", response.jwt);
-    } catch (error) {}
+
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.jwt);
+        navigate("/");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setError("Email or password incorrect. Try again.");
+      } else {
+        setError("An error occurred. Please try again.");
+      }
+    }
   };
 
   const handleChange = (
@@ -205,6 +218,7 @@ const SignInSide = () => {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+              {error && <p style={{ color: "red" }}>{error}</p>}
               <Button
                 type="submit"
                 fullWidth

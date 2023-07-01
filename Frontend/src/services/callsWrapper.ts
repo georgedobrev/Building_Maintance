@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from "axios";
 
 type Methods = "get" | "post" | "delete";
 type Headers = { "Content-Type": string };
-type Data = Record<string, unknown>; 
+type Data = Record<string, unknown>;
 type RequestOptions = {
   method: Methods;
   headers?: Headers;
@@ -32,14 +32,7 @@ const _delete = async (url: string) => {
   return handleResponse(await axios(url, requestOptions));
 };
 
-const handleResponse = async (response: AxiosResponse) => {
-  if (response.status !== 200) {
-    const error = (response.data && response.data.message) || response.statusText;
-    throw error;
-  }
-
-  return response.data;
-};
+const handleResponse = (response: AxiosResponse) => response;
 
 export const fetchWrapper = {
   get,

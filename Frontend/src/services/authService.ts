@@ -34,17 +34,17 @@ const post = async (url: string, body: any, token: string) => {
 };
 
 const login = async (body: any) => {
-  try {
-    const response = await fetchWrapper.post(
-      `${config.baseURL}${config.login}`,
-      body
-    );
-    return response;
-  } catch (error) {
-    throw error;
+  const response = await fetchWrapper.post(
+    `${config.baseURL}${config.login}`,
+    body
+  );
+
+  if (response.status >= 200 && response.status < 300) {
+    return { status: response.status, data: response.data };
+  } else {
+    throw { status: response.status, data: response.data };
   }
 };
-
 const handleResponse = async (response: AxiosResponse) => {
   if (response.status !== 200) {
     const error =
