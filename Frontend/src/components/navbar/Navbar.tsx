@@ -215,6 +215,8 @@ const Navbar = ({ currentUser, manager }: NavbarProps) => {
                       ? "/register-admin"
                       : page === "Add Unit"
                       ? "/add-unit"
+                      : page === "Add Building"
+                      ? "/add-building"
                       : `/${page.replace(/\s/g, "").toLowerCase()}`
                   }
                 >

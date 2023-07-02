@@ -105,8 +105,6 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const handleEditBlur = () => {
     if (editCommentText.trim() === "") {
       setEditCommentError(true);
-    } else {
-      setEditCommentId(null);
     }
   };
 
@@ -119,10 +117,8 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
 
       dispatch(editComment({ id: editCommentId, text: editCommentText }));
 
-      setTimeout(() => {
-        setEditCommentId(null);
-        setEditCommentText("");
-      }, 500);
+      setEditCommentId(null);
+      setEditCommentText("");
     }
   };
 

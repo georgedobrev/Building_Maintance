@@ -7,7 +7,7 @@ interface HomeProps {
   currentUser: boolean;
 }
 
-const Home: React.FC<HomeProps> = () => {
+const Home: React.FC<HomeProps> = ({ manager, currentUser }) => {
   return (
     <div
       style={{

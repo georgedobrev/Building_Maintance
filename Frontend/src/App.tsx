@@ -14,7 +14,7 @@ import AddBuilding from "./pages/addBuilding/AddBuilding";
 import AdminRegister from "./pages/register/AdminRegister";
 import Footer from "./components/Footer/Footer";
 const currentUser = false;
-const manager = false;
+const manager = true;
 
 const NavbarWrapper = () => {
   const location = useLocation();
@@ -59,8 +59,8 @@ const App = () => {
               element={<Announcements currentUser={currentUser} />}
             />
           )}
-          {manager && <Route path="/add-unit" element={<AddUnit />} />}
-          {manager && <Route path="/addbuilding" element={<AddBuilding />} />}
+          {/* {manager && <Route path="/add-unit" element={<AddUnit />} />} */}
+          {manager && <Route path="/add-building" element={<AddBuilding />} />}
           {!currentUser && !manager && (
             <Route
               path="/register-admin"

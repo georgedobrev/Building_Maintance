@@ -40,22 +40,19 @@ const AddBuilding: React.FC<FormValues> = () => {
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
 
-  useEffect(() => {
-    const fetchCountryNames = async () => {
-      try {
-        const data = await apiService.getAllCountries();
-        const names = data.map((country: Country) => country.name.common);
-        const sortedCountries = names.sort((a: string, b: string) =>
-          a.localeCompare(b)
-        );
-        setCountryNames(sortedCountries);
-      } catch (error) {
-        throw error;
-      }
-    };
-
-    fetchCountryNames();
-  }, []);
+  const fetchCountryNames = async () => {
+    try {
+      const data = await apiService.getAllCountries();
+      const names = data.map((country: Country) => country.name.common);
+      const sortedCountries = names.sort((a: string, b: string) =>
+        a.localeCompare(b)
+      );
+      setCountryNames(sortedCountries);
+    } catch (error) {
+      throw error;
+    }
+  };
+  fetchCountryNames();
 
   const handleAutocompleteChange = (
     fieldName: keyof FormValues,

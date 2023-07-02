@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -43,22 +43,20 @@ const AdminRegister: React.FC<FormValues> = () => {
     useAuthValidations();
   const [countryNames, setCountryNames] = useState([]);
 
-  useEffect(() => {
-    const fetchCountryNames = async () => {
-      try {
-        const data = await apiService.getAllCountries();
-        const names = data.map((country: Country) => country.name.common);
-        const sortedCountries = names.sort((a: string, b: string) =>
-          a.localeCompare(b)
-        );
-        setCountryNames(sortedCountries);
-      } catch (error) {
-        throw error;
-      }
-    };
+  const fetchCountryNames = async () => {
+    try {
+      const data = await apiService.getAllCountries();
+      const names = data.map((country: Country) => country.name.common);
+      const sortedCountries = names.sort((a: string, b: string) =>
+        a.localeCompare(b)
+      );
+      setCountryNames(sortedCountries);
+    } catch (error) {
+      throw error;
+    }
+  };
 
-    fetchCountryNames();
-  }, []);
+  fetchCountryNames();
 
   const handleAutocompleteChange = (
     fieldName: keyof FormValues,
