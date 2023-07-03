@@ -100,6 +100,28 @@ CREATE TABLE Invoice (
     type LONG,
 FOREIGN KEY (unitID) REFERENCES Unit(ID)
 );
+CREATE TABLE `payment` (
+    `id` bigint NOT NULL,
+      `user_id` bigint DEFAULT NULL,
+      `payment_date` date DEFAULT NULL,
+     `invoice_id` int DEFAULT NULL,
+        `payment_amount` float DEFAULT NULL,
+     PRIMARY KEY (`id`),
+      KEY `userId` (`user_id`),
+      KEY `invoiceId` (`invoice_id`),
+      CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+     CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `password_reset_token` (
+  `id` int NOT NULL AUTO_INCREMENT,
+   `token` varchar(255) NOT NULL,
+     `user_id` bigint NOT NULL,
+    `expiry_date` datetime(6) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+ KEY `user_id` (`user_id`),
+    CONSTRAINT `password_reset_token_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE user
 (
