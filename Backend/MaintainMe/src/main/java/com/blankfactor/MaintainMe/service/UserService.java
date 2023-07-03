@@ -67,7 +67,7 @@ public class UserService {
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding(user, role, savedBuilding);
 
         userRoleBuildingRepository.save(userRoleBuilding);
-
+  
 
     }
 

@@ -15,12 +15,12 @@ import java.util.Arrays;
 
 @Configuration
 public class WebSecurityConfig {
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.cors().and().authorizeRequests().anyRequest().permitAll();
-//        return http.build();
-//    }
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.cors().and().authorizeRequests().anyRequest().permitAll();
+        return http.build();
+    }
 
     protected void configure(HttpSecurity http) throws Exception {
         http
