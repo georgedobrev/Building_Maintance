@@ -1,18 +1,15 @@
 package com.blankfactor.MaintainMe.service;
 
-
 import com.blankfactor.MaintainMe.entity.Invoice;
 import com.blankfactor.MaintainMe.entity.Payment;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.InvoiceRepository;
 import com.blankfactor.MaintainMe.repository.PaymentRepository;
 import com.blankfactor.MaintainMe.web.resource.PaymentRequest;
-import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -24,14 +21,22 @@ public class PaymentService {
     private final InvoiceRepository invoiceRepository;
     private final EmailService emailService;
 
-    public Payment makePayment(PaymentRequest paymentRequest) throws MessagingException, UnsupportedEncodingException {
+    public Payment makePayment(PaymentRequest paymentRequest) throws Exception {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         Date date = new Date();
 
         Invoice invoice = invoiceRepository.getInvoiceById(paymentRequest.getInvoiceId());
-        invoice.setTotalAmount(invoice.getTotalAmount()-paymentRequest.getPayedAmount());
+
+        if(paymentRequest.getPayedAmount() >0){
+            invoice.setTotalAmount(invoice.getTotalAmount()-paymentRequest.getPayedAmount());
+            if(invoice.getTotalAmount() ==0){
+                invoice.setIsFullyPaid(true);
+            }
+        }else {
+            throw new Exception("Payed amount should be more than 0");
+        }
 
         invoiceRepository.save(invoice);
 
@@ -55,7 +60,6 @@ public class PaymentService {
                 + "\n Invoice info: " + invoice.getInvoiceInfo();
 
         emailService.sendEmail(authUser.getEmail(),emailSubject, emailText);
-
 
         return null;
     }
