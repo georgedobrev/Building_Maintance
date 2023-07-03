@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Entity
 @Builder
@@ -14,9 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "payment")
 public class Payment {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -24,10 +26,12 @@ public class Payment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "payment_date", nullable = false)
-    private Data date;
+    private Date date;
 
-    @Column(name = "invoice_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "invoice_id", nullable = false)
     private Invoice invoice;
 
     @Column(name = "payment_amount", nullable = false)

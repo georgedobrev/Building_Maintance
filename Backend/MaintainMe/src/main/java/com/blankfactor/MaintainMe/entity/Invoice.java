@@ -14,7 +14,7 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private int id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "unit_id", nullable = false)

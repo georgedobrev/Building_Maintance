@@ -8,11 +8,14 @@ import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.service.UserService;
 import com.blankfactor.MaintainMe.web.resource.ManagerCreateUser;
 import com.blankfactor.MaintainMe.web.resource.ManagerRegistrationRequest;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 //Controller for user registration and log in authentication
 @RestController
@@ -42,6 +45,10 @@ public class AuthenticationController {
         } catch (UserAlreadyExistsException e) {
             // Handle the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.OK).body("User already exists");
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
     }
 
