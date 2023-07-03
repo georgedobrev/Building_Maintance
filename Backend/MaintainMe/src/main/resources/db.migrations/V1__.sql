@@ -88,6 +88,19 @@ CREATE TABLE unit_type
     CONSTRAINT PK_UNIT_TYPE PRIMARY KEY (id)
 );
 
+CREATE TABLE Invoice (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    unitID INT,
+    totalAmount FLOAT,
+     forMonth DATE,
+    dueDate DATE,
+    issueDate DATE,
+    InvoiceInfo VARCHAR(150),
+    isFullyPaid BOOLEAN,
+    type LONG,
+FOREIGN KEY (unitID) REFERENCES Unit(ID)
+);
+
 CREATE TABLE user
 (
     id         BIGINT AUTO_INCREMENT NOT NULL,
@@ -97,7 +110,7 @@ CREATE TABLE user
     last_name  VARCHAR(255) NOT NULL,
     password   VARCHAR(255) NOT NULL,
     CONSTRAINT PK_USER PRIMARY KEY (id),
-    UNIQUE (email),
+    UNIQUE (email)
 );
 
 CREATE TABLE user_role_building

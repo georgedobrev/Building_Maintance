@@ -67,7 +67,7 @@ public class UserService {
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding(user, role, savedBuilding);
 
         userRoleBuildingRepository.save(userRoleBuilding);
-  
+
 
     }
 
@@ -126,6 +126,7 @@ public class UserService {
             User user = optionalUser.get();
             if (encryptionService.verifyPassword(loginBody.getPassword(), user.getPassword())) {
               authenticate(user);
+              return jwtService.generateJWT(user);
             }
 
         }
