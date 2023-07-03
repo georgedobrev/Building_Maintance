@@ -1,6 +1,7 @@
 package com.blankfactor.MaintainMe.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class Payment {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -30,6 +32,7 @@ public class Payment {
     @Column(name = "payment_date", nullable = false)
     private Date date;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "invoice_id", nullable = false)
     private Invoice invoice;

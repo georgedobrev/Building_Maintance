@@ -24,7 +24,6 @@ public class PaymentService {
     private final InvoiceRepository invoiceRepository;
     private final EmailService emailService;
 
-
     //makePayment to invoice
 
     public Payment makePayment(PaymentRequest paymentRequest) throws MessagingException, UnsupportedEncodingException {
@@ -71,7 +70,8 @@ public class PaymentService {
     public List<Payment> getPaymentHistory(){
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return paymentRepository.getPaymentsByUser(authUser.getId());
+        System.out.println(authUser.getEmail());
+        return paymentRepository.findAllByUserId(authUser.getId());
 
     }
 
