@@ -51,4 +51,7 @@ public class Unit {
     @JoinColumn(name = "unit_type_id", nullable = false)
     private UnitType unitType;
 
+    @OneToMany(mappedBy = "unit", orphanRemoval = true)
+    private List<Invoice> invoices = new ArrayList<>();
+
 }
