@@ -52,7 +52,10 @@ const AddBuilding: React.FC<FormValues> = () => {
       throw error;
     }
   };
-  fetchCountryNames();
+
+  useEffect(() => {
+    fetchCountryNames();
+  }, []);
 
   const handleAutocompleteChange = (
     fieldName: keyof FormValues,

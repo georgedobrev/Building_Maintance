@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -56,7 +56,9 @@ const AdminRegister: React.FC<FormValues> = () => {
     }
   };
 
-  fetchCountryNames();
+  useEffect(() => {
+    fetchCountryNames();
+  }, []);
 
   const handleAutocompleteChange = (
     fieldName: keyof FormValues,
