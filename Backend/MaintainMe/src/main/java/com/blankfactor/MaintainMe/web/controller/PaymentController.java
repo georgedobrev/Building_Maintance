@@ -19,7 +19,6 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final PaymentRepository paymentRepository;
 
     @PostMapping("/make")
     public ResponseEntity<Payment> makePayment(@RequestBody PaymentRequest request) throws Exception {

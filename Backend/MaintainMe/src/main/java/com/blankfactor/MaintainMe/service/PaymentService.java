@@ -24,8 +24,6 @@ public class PaymentService {
     private final InvoiceRepository invoiceRepository;
     private final EmailService emailService;
 
-    //makePayment to invoice
-
     public Payment makePayment(PaymentRequest paymentRequest) throws MessagingException, UnsupportedEncodingException {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -52,7 +50,6 @@ public class PaymentService {
             throw new RuntimeException(e);
         }
 
-
         String emailSubject = "Payment was made to invoice with ID: " + invoice.getId();
         String emailText = emailSubject + "\n Invoice info: \n Total left: " +invoice.getTotalAmount() + "\n Due date: " + invoice.getDueDate()
                 + "\n Invoice info: " + invoice.getInvoiceInfo();
@@ -60,12 +57,8 @@ public class PaymentService {
         emailService.sendEmail(authUser.getEmail(),emailSubject, emailText);
 
 
-
         return null;
     }
-
-
-    //check payment history
 
     public List<Payment> getPaymentHistory(){
 
