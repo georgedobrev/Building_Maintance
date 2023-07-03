@@ -37,7 +37,7 @@ public class Invoice {
     @Temporal(TemporalType.DATE)
     @Column(name = "due_date", nullable = false)
     private Date dueDate;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @Column(name = "issue_date", nullable = false)
