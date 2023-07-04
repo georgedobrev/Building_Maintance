@@ -8,7 +8,6 @@ import {
   CssBaseline,
   FormControlLabel,
   InputAdornment,
-  Link,
   Paper,
   TextField,
   Typography,
@@ -18,6 +17,7 @@ import BuildingPic from "../../assets/backgroundBFM.jpg";
 import { FormValues } from "./LoginInterfaces";
 import useAuthValidations from "../../common/utils";
 import GoogleButton from "./GoogleButton";
+import { authService } from "../../services/authService";
 
 const SignInSide = () => {
   const theme = useTheme();
@@ -25,12 +25,21 @@ const SignInSide = () => {
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+
     Object.keys(formValues).forEach((field) =>
       validateField(field as keyof FormValues)
     );
-    console.log(formValues);
+
+    const user = {
+      email: formValues.email,
+      password: formValues.password,
+    };
+    try {
+      const response = await authService.login(user);
+      localStorage.setItem("token", response.jwt);
+    } catch (error) {}
   };
 
   const handleChange = (
