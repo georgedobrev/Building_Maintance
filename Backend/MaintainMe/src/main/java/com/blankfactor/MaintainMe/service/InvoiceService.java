@@ -1,54 +1,88 @@
 package com.blankfactor.MaintainMe.service;
 
 import com.blankfactor.MaintainMe.entity.Invoice;
-import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.entity.Unit;
+import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.InvoiceRepository;
+import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.UnitRepository;
-import com.blankfactor.MaintainMe.web.exception.InvalidNotificationException;
-import com.blankfactor.MaintainMe.web.resource.InvoiceResource;
-import org.springframework.jmx.access.InvalidInvocationException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
 @Service
 public class InvoiceService {
     private InvoiceRepository invoiceRepository;
     private UnitRepository unitRepository;
+   private final EmailService emailService;
 
-    public InvoiceService(InvoiceRepository invoiceRepository, UnitRepository unitRepository) {
+
+    private final LocalUserRepository localUserRepository;
+
+    public InvoiceService(InvoiceRepository invoiceRepository, UnitRepository unitRepository, EmailService emailService, LocalUserRepository localUserRepository) {
         this.invoiceRepository = invoiceRepository;
         this.unitRepository = unitRepository;
+        this.emailService = emailService;
+        this.localUserRepository = localUserRepository;
     }
 
-    public Invoice createInvoice(InvoiceResource invoiceResource) throws Exception {
 
-        Unit unit = unitRepository.findById(invoiceResource.getUnitId()) .
-                orElseThrow(() -> new Exception("Unit not found"));
+    public List<Invoice> findInvoicesByUnitId(Long unitId) {
+        return invoiceRepository.findByUnit_Id(unitId);
+    }
 
-        try{
+    @Scheduled(cron = "0 0 0 1 * *")
+    public void sendMonthlyInvoices() {
+        List<Unit> units = unitRepository.findAll();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, 1);
+        Date nextMonthDate = calendar.getTime();
+        Date date = new Date();
+        User user=new User();
+
+        boolean fullyPaid = false;
+        for (Unit unit : units) {
+            float invoiceAmount = InvoiceService.calculateTotalAmount(unit);
+          List <User> users= localUserRepository.getUsersByUnitId(unit.getId());
             var invoice = Invoice.builder()
-                    .invoiceInfo(invoiceResource.getInvoiceInfo())
-                    .dueDate(invoiceResource.getDueDate())
-                    .forMonth(invoiceResource.getForMonth())
-                    .isFullyPaid(invoiceResource.getIsFullyPaid())
-                    .issueDate(invoiceResource.getIssueDate())
-                    .totalAmount(invoiceResource.getTotalAmount())
+                    .invoiceInfo("Your monthly Invoice:")
+                    .dueDate(nextMonthDate)
+                    .forMonth(date)
+                    .isFullyPaid(fullyPaid)
+                    .issueDate(date)
+                    .totalAmount(invoiceAmount)
                     .unit(unit)
                     .build();
 
+            String invoiceString = "Invoice Information:\n" +
+                    "Invoice Info: " + invoice.getInvoiceInfo() + "\n" +
+                    "Due Date: " + invoice.getDueDate() + "\n" +
+                    "For Month: " + invoice.getForMonth() + "\n" +
+                    "Is Fully Paid: " + invoice.getIsFullyPaid() + "\n" +
+                    "Issue Date: " + invoice.getIssueDate() + "\n" +
+                    "Total Amount: " + invoice.getTotalAmount() + "\n" +
+                    "Unit: " + unit.getBuilding().getAddress().toString();
+
+            for (int i =0; i <users.size();i++){
+                emailService.sendEmail(users.get(i).getEmail(), invoice.getInvoiceInfo(), invoiceString);
+            }
+
             invoiceRepository.save(invoice);
 
-    }catch (Exception ex){
-        throw new InvalidInvocationException(ex.getMessage());
-    }
-      return null;
-    }
+        }
 
-    public List<Invoice> findInvoicesByUnitId(Long unitId){
-       return invoiceRepository.findByUnit_Id(unitId);
+
     }
 
 
+    public static float calculateTotalAmount(Unit unit) {
+
+        float invoiceAmount = (unit.getSqm() * 1) + (unit.getResidents() * 15) + (unit.getTaxablePets() * 5);
+        return invoiceAmount;
+    }
 
 }
