@@ -13,11 +13,7 @@ import useAuthValidations from "../../common/utils";
 import { FormValues } from "../../common/RegisterInterfaces";
 import apiService from "../../services/apiService";
 import { Building } from "../../services/buildingRegisterInterface";
-interface Country {
-  name: {
-    common: string;
-  };
-}
+import { Country } from "../../common/countryInterface";
 
 const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "buildingName",
