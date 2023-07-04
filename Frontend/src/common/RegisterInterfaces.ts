@@ -3,9 +3,9 @@ export interface FormValues {
   lastName: string;
   email: string;
   password: string;
-  building: string | number;
+  building: string;
   buildingName: string;
-  unit: number | string;
+  unit: number;
   country: string;
   region: string;
   city: string;
@@ -13,8 +13,8 @@ export interface FormValues {
   postalCode: number | null;
   streetName: string;
   streetNumber: number | null;
-  floors: number | null;
-  entrances: number | null;
+  floors: number;
+  entrances: number;
 }
 
 export interface FormErrors {
@@ -22,9 +22,9 @@ export interface FormErrors {
   lastName?: string;
   email?: string;
   password?: string;
-  building?: string | number;
+  building?: string;
   buildingName?: string;
-  unit?: string | number;
+  unit?: number;
   country?: string;
   region?: string;
   city?: string;

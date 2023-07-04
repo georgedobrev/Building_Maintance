@@ -1,0 +1,42 @@
+[
+    { "id": 1,
+      "date": "2023-06-01",
+      "invoiceNumber": "INV001",
+      "paymentType": "building tax",
+      "paymentMethod": "credit card",
+      "totalPrice": 500
+    },
+    {
+      "id": 2,
+      "date": "2023-06-02",
+      "invoiceNumber": "INV002",
+      "paymentType": "repairment tax",
+      "paymentMethod": "cash",
+      "totalPrice": 350
+    },
+    {
+      "id": 3,
+      "date": "2023-06-03",
+      "invoiceNumber": "INV003",
+      "paymentType": "building tax",
+      "paymentMethod": "bank transfer",
+      "totalPrice": 800
+    },
+    {
+      "id": 4,
+      "date": "2023-06-04",
+      "invoiceNumber": "INV004",
+      "paymentType": "repairment tax",
+      "paymentMethod": "credit card",
+      "totalPrice": 650
+    },
+    {
+      "id": 5,
+      "date": "2023-06-05",
+      "invoiceNumber": "INV005",
+      "paymentType": "building tax",
+      "paymentMethod": "cash",
+      "totalPrice": 450
+    }
+  ]
+  

@@ -22,6 +22,7 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import { Payment } from "../../store/payment/paymentSlice";
 import { selectUsers } from "../../store/users/userSlice";
+import paymentData from "./Payments.json";
 
 interface User {
   id: number;
@@ -32,24 +33,10 @@ interface User {
   unitID: number;
 }
 
-const createData = (user: User, paymentHistory: Payment[]) => {
-  const {
-    id,
-    firstName: first_name,
-    lastName: last_name,
-    email,
-    buildingID: buildingId,
-    unitID: unitId,
-  } = user;
-
+const createData = (user: User, history: Payment[]) => {
   return {
-    id,
-    first_name,
-    last_name,
-    email,
-    unitId,
-    buildingId,
-    history: paymentHistory,
+    ...user,
+    history,
   };
 };
 
@@ -69,11 +56,11 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell>{row.first_name}</TableCell>
-        <TableCell>{row.last_name}</TableCell>
+        <TableCell>{row.firstName}</TableCell>
+        <TableCell>{row.lastName}</TableCell>
         <TableCell>{row.email}</TableCell>
-        <TableCell>{row.buildingId}</TableCell>
-        <TableCell>{row.unitId}</TableCell>
+        <TableCell>{row.buildingID}</TableCell>
+        <TableCell>{row.unitID}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
@@ -127,15 +114,7 @@ const CollapsibleTable: FC = () => {
     const paymentHistory = paymentData.filter(
       (payment) => payment.id === user.id
     );
-    return createData(
-      user.id,
-      user.firstName,
-      user.lastName,
-      user.email,
-      user.unitID,
-      user.building,
-      paymentHistory
-    );
+    return createData(user, paymentHistory);
   });
 
   const theme = useTheme();
@@ -152,10 +131,10 @@ const CollapsibleTable: FC = () => {
   };
 
   const filteredRows = buildingFilter
-    ? rows.filter((row) => row.buildingId === buildingFilter)
+    ? rows.filter((row) => row.buildingID === buildingFilter)
     : rows;
 
-  const buildingIds = Array.from(new Set(rows.map((row) => row.buildingId)));
+  const buildingIds = Array.from(new Set(rows.map((row) => row.buildingID)));
 
   return (
     <Box height="100vh" width="100%" bgcolor={theme.palette.background.default}>
@@ -213,7 +192,7 @@ const CollapsibleTable: FC = () => {
             </TableHead>
             <TableBody>
               {filteredRows.map((row) => (
-                <Row key={row.first_name} row={row} />
+                <Row key={row.firstName} row={row} />
               ))}
             </TableBody>
           </Table>

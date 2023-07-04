@@ -12,6 +12,7 @@ import {
 import useAuthValidations from "../../common/utils";
 import { FormValues } from "../../common/RegisterInterfaces";
 import apiService from "../../services/apiService";
+import { Building } from "../../services/buildingRegisterInterface";
 interface Country {
   name: {
     common: string;
@@ -31,7 +32,7 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "floors",
 ];
 
-const AddBuilding: React.FC<FormValues> = () => {
+const AddBuilding: React.FC = () => {
   const theme = useTheme();
   const [countryNames, setCountryNames] = useState([]);
   const navigate = useNavigate();
@@ -40,20 +41,19 @@ const AddBuilding: React.FC<FormValues> = () => {
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
 
-  const fetchCountryNames = async () => {
-    try {
-      const data = await apiService.getAllCountries();
-      const names = data.map((country: Country) => country.name.common);
-      const sortedCountries = names.sort((a: string, b: string) =>
-        a.localeCompare(b)
-      );
-      setCountryNames(sortedCountries);
-    } catch (error) {
-      throw error;
-    }
-  };
-
   useEffect(() => {
+    const fetchCountryNames = async () => {
+      try {
+        const data = await apiService.getAllCountries();
+        const names = data.map((country: Country) => country.name.common);
+        const sortedCountries = names.sort((a: string, b: string) =>
+          a.localeCompare(b)
+        );
+        setCountryNames(sortedCountries);
+      } catch (error) {
+        throw error;
+      }
+    };
     fetchCountryNames();
   }, []);
 
@@ -75,7 +75,7 @@ const AddBuilding: React.FC<FormValues> = () => {
       validateField(field as keyof FormValues)
     );
 
-    const building = {
+    const building: Building = {
       name: formValues.buildingName,
       floors: formValues.floors,
       entrances: formValues.entrances,

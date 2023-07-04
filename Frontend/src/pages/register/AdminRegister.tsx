@@ -12,6 +12,7 @@ import {
 import useAuthValidations from "../../common/utils";
 import { FormValues } from "../../common/RegisterInterfaces";
 import apiService from "../../services/apiService";
+import { CreateUser } from "../../store/users/interfaces";
 
 interface Country {
   name: {
@@ -35,7 +36,7 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "floors",
 ];
 
-const AdminRegister: React.FC<FormValues> = () => {
+const AdminRegister: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
@@ -43,20 +44,19 @@ const AdminRegister: React.FC<FormValues> = () => {
     useAuthValidations();
   const [countryNames, setCountryNames] = useState([]);
 
-  const fetchCountryNames = async () => {
-    try {
-      const data = await apiService.getAllCountries();
-      const names = data.map((country: Country) => country.name.common);
-      const sortedCountries = names.sort((a: string, b: string) =>
-        a.localeCompare(b)
-      );
-      setCountryNames(sortedCountries);
-    } catch (error) {
-      throw error;
-    }
-  };
-
   useEffect(() => {
+    const fetchCountryNames = async () => {
+      try {
+        const data = await apiService.getAllCountries();
+        const names = data.map((country: Country) => country.name.common);
+        const sortedCountries = names.sort((a: string, b: string) =>
+          a.localeCompare(b)
+        );
+        setCountryNames(sortedCountries);
+      } catch (error) {
+        throw error;
+      }
+    };
     fetchCountryNames();
   }, []);
 
@@ -78,7 +78,7 @@ const AdminRegister: React.FC<FormValues> = () => {
       validateField(field as keyof FormValues)
     );
 
-    const building = {
+    const manager: CreateUser = {
       buildingResource: {
         name: formValues.buildingName,
         address: {
@@ -101,7 +101,7 @@ const AdminRegister: React.FC<FormValues> = () => {
       },
     };
     try {
-      await apiService.registerManager(building);
+      await apiService.registerManager(manager);
       navigate("/");
     } catch (error) {}
   };

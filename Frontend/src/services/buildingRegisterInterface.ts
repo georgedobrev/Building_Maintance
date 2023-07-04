@@ -1,6 +1,11 @@
 export interface Building {
-  building: string;
-  buildingName: string;
+  name: string;
+  floors: number | null;
+  entrances: number | null;
+  address: Address;
+}
+
+export interface Address {
   country: string;
   region: string;
   city: string;
@@ -8,7 +13,4 @@ export interface Building {
   postalCode: number | null;
   streetName: string;
   streetNumber: number | null;
-  floors: number | null;
-  entrances: number | null;
-  [key: string]: string | number | null;
 }

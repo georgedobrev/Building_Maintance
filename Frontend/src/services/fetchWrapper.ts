@@ -2,22 +2,21 @@ import axios, { AxiosResponse } from "axios";
 
 type Methods = "get" | "post" | "delete";
 type Headers = { "Content-Type": string };
-type Data = Record<string, unknown>;
-type RequestOptions = {
+type RequestOptions<T> = {
   method: Methods;
   headers?: Headers;
-  data?: Data;
+  data?: T;
 };
 
 const get = async (url: string) => {
-  const requestOptions: RequestOptions = {
+  const requestOptions: RequestOptions<undefined> = {
     method: "get",
   };
   return handleResponse(await axios(url, requestOptions));
 };
 
-const post = async (url: string, data: Data) => {
-  const requestOptions: RequestOptions = {
+const post = async <T>(url: string, data: T) => {
+  const requestOptions: RequestOptions<T> = {
     method: "post",
     headers: { "Content-Type": "application/json" },
     data,
@@ -26,7 +25,7 @@ const post = async (url: string, data: Data) => {
 };
 
 const _delete = async (url: string) => {
-  const requestOptions: RequestOptions = {
+  const requestOptions: RequestOptions<undefined> = {
     method: "delete",
   };
   return handleResponse(await axios(url, requestOptions));

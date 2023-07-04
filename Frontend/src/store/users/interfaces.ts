@@ -16,19 +16,13 @@ export interface BuildingResource {
 }
 
 export interface RegistrationRequest {
-  username: string;
   password: string;
   email: string;
   firstName: string;
   lastName: string;
 }
 
-export interface User {
-  id: number;
-  unitID: number;
-  firstName: string;
-  lastName: string;
-  email: string;
+export interface CreateUser {
   buildingResource: BuildingResource;
   registrationRequest: RegistrationRequest;
 }

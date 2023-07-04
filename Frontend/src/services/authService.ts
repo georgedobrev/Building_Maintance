@@ -4,7 +4,7 @@ import { User } from "./loginUserInterface";
 
 const login = async (body: User) => {
   try {
-    const response = await fetchWrapper.post(
+    const response = await fetchWrapper.post<User>(
       `${config.baseURL}${config.login}`,
       body
     );

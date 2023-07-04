@@ -40,17 +40,14 @@ const App = () => {
             element={<Home manager={manager} currentUser={currentUser} />}
           />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/register"
-            element={<Register currentUser={currentUser} manager={manager} />}
-          />
+          <Route path="/register" element={<Register />} />
           {currentUser && (
             <>
               <Route
                 path="/notifications"
                 element={<Notifications currentUser={currentUser} />}
               />
-              <Route path="/payments" element={<Payments />} />
+              {/* <Route path="/payments" element={<Payments />} /> */}
             </>
           )}
           {manager && (
@@ -62,12 +59,7 @@ const App = () => {
           {/* {manager && <Route path="/add-unit" element={<AddUnit />} />} */}
           {manager && <Route path="/add-building" element={<AddBuilding />} />}
           {!currentUser && !manager && (
-            <Route
-              path="/register-admin"
-              element={
-                <AdminRegister currentUser={currentUser} manager={manager} />
-              }
-            />
+            <Route path="/register-admin" element={<AdminRegister />} />
           )}
           <Route path="/users" element={<Users />} />
         </Routes>

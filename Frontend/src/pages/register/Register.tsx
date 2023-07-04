@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
   useTheme,
-  useMediaQuery,
   Autocomplete,
 } from "@mui/material";
 import SelectField from "./SelectField";
@@ -15,6 +14,7 @@ import useAuthValidations from "../../common/utils";
 import { FormValues } from "../../common/RegisterInterfaces";
 import { addUser } from "../../store/users/userSlice";
 import Users from "../users/Users.json";
+import { RegisterUser } from "./interface";
 
 const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "firstName",
@@ -24,7 +24,7 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "unit",
 ];
 
-const Register: React.FC<FormValues> = () => {
+const Register: React.FC = () => {
   const theme = useTheme();
   const buildings = Array.from(new Set(Users.map((user) => user.buildingID)));
   const units = Array.from(new Set(Users.map((user) => user.unitID)));
@@ -47,16 +47,16 @@ const Register: React.FC<FormValues> = () => {
       validateField(field as keyof FormValues)
     );
 
-    const userValues = Object.fromEntries(
-      REQUIRED_FIELDS.map((field) => [field, formValues[field]])
-    );
-
-    const randomIdGenerator = Math.random();
-
-    const newUser = {
-      ...userValues,
-      id: randomIdGenerator,
+    const userValues = {
       unitID: formValues.unit,
+      firstName: formValues.firstName,
+      lastName: formValues.lastName,
+      email: formValues.email,
+      buildingID: Number(formValues.building),
+    };
+
+    const newUser: RegisterUser = {
+      ...userValues,
     };
 
     dispatch(addUser(newUser));
@@ -151,18 +151,16 @@ const Register: React.FC<FormValues> = () => {
           error={!!formErrors.email}
           helperText={formErrors.email}
         />
-        <Autocomplete
+        <Autocomplete<string | number>
           id="combo-box-demo"
           options={buildings}
           sx={{ width: "100%" }}
-          getOptionLabel={(option) => option}
+          getOptionLabel={(option) => option.toString()}
           renderInput={(params) => (
             <TextField {...params} label="Building" margin="normal" />
           )}
           value={formValues.building}
-          onChange={(event, newValue) =>
-            setBuilding(newValue?.toString() || "")
-          }
+          onChange={(event, newValue) => setBuilding(newValue || "")}
         />
         <SelectField
           label="Unit"

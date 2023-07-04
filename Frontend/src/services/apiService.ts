@@ -1,7 +1,7 @@
 import { fetchWrapper } from "./fetchWrapper";
 import { config } from "../config/config";
 import { Building } from "./buildingRegisterInterface";
-import { RegisterAdminData } from "./managerRegisterInterface";
+import { CreateUser } from "../store/users/interfaces";
 
 const apiService = {
   getAllCountries: async () => {
@@ -9,9 +9,9 @@ const apiService = {
     return countries;
   },
 
-  registerManager: async (manager: RegisterAdminData) => {
+  registerManager: async (manager: CreateUser) => {
     try {
-      const response = await fetchWrapper.post(
+      const response = await fetchWrapper.post<CreateUser>(
         config.register_manager,
         manager
       );
@@ -22,7 +22,10 @@ const apiService = {
   },
   addBuilding: async (building: Building) => {
     try {
-      const response = await fetchWrapper.post(config.add_building, building);
+      const response = await fetchWrapper.post<Building>(
+        config.add_building,
+        building
+      );
       return response;
     } catch (error) {
       throw error;

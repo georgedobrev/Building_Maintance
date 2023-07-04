@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { User } from "./interfaces";
+// import { CreateUser } from "./interfaces";
+import { RegisterUser } from "../../pages/register/interface";
 
 export interface UsersState {
-  users: User[];
+  users: RegisterUser[];
 }
 
 const initialState: UsersState = {
@@ -16,7 +17,7 @@ export const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<User>) => {
+    addUser: (state, action: PayloadAction<RegisterUser>) => {
       state.users.push(action.payload);
     },
   },
