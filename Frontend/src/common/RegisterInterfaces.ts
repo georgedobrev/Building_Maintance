@@ -3,7 +3,7 @@ export interface FormValues {
   lastName: string;
   email: string;
   password: string;
-  building: string;
+  building: string | number;
   buildingName: string;
   unit: number;
   country: string;
@@ -22,7 +22,7 @@ export interface FormErrors {
   lastName?: string;
   email?: string;
   password?: string;
-  building?: string;
+  building?: string | number;
   buildingName?: string;
   unit?: number;
   country?: string;

@@ -24,12 +24,14 @@ const useAuthValidations = () => {
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const setBuilding = (value: string | number) => {
+
+  const setBuilding = (value: number | string) => {
     setFormValues((prevState) => ({ ...prevState, building: value }));
   };
 
   const setUnit = (value: string | number) => {
-    setFormValues((prevState) => ({ ...prevState, unit: value }));
+    const unitValue = typeof value === "string" ? parseInt(value) : value;
+    setFormValues((prevState) => ({ ...prevState, unit: unitValue }));
   };
 
   const validateField = async (fieldName: keyof FormValues) => {
