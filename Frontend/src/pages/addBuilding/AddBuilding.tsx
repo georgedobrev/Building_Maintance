@@ -210,7 +210,7 @@ const AddBuilding: React.FC = () => {
           placeholder="Postal Code"
           variant="outlined"
           fullWidth
-          value={formValues.postalCode}
+          value={formValues.postalCode === 0 ? "" : formValues.postalCode}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("postalCode", e)
           }
@@ -234,7 +234,7 @@ const AddBuilding: React.FC = () => {
           placeholder="Street Number"
           variant="outlined"
           fullWidth
-          value={formValues.streetNumber}
+          value={formValues.streetNumber === 0 ? "" : formValues.streetNumber}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("streetNumber", e)
           }
@@ -246,7 +246,7 @@ const AddBuilding: React.FC = () => {
           placeholder="Entrances"
           variant="outlined"
           fullWidth
-          value={formValues.entrances}
+          value={formValues.entrances === 0 ? "" : formValues.entrances}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("entrances", e)
           }
@@ -258,7 +258,7 @@ const AddBuilding: React.FC = () => {
           placeholder="Floors"
           variant="outlined"
           fullWidth
-          value={formValues.floors}
+          value={formValues.floors === 0 ? "" : formValues.floors}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("floors", e)
           }

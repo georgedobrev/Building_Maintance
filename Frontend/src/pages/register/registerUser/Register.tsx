@@ -9,12 +9,12 @@ import {
   useTheme,
   Autocomplete,
 } from "@mui/material";
-import SelectField from "./SelectField";
-import useAuthValidations from "../../common/utils";
-import { FormValues } from "../../common/RegisterInterfaces";
-import { addUser } from "../../store/users/userSlice";
-import Users from "../users/Users.json";
-import { RegisterUser } from "./interface";
+import SelectField from "../SelectField";
+import useAuthValidations from "../../../common/utils";
+import { FormValues } from "../../../common/RegisterInterfaces";
+import { addUser } from "../../../store/users/userSlice";
+import Users from "../../users/Users.json";
+import { RegisterUser } from "../../../store/users/interface";
 
 const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "firstName",
@@ -164,8 +164,8 @@ const Register: React.FC = () => {
         />
         <SelectField
           label="Unit"
-          items={units}
-          value={formValues.unit}
+          items={units.join(",").split(",")}
+          value={formValues.unit === 0 ? "" : formValues.unit}
           onChange={setUnit}
         />
         <Button

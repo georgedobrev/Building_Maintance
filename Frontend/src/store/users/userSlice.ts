@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-// import { CreateUser } from "./interfaces";
-import { RegisterUser } from "../../pages/register/interface";
-
-export interface UsersState {
-  users: RegisterUser[];
-}
+import { RegisterUser, UsersState } from "./interface";
 
 const initialState: UsersState = {
   users: [],

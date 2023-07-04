@@ -10,17 +10,17 @@ const useAuthValidations = () => {
     email: "",
     password: "",
     building: "",
-    unit: "",
+    unit: 0,
     buildingName: "",
     country: "",
     region: "",
     city: "",
     district: "",
-    postalCode: "",
+    postalCode: 0,
     streetName: "",
-    streetNumber: "",
-    floors: "",
-    entrances: "",
+    streetNumber: 0,
+    floors: 0,
+    entrances: 0,
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});

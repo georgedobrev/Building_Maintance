@@ -5,3 +5,7 @@ export interface RegisterUser {
   email: string;
   buildingID: number;
 }
+
+export interface UsersState {
+  users: RegisterUser[];
+}

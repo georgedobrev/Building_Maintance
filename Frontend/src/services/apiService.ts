@@ -1,7 +1,7 @@
 import { fetchWrapper } from "./fetchWrapper";
 import { config } from "../config/config";
 import { Building } from "./buildingRegisterInterface";
-import { CreateUser } from "../store/users/interfaces";
+import { CreateUser } from "../pages/register/registerManager/interfaces";
 
 const apiService = {
   getAllCountries: async () => {

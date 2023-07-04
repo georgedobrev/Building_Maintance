@@ -9,10 +9,10 @@ import {
   useMediaQuery,
   Autocomplete,
 } from "@mui/material";
-import useAuthValidations from "../../common/utils";
-import { FormValues } from "../../common/RegisterInterfaces";
-import apiService from "../../services/apiService";
-import { CreateUser } from "../../store/users/interfaces";
+import useAuthValidations from "../../../common/utils";
+import { FormValues } from "../../../common/RegisterInterfaces";
+import apiService from "../../../services/apiService";
+import { CreateUser } from "./interfaces";
 
 interface Country {
   name: {
@@ -267,7 +267,7 @@ const AdminRegister: React.FC = () => {
           placeholder="Postal Code"
           variant="outlined"
           fullWidth
-          value={formValues.postalCode}
+          value={formValues.postalCode === 0 ? "" : formValues.postalCode}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("postalCode", e)
           }
@@ -291,7 +291,7 @@ const AdminRegister: React.FC = () => {
           placeholder="Street Number"
           variant="outlined"
           fullWidth
-          value={formValues.streetNumber}
+          value={formValues.streetNumber === 0 ? "" : formValues.streetNumber}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("streetNumber", e)
           }
@@ -303,7 +303,7 @@ const AdminRegister: React.FC = () => {
           placeholder="Entrances"
           variant="outlined"
           fullWidth
-          value={formValues.entrances}
+          value={formValues.entrances === 0 ? "" : formValues.entrances}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("entrances", e)
           }
@@ -315,7 +315,7 @@ const AdminRegister: React.FC = () => {
           placeholder="Floors"
           variant="outlined"
           fullWidth
-          value={formValues.floors}
+          value={formValues.floors === 0 ? "" : formValues.floors}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             handleChange("floors", e)
           }
