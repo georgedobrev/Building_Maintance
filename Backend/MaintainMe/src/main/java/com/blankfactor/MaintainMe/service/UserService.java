@@ -221,6 +221,7 @@ public class UserService {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
 

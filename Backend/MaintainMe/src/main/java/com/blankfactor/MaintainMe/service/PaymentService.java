@@ -4,9 +4,16 @@ import com.blankfactor.MaintainMe.entity.Invoice;
 import com.blankfactor.MaintainMe.entity.Payment;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.InvoiceRepository;
+import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.PaymentRepository;
 import com.blankfactor.MaintainMe.web.resource.PaymentRequest;
+import com.sun.java.accessibility.util.EventID;
 import lombok.AllArgsConstructor;
+import org.mapstruct.Qualifier;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +22,14 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@EnableScheduling
+
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final InvoiceRepository invoiceRepository;
     private final EmailService emailService;
+    private final LocalUserRepository userRepository;
 
     public Payment makePayment(PaymentRequest paymentRequest) throws Exception {
 
@@ -72,9 +82,37 @@ public class PaymentService {
 
     }
 
+    public User getAuthUser(){
+        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        System.out.println("email: " + authUser.getEmail());
+        return authUser;
+
+    }
+
+    //auto paying
+
+
+    public void autoPayment() {
+        //get all unpaid invoices
+        //pay them
+
+            // Rest of your code
+        } 
+    }
+
+
+    //  }
+
+
+    }
 
 
 
 
 
-}
+
+
+
+
+
+
