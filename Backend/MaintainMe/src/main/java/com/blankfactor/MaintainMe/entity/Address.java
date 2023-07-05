@@ -40,4 +40,16 @@ public class Address {
     @OneToOne(mappedBy = "address", optional = false, orphanRemoval = true)
     private Building building;
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "country='" + country + '\'' +
+                ", region='" + region + '\'' +
+                ", city='" + city + '\'' +
+                ", district='" + district + '\'' +
+                ", postalCode=" + postalCode +
+                ", streetName='" + streetName + '\'' +
+                ", streetNumber=" + streetNumber +
+                '}';
+    }
 }
