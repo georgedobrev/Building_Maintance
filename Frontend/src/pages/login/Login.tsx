@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   IconButton,
   useTheme,
@@ -22,7 +23,9 @@ import "./ErrorStyles.scss";
 
 const SignInSide = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
 
@@ -39,10 +42,11 @@ const SignInSide = () => {
     };
     try {
       const response = await authService.login(user);
-      localStorage.setItem("token", response.jwt);
+      localStorage.setItem("token", response.data.jwt);
+      navigate("/");
     } catch (error) {
       if (error.response?.status === 400) {
-        setErrorMessage("Invalid Username or Password");
+        setErrorMessage("Invalid Email or Password");
       } else {
       }
     }
@@ -58,7 +62,9 @@ const SignInSide = () => {
     });
   };
 
-  const handleClickShowPassword = () => {};
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <>
@@ -187,7 +193,7 @@ const SignInSide = () => {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
                 value={formValues.password}

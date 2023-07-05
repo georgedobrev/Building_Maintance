@@ -13,5 +13,12 @@ const login = async (body: User) => {
     throw error;
   }
 };
+const getUserRole = async (token: string) => {
+  const response = await fetchWrapper.get(
+    `${config.baseURL}${config.get_user_role}`,
+    token
+  );
+  return response.data;
+};
 
-export const authService = { login };
+export const authService = { login, getUserRole };

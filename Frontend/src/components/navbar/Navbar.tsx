@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled, useTheme } from "@mui/system";
 import {
@@ -18,6 +19,7 @@ import {
 import NavbarProps from "./NavbarProps";
 import DarkModeSwitch from "../DarkMode/DarkModeSwitch";
 import "./Navbar.scss";
+import { logout } from "../../store/loggedUser/loggedUser";
 
 const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -36,6 +38,8 @@ const StyledDropdownLink = styled(Link)(({ theme }) => ({
 }));
 
 const Navbar = ({ currentUser, manager }: NavbarProps) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLButtonElement>(
     null
   );
@@ -63,6 +67,13 @@ const Navbar = ({ currentUser, manager }: NavbarProps) => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = (event: React.MouseEvent<HTMLLIElement>) => {
+    dispatch(logout());
+    handleCloseUserMenu();
+    navigate("/login");
+    window.location.reload();
   };
 
   let pages = ["Notifications", "Payments"];
@@ -256,7 +267,14 @@ const Navbar = ({ currentUser, manager }: NavbarProps) => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={
+                    setting.toLowerCase() === "logout"
+                      ? handleLogout
+                      : handleCloseUserMenu
+                  }
+                >
                   <Typography textAlign="center">
                     {setting.toLowerCase() === "logout" ? (
                       <StyledDropdownLink to="/login">
