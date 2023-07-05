@@ -8,6 +8,7 @@ import com.blankfactor.MaintainMe.web.resource.*;
 import com.blankfactor.MaintainMe.web.resource.Login.LoginRequest;
 import com.blankfactor.MaintainMe.web.utilities.GmailChecker;
 import com.blankfactor.MaintainMe.web.utilities.RandomPassword;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,6 +17,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service
@@ -72,7 +74,7 @@ public class UserService {
     }
 
     @Transactional
-    public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException {
+    public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException, MessagingException, UnsupportedEncodingException {
 
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding();
         User user = new User();
@@ -219,6 +221,7 @@ public class UserService {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
 

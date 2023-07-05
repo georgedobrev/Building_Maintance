@@ -49,6 +49,17 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<UserRoleBuilding> userRoleBuildings = new ArrayList<>();
 
+    @Column(name = "auto_pay")
+    private Integer autoPay;
+
+    public Integer getAutoPay() {
+        return autoPay;
+    }
+
+    public void setAutoPay(Integer autoPay) {
+        this.autoPay = autoPay;
+    }
+
     public Long getId() {
         return id;
     }

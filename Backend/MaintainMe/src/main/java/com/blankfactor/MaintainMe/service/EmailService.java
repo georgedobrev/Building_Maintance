@@ -20,11 +20,12 @@ public class EmailService {
     }
 
     @Async
-    public void sendEmail(String to, String subject, String text) {
+    public void sendEmail(String to, String subject, String text) throws MessagingException, UnsupportedEncodingException {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("MaintainMe");
-        message.setTo(to);
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom("maintainme@gmail.com", "MaintainMe Support");
+        helper.setTo(to);
         message.setSubject(subject);
         message.setText(text);
         emailSender.send(message);

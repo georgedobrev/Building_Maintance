@@ -11,6 +11,7 @@ import com.blankfactor.MaintainMe.web.resource.Notification.NotificationByBuildi
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationDeleteRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationEditRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class NotificationService {
     public List<Notification> getAllNotificationsByBuilding(NotificationByBuildingRequest request){
         return notificationRepository.getNotificationByBuildingId(request.getId());
     }
+
 
     public Notification sendNotification(NotificationRequest notificationRequest) throws Exception {
 
