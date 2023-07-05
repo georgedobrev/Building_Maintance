@@ -6,9 +6,11 @@ import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.InvoiceRepository;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.UnitRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +37,7 @@ public class InvoiceService {
     }
 
     @Scheduled(cron = "0 0 0 1 * *")
-    public void sendMonthlyInvoices() {
+    public void sendMonthlyInvoices() throws MessagingException, UnsupportedEncodingException {
         List<Unit> units = unitRepository.findAll();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
