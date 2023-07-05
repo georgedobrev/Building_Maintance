@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   IconButton,
   useTheme,
@@ -18,10 +18,11 @@ import { FormValues } from "./LoginInterfaces";
 import useAuthValidations from "../../common/utils";
 import GoogleButton from "./GoogleButton";
 import { authService } from "../../services/authService";
+import "./ErrorStyles.scss";
 
 const SignInSide = () => {
   const theme = useTheme();
-
+  const [errorMessage, setErrorMessage] = useState("");
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
 
@@ -39,7 +40,12 @@ const SignInSide = () => {
     try {
       const response = await authService.login(user);
       localStorage.setItem("token", response.jwt);
-    } catch (error) {}
+    } catch (error) {
+      if (error.response?.status === 400) {
+        setErrorMessage("Invalid Username or Password");
+      } else {
+      }
+    }
   };
 
   const handleChange = (
@@ -205,6 +211,7 @@ const SignInSide = () => {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+              {errorMessage && <p className="errorMessage">{errorMessage}</p>}
               <Button
                 type="submit"
                 fullWidth

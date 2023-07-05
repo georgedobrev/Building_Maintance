@@ -31,11 +31,16 @@ const _delete = async (url: string) => {
   return handleResponse(await axios(url, requestOptions));
 };
 
-const handleResponse = async (response: AxiosResponse) => {
+const handleResponse = (response: AxiosResponse) => {
   if (response.status !== 200) {
-    const error =
-      (response.data && response.data.message) || response.statusText;
-    throw error;
+    const error = {
+      status: response.status,
+      message: (response.data && response.data.message) || response.statusText,
+    };
+    throw {
+      message: error.message,
+      response: response,
+    };
   }
 
   return response.data;
