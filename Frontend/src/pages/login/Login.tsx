@@ -43,6 +43,7 @@ const SignInSide = () => {
     try {
       const response = await authService.login(user);
       localStorage.setItem("token", response.data.jwt);
+      localStorage.setItem("userId", response.data.user.id);
       navigate("/");
     } catch (error) {
       if (error.response?.status === 400) {
