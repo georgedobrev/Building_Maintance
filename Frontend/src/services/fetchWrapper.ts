@@ -34,19 +34,6 @@ const _delete = async (url: string) => {
   return handleResponse(await axios(url, requestOptions));
 };
 
-// const handleResponse = (response: AxiosResponse) => {
-//   if (response.status < 200 || response.status >= 300) {
-//     const error = {
-//       status: response.status,
-//       message: (response.data && response.data.message) || response.statusText,
-//     };
-//     throw {
-//       message: error.message,
-//       response: response,
-//     };
-//   }
-//   return response.data;
-// };
 const handleResponse = (response: AxiosResponse) => response;
 
 export const fetchWrapper = {

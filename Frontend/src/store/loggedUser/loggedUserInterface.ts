@@ -1,10 +1,12 @@
+export interface CurrentUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 export interface LoggedUser {
-  currentUser: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-  } | null;
+  currentUser: CurrentUser | null;
   token: string | null;
   role: number | null;
 }
