@@ -81,27 +81,46 @@ public class PaymentService {
         return paymentRepository.findAllByUserId(authUser.getId());
 
     }
-
-    public User getAuthUser(){
-        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        System.out.println("email: " + authUser.getEmail());
-        return authUser;
-
-    }
-
     //auto paying
 
 
     public void autoPayment() {
-        //get all unpaid invoices
-        //pay them
 
-            // Rest of your code
+        //get all users with auto pay
+
+        List<User> autoPayUsers = userRepository.getUserByAutoPay();
+        System.out.println("Users with auto pay:"+ autoPayUsers.size());
+
+        //find invoices per user
+
+
+        for (int i =0; i < autoPayUsers.size(); i++){
+            List<Invoice> unpaidInvoices = invoiceRepository.findUnpaidInvoices(autoPayUsers.get(i).getUnit().getId());
+            System.out.println("All unpaid invoices: " + unpaidInvoices.size());
+
+            //pay them
+
+            for (int j =0; j<unpaidInvoices.size(); j++){
+
+                Date date = new Date();
+
+                var payment = Payment.builder()
+                        .paymentAmount(unpaidInvoices.get(j).getTotalAmount())
+                        .user(autoPayUsers.get(i))
+                        .invoice(unpaidInvoices.get(j))
+                        .date(date)
+                        .build();
+
+                paymentRepository.save(payment);
+
+                unpaidInvoices.get(j).setTotalAmount(0F);
+                unpaidInvoices.get(j).setIsFullyPaid(true);
+
+                invoiceRepository.save(unpaidInvoices.get(j));
+            }
+        }
         } 
     }
-
-
-    //  }
 
 
 

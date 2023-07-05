@@ -43,13 +43,12 @@ public class PaymentController {
 
     // @Scheduled(cron = "0 0 12 1 * ?") // Run at 12 o'clock on the first day of every month
 
-    @Scheduled(fixedRate = 1000, initialDelay = 5000)
+    @Scheduled(cron = "0 7 10 * * ?")
     public void runTask() {
-
-        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
-        System.out.println("email: " + authUser.getEmail());
+        paymentService.autoPayment();
     }
+
+
 }
 
 

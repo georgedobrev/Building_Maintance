@@ -21,7 +21,7 @@ public interface LocalUserRepository extends ListCrudRepository<User,Long> {
     @Query(value = "select * from user where id = :userId", nativeQuery = true)
     User getUserById(@Param("userId") Long userID);
 
-
-
+    @Query(value = "select * from user where auto_pay =1", nativeQuery = true)
+    List<User> getUserByAutoPay();
 
 }

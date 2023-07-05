@@ -18,5 +18,11 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
             "JOIN user u ON i.unit_id = u.unit_id " +
             "WHERE u.id = :id AND i.is_fully_paid = 0;", nativeQuery = true)
     List<Invoice> findInvoicesByUserId(@Param("id") Long id);
-    
+
+    @Query(value = "select * from invoice where is_fully_paid =0 and unit_id = :id", nativeQuery = true)
+    List<Invoice> findUnpaidInvoices(@Param("id") Long id);
+
+
+
+
 }
