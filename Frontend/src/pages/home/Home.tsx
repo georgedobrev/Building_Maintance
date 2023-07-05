@@ -18,9 +18,7 @@ const Home: React.FC<HomeProps> = () => {
     const getRole = async () => {
       let roleResponse;
       try {
-        console.log(token);
         roleResponse = await authService.getUserRole(token);
-        console.log(roleResponse);
         dispatch(setRole(roleResponse.roleId));
       } catch (roleError) {}
       return roleResponse ? roleResponse.roleId : null;

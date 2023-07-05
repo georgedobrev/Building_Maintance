@@ -29,6 +29,7 @@ const App = () => {
   if (role === 2) {
     manager = true;
   }
+
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>

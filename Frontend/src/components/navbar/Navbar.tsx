@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled, useTheme } from "@mui/system";
 import {
@@ -48,6 +48,11 @@ const Navbar = ({ currentUser, manager }: NavbarProps) => {
   );
 
   const theme = useTheme();
+
+  const location = useLocation();
+  if (location.pathname === "/login") {
+    return null;
+  }
 
   const handleOpenNavMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
