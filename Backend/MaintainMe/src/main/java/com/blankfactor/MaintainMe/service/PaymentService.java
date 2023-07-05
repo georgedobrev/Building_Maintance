@@ -8,6 +8,7 @@ import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.PaymentRepository;
 import com.blankfactor.MaintainMe.web.resource.PaymentRequest;
 import com.sun.java.accessibility.util.EventID;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import org.mapstruct.Qualifier;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +33,7 @@ public class PaymentService {
     private final EmailService emailService;
     private final LocalUserRepository userRepository;
 
+    @Transactional
     public Payment makePayment(PaymentRequest paymentRequest) throws Exception {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -84,6 +87,7 @@ public class PaymentService {
     //auto paying
 
 
+    @Transactional
     public void autoPayment() {
 
         //get all users with auto pay
@@ -92,7 +96,6 @@ public class PaymentService {
         System.out.println("Users with auto pay:"+ autoPayUsers.size());
 
         //find invoices per user
-
 
         for (int i =0; i < autoPayUsers.size(); i++){
             List<Invoice> unpaidInvoices = invoiceRepository.findUnpaidInvoices(autoPayUsers.get(i).getUnit().getId());
