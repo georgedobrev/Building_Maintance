@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   IconButton,
   useTheme,
@@ -43,7 +44,8 @@ const SignInSide = () => {
       const response = await authService.login(user);
 
       if (response.status === 200) {
-        localStorage.setItem("token", response.data.jwt);
+        const token = response.data.jwt;
+        localStorage.setItem("token", token);
         navigate("/");
       }
     } catch (error) {

@@ -12,12 +12,7 @@ import {
 import useAuthValidations from "../../common/utils";
 import { FormValues } from "../../common/RegisterInterfaces";
 import apiService from "../../services/apiService";
-
-interface Country {
-  name: {
-    common: string;
-  };
-}
+import { Country } from "../../common/countryInterface";
 
 const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "firstName",
@@ -35,7 +30,7 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "floors",
 ];
 
-const AdminRegister: React.FC<FormValues> = () => {
+const AdminRegister: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));

@@ -24,7 +24,7 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "unit",
 ];
 
-const Register: React.FC<FormValues> = () => {
+const Register: React.FC = () => {
   const theme = useTheme();
   const buildings = Array.from(new Set(Users.map((user) => user.buildingID)));
   const units = Array.from(new Set(Users.map((user) => user.unitID)));

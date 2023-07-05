@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 type Methods = "get" | "post" | "delete";
-type Headers = { "Content-Type": string };
+type Headers = { "Content-Type": string; Authorization?: string };
 type Data = Record<string, unknown>;
 type RequestOptions = {
   method: Methods;
@@ -9,9 +9,12 @@ type RequestOptions = {
   data?: Data;
 };
 
-const get = async (url: string) => {
+const get = async (url: string, token?: string) => {
   const requestOptions: RequestOptions = {
     method: "get",
+    headers: token
+      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+      : { "Content-Type": "application/json" },
   };
   return handleResponse(await axios(url, requestOptions));
 };

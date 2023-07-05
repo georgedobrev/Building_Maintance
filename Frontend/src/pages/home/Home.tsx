@@ -1,6 +1,9 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import homePagePic from "../../assets/homePageView.jpg";
 import logo from "../../assets/blankfactor-logo.svg";
+import { setRole } from "../../store/loggedUser/loggedUser";
+import { authService } from "../../services/authService";
 
 interface HomeProps {
   manager: boolean;
@@ -8,6 +11,20 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = () => {
+  const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
+
+  const getRole = async () => {
+    let roleResponse;
+    try {
+      roleResponse = await authService.getUserRole(token);
+      dispatch(setRole(roleResponse.roleId));
+    } catch (roleError) {}
+    return roleResponse ? roleResponse.roleId : null;
+  };
+
+  getRole();
+
   return (
     <div
       style={{

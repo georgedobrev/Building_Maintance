@@ -4,4 +4,5 @@ export const config = {
   add_building: "building/create",
   login: "auth/login",
   api_all_countries: "https://restcountries.com/v3.1/all",
+  get_user_role: "user/role",
 };

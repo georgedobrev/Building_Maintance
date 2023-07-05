@@ -31,7 +31,7 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "floors",
 ];
 
-const AddBuilding: React.FC<FormValues> = () => {
+const AddBuilding: React.FC = () => {
   const theme = useTheme();
   const [countryNames, setCountryNames] = useState([]);
   const navigate = useNavigate();

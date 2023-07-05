@@ -45,6 +45,15 @@ const login = async (body: any) => {
     throw { status: response.status, data: response.data };
   }
 };
+
+const getUserRole = async (token: string) => {
+  const response = await fetchWrapper.get(
+    `${config.baseURL}${config.get_user_role}`,
+    token
+  );
+  return response.data;
+};
+
 const handleResponse = async (response: AxiosResponse) => {
   if (response.status !== 200) {
     const error =
@@ -55,4 +64,4 @@ const handleResponse = async (response: AxiosResponse) => {
   return response.data;
 };
 
-export const authService = { get, post, login, handleResponse };
+export const authService = { get, post, login, handleResponse, getUserRole };
