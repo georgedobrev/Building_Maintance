@@ -1,13 +1,29 @@
 import React from "react";
 import homePagePic from "../../assets/homePageView.jpg";
 import logo from "../../assets/blankfactor-logo.svg";
+import { useDispatch } from "react-redux";
+import { setRole } from "../../store/loggedUser/loggedUser";
+import { authService } from "../../services/authService";
 
 interface HomeProps {
   manager: boolean;
   currentUser: boolean;
 }
 
-const Home: React.FC<HomeProps> = ({ manager, currentUser }) => {
+const Home: React.FC<HomeProps> = () => {
+  const dispatch = useDispatch();
+
+  const getRole = async () => {
+    let roleResponse;
+    try {
+      roleResponse = await authService.getUserRole();
+      dispatch(setRole(roleResponse.roleId));
+    } catch (roleError) {}
+    return roleResponse ? roleResponse.roleId : null;
+  };
+
+  getRole();
+
   return (
     <div
       style={{

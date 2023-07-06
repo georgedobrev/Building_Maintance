@@ -13,5 +13,19 @@ const login = async (body: User) => {
     throw error;
   }
 };
+const getUserRole = async () => {
+  const token = localStorage.getItem("token");
 
-export const authService = { login };
+  if (!token) {
+    throw new Error("No token found in local storage");
+  }
+
+  const response = await fetchWrapper.get(
+    `${config.baseURL}${config.get_user_role}`,
+    token
+  );
+
+  return response.data;
+};
+
+export const authService = { login, getUserRole };
