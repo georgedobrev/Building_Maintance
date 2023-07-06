@@ -34,7 +34,7 @@ public class UserService {
     private final UserRoleBuildingRepository userRoleBuildingRepository;
     private final ResetTokenRepository resetTokenRepository;
 
-    ManagerCreateUser managerCreateUser;
+
     private final UnitRepository unitRepository;
 
 
