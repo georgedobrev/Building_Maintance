@@ -13,18 +13,11 @@ const login = async (body: User) => {
     throw error;
   }
 };
-const getUserRole = async () => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    throw new Error("No token found in local storage");
-  }
-
+const getUserRole = async (token: string) => {
   const response = await fetchWrapper.get(
     `${config.baseURL}${config.get_user_role}`,
     token
   );
-
   return response.data;
 };
 

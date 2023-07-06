@@ -20,6 +20,19 @@ const apiService = {
       throw error;
     }
   },
+  getManagedBuildings: async () => {
+    const token: string | undefined =
+      localStorage.getItem("token") || undefined;
+    try {
+      const response = await fetchWrapper.get(
+        config.get_managed_buildings,
+        token
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   addBuilding: async (building: Building) => {
     try {
       const response = await fetchWrapper.post<Building>(

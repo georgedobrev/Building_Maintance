@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -15,6 +15,7 @@ import { FormValues } from "../../../common/RegisterInterfaces";
 import { addUser } from "../../../store/users/userSlice";
 import Users from "../../users/Users.json";
 import { RegisterUser } from "../../../store/users/interface";
+import apiService from "../../../services/apiService";
 
 const REQUIRED_FIELDS: (keyof FormValues)[] = [
   "firstName",
@@ -26,7 +27,7 @@ const REQUIRED_FIELDS: (keyof FormValues)[] = [
 
 const Register: React.FC = () => {
   const theme = useTheme();
-  const buildings = Array.from(new Set(Users.map((user) => user.buildingID)));
+  const [managedBuildings, setManagedBuildings] = useState([]);
   const units = Array.from(new Set(Users.map((user) => user.unitID)));
 
   const {
@@ -39,6 +40,20 @@ const Register: React.FC = () => {
   } = useAuthValidations();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchManagedBuildings = async () => {
+      try {
+        const response = await apiService.getManagedBuildings();
+        const buildingNames = response.data.map(
+          (b: { buildingName: string }) => b.buildingName
+        );
+        setManagedBuildings(buildingNames);
+      } catch (error) {}
+    };
+
+    fetchManagedBuildings();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,7 +168,7 @@ const Register: React.FC = () => {
         />
         <Autocomplete<string | number>
           id="combo-box-demo"
-          options={buildings}
+          options={managedBuildings}
           sx={{ width: "100%" }}
           getOptionLabel={(option) => option.toString()}
           renderInput={(params) => (
