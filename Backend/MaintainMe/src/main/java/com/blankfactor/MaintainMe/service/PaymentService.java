@@ -3,17 +3,13 @@ package com.blankfactor.MaintainMe.service;
 import com.blankfactor.MaintainMe.entity.Invoice;
 import com.blankfactor.MaintainMe.entity.Payment;
 import com.blankfactor.MaintainMe.entity.User;
+import com.blankfactor.MaintainMe.paymentProcessor.PaymentProcessorProxy;
 import com.blankfactor.MaintainMe.repository.InvoiceRepository;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.PaymentRepository;
 import com.blankfactor.MaintainMe.web.resource.PaymentRequest;
-import com.sun.java.accessibility.util.EventID;
 import lombok.AllArgsConstructor;
-import org.mapstruct.Qualifier;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +26,9 @@ public class PaymentService {
     private final InvoiceRepository invoiceRepository;
     private final EmailService emailService;
     private final LocalUserRepository userRepository;
+    private final PaymentProcessorProxy paymentProcessorProxy;
 
-    public Payment makePayment(PaymentRequest paymentRequest) throws Exception {
+    public Payment makePayment(PaymentRequest paymentRequest) {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
@@ -39,38 +36,41 @@ public class PaymentService {
 
         Invoice invoice = invoiceRepository.getInvoiceById(paymentRequest.getInvoiceId());
 
-        if(paymentRequest.getPayedAmount() >0){
-            invoice.setTotalAmount(invoice.getTotalAmount()-paymentRequest.getPayedAmount());
-            if(invoice.getTotalAmount() ==0){
-                invoice.setIsFullyPaid(true);
-            }
-        }else {
-            throw new Exception("Payed amount should be more than 0");
-        }
-
-        invoiceRepository.save(invoice);
-
         try {
 
-            var payment = Payment.builder()
-                    .paymentAmount(paymentRequest.getPayedAmount())
-                    .user(authUser)
-                    .invoice(invoice)
-                    .date(date)
-                    .build();
+            if(paymentRequest.getPayedAmount() >0 && paymentRequest.getPayedAmount() <= invoice.getTotalAmount() ){
 
-            paymentRepository.save(payment);
+                var payment = Payment.builder()
+                        .paymentAmount(paymentRequest.getPayedAmount())
+                        .user(authUser)
+                        .invoice(invoice)
+                        .date(date)
+                        .build();
+
+                paymentProcessorProxy.makePayment(payment);
+                paymentRepository.save(payment);
+
+                invoice.setTotalAmount(invoice.getTotalAmount() - payment.getPaymentAmount());
+                invoiceRepository.save(invoice);
+
+                String emailSubject = "Payment was made to invoice with ID: " + invoice.getId();
+                String emailText = emailSubject + "\n Invoice info: \n Total left: " +invoice.getTotalAmount() + "\n Due date: " + invoice.getDueDate()
+                        + "\n Invoice info: " + invoice.getInvoiceInfo();
+
+                emailService.sendEmail(authUser.getEmail(),emailSubject, emailText);
+
+                if(invoice.getTotalAmount() ==0){
+                    invoice.setIsFullyPaid(true);
+                    invoiceRepository.save(invoice);
+                }
+
+            }else {
+                throw new Exception("Payed amount should be more than 0 or less than total owed");
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        String emailSubject = "Payment was made to invoice with ID: " + invoice.getId();
-        String emailText = emailSubject + "\n Invoice info: \n Total left: " +invoice.getTotalAmount() + "\n Due date: " + invoice.getDueDate()
-                + "\n Invoice info: " + invoice.getInvoiceInfo();
-
-        emailService.sendEmail(authUser.getEmail(),emailSubject, emailText);
-
         return null;
     }
 
@@ -79,26 +79,14 @@ public class PaymentService {
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         System.out.println(authUser.getEmail());
         return paymentRepository.findAllByUserId(authUser.getId());
-
     }
-    //auto paying
-
 
     public void autoPayment() {
 
-        //get all users with auto pay
-
         List<User> autoPayUsers = userRepository.getUserByAutoPay();
-        System.out.println("Users with auto pay:"+ autoPayUsers.size());
-
-        //find invoices per user
-
 
         for (int i =0; i < autoPayUsers.size(); i++){
             List<Invoice> unpaidInvoices = invoiceRepository.findUnpaidInvoices(autoPayUsers.get(i).getUnit().getId());
-            System.out.println("All unpaid invoices: " + unpaidInvoices.size());
-
-            //pay them
 
             for (int j =0; j<unpaidInvoices.size(); j++){
 
@@ -111,6 +99,7 @@ public class PaymentService {
                         .date(date)
                         .build();
 
+                paymentProcessorProxy.makePayment(payment);
                 paymentRepository.save(payment);
 
                 unpaidInvoices.get(j).setTotalAmount(0F);
@@ -118,7 +107,7 @@ public class PaymentService {
 
                 invoiceRepository.save(unpaidInvoices.get(j));
             }
-        }
+          }
         } 
     }
 

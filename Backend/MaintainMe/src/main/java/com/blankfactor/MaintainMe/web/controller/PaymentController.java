@@ -43,7 +43,7 @@ public class PaymentController {
 
     // @Scheduled(cron = "0 0 12 1 * ?") // Run at 12 o'clock on the first day of every month
 
-    @Scheduled(cron = "0 7 10 * * ?")
+    @Scheduled(cron = "0 0 17 15 * ?")
     public void runTask() {
         paymentService.autoPayment();
     }
