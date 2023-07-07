@@ -8,9 +8,14 @@ import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.PaymentRepository;
 import com.blankfactor.MaintainMe.web.resource.PaymentRequest;
 import com.sun.java.accessibility.util.EventID;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +24,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
+
+import static java.lang.System.out;
 
 @Service
 @AllArgsConstructor
 @EnableScheduling
+@Slf4j
 
 public class PaymentService {
 
@@ -32,6 +42,9 @@ public class PaymentService {
     private final InvoiceRepository invoiceRepository;
     private final EmailService emailService;
     private final LocalUserRepository userRepository;
+
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     @Transactional
     public Payment makePayment(PaymentRequest paymentRequest) throws Exception {
@@ -80,11 +93,27 @@ public class PaymentService {
     public List<Payment> getPaymentHistory(){
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        System.out.println(authUser.getEmail());
+        out.println(authUser.getEmail());
         return paymentRepository.findAllByUserId(authUser.getId());
 
     }
     //auto paying
+
+    public void exportWithoutStream() {
+        final int PAGE_SIZE = 100;
+
+        int page = 0;
+        Slice<Payment> paymentPage;
+        do {
+            paymentPage = paymentRepository.findAllBy(PageRequest.of(page, PAGE_SIZE));
+            for (Payment payment : paymentPage) {
+                out.println(payment.toString());
+            }
+            entityManager.clear();
+            page++;
+        } while (paymentPage.hasNext());
+
+    }
 
 
     @Transactional
@@ -93,13 +122,13 @@ public class PaymentService {
         //get all users with auto pay
 
         List<User> autoPayUsers = userRepository.getUserByAutoPay();
-        System.out.println("Users with auto pay:"+ autoPayUsers.size());
+        out.println("Users with auto pay:"+ autoPayUsers.size());
 
         //find invoices per user
 
         for (int i =0; i < autoPayUsers.size(); i++){
             List<Invoice> unpaidInvoices = invoiceRepository.findUnpaidInvoices(autoPayUsers.get(i).getUnit().getId());
-            System.out.println("All unpaid invoices: " + unpaidInvoices.size());
+            out.println("All unpaid invoices: " + unpaidInvoices.size());
 
             //pay them
 

@@ -3,6 +3,7 @@ package com.blankfactor.MaintainMe.web.controller;
 import com.blankfactor.MaintainMe.entity.Payment;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
+import com.blankfactor.MaintainMe.repository.PaymentRepository;
 import com.blankfactor.MaintainMe.service.PaymentService;
 import com.blankfactor.MaintainMe.web.resource.PaymentRequest;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
     private final LocalUserRepository userRepository;
+    private final PaymentRepository paymentRepository;
 
 
     @PostMapping("/make")
@@ -45,6 +48,16 @@ public class PaymentController {
     public void runTask() {
         paymentService.autoPayment();
     }
+
+    @Scheduled(fixedDelay = 10000)
+    @Transactional
+    public void scheduleFixedDelayTask() {
+//        List<Payment> aa = paymentRepository.findAll();
+//        System.out.println(aa.size());
+        paymentService.exportWithoutStream();
+    }
+
+
 
 
 
