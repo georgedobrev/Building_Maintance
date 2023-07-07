@@ -32,7 +32,7 @@ public class InvitationService {
                .orElseThrow(null));
        invitation.setBuilding(buildingRepository.findById(invitationRequest.getBuildingId())
                .orElseThrow(null));
-       invitation.setUser(userRepository.getUserById(invitationRequest.getUserID()));
+       invitation.setUser(userRepository.getUserByEmail(invitationRequest.getEmail()));
        invitation.setJointStatus(invitationRequest.getJointStatus());
        invitationRepository.save(invitation);
 

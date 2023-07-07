@@ -10,7 +10,7 @@ import lombok.*;
 public class InvitationRequest {
    private Boolean jointStatus = false;
    public Long buildingId;
-   public Long userID;
+   public String email;
    public Long unitId;
 
 }
