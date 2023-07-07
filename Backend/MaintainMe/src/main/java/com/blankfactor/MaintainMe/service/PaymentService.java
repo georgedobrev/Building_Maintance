@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -90,29 +91,32 @@ public class PaymentService {
         return null;
     }
 
-    public List<Payment> getPaymentHistory(){
-
-        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        out.println(authUser.getEmail());
-        return paymentRepository.findAllByUserId(authUser.getId());
-
-    }
+//    public List<Payment> getPaymentHistory(){
+//
+//        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+//        return paymentRepository.findAllByUserId(authUser.getId());
+//
+//    }
     //auto paying
 
     public void exportWithoutStream() {
-        final int PAGE_SIZE = 100;
 
+        final int PAGE_SIZE = 5;
         int page = 0;
+        List<Payment> all = new ArrayList<>();
+
         Slice<Payment> paymentPage;
         do {
-            paymentPage = paymentRepository.findAllBy(PageRequest.of(page, PAGE_SIZE));
+            paymentPage = paymentRepository.findAllByUserId(PageRequest.of(page, PAGE_SIZE), 26L);
             for (Payment payment : paymentPage) {
-                out.println(payment.toString());
+//                out.println(payment.toString());
+                all.add(payment);
             }
             entityManager.clear();
             page++;
         } while (paymentPage.hasNext());
 
+        out.println(all.size());
     }
 
 

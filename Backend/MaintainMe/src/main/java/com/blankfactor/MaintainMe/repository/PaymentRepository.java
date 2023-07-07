@@ -14,7 +14,8 @@ import java.util.List;
 @Repository
 public interface PaymentRepository  extends JpaRepository<Payment, Long> {
 
-    List<Payment> findAllByUserId(Long userId);
+    @Transactional
+    Slice<Payment> findAllByUserId(Pageable page,Long userId);
 
     @Transactional(readOnly = true)
     Slice<Payment> findAllBy(Pageable page);

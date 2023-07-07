@@ -9,6 +9,7 @@
       <change beforePath="$PROJECT_DIR$/../MaintainMe/src/main/java/com/blankfactor/MaintainMe/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MaintainMe/src/main/java/com/blankfactor/MaintainMe/service/PaymentService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MaintainMe/src/main/java/com/blankfactor/MaintainMe/web/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../MaintainMe/src/main/java/com/blankfactor/MaintainMe/web/controller/PaymentController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MaintainMe/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../MaintainMe/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

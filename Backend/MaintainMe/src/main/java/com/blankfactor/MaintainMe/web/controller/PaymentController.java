@@ -30,22 +30,19 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final LocalUserRepository userRepository;
-    private final PaymentRepository paymentRepository;
-
 
     @PostMapping("/make")
     public ResponseEntity<Payment> makePayment(@RequestBody PaymentRequest request) throws Exception {
         return ResponseEntity.ok(paymentService.makePayment(request));
     }
 
-    @GetMapping("/history")
-    public List<Payment> paymentHistory() {
-        return paymentService.getPaymentHistory();
-    }
+//    @GetMapping("/history")
+//    public List<Payment> paymentHistory() {
+//        return paymentService.getPaymentHistory();
+//    }
 
     @Scheduled(cron = "0 0 0 15 * *")
-    public void runTask() {
+    public void autoPayment() {
         paymentService.autoPayment();
     }
 
