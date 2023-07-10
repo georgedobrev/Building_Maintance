@@ -12,18 +12,19 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = () => {
   const dispatch = useDispatch();
-
+  const token = localStorage.getItem("token");
   if (token) {
     const getRole = async () => {
       let roleResponse;
       try {
-        roleResponse = await authService.getUserRole(token);
+        roleResponse = await authService.getUserRole();
         dispatch(setRole(roleResponse.roleId));
       } catch (roleError) {}
       return roleResponse ? roleResponse.roleId : null;
     };
 
-  getRole();
+    getRole();
+  }
 
   return (
     <div
