@@ -44,6 +44,19 @@ const apiService = {
       throw error;
     }
   },
+  getManagedBuildings: async () => {
+    const token: string | undefined =
+      localStorage.getItem("token") || undefined;
+    try {
+      const response = await fetchWrapper.get(
+        config.get_managed_buildings,
+        token
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default apiService;
