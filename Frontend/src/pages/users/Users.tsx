@@ -106,7 +106,6 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
     </>
   );
 };
-
 const CollapsibleTable: FC = () => {
   const usersData = useSelector(selectUsers);
 

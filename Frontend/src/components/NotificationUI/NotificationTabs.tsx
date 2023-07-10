@@ -19,7 +19,6 @@ const StyledTab = styled(Tab)(({ theme }) => ({
 export default function DisabledTabs() {
   const [value, setValue] = React.useState(0);
   const dispatch = useDispatch();
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };

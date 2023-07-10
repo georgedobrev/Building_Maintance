@@ -8,7 +8,7 @@ const ValidationSchema = yup.object().shape({
     .string()
     .email("Enter a valid email")
     .required("Email is required"),
-    password: yup
+  password: yup
     .string()
     .required("Password is required")
     .matches(
@@ -37,11 +37,23 @@ const ValidationSchema = yup.object().shape({
 
   city: yup.string().required("City is required"),
   district: yup.string().required("District is required"),
-  postalCode: yup.number().typeError("Postal code field should be a number").required("Postal code is required"),
+  postalCode: yup
+    .number()
+    .typeError("Postal code field should be a number")
+    .required("Postal code is required"),
   streetName: yup.string().required("Street name is required"),
-  streetNumber: yup.number().typeError("Street Number field should be a number").required("Street number is required"),
-  floors: yup.number().typeError("Floors field should be a number").required("Number of floors is required"),
-  entrances: yup.number().typeError("Entrances field should be a number").required("Number of entrances is required"),
+  streetNumber: yup
+    .number()
+    .typeError("Street Number field should be a number")
+    .required("Street number is required"),
+  floors: yup
+    .number()
+    .typeError("Floors field should be a number")
+    .required("Number of floors is required"),
+  entrances: yup
+    .number()
+    .typeError("Entrances field should be a number")
+    .required("Number of entrances is required"),
 });
 
 export default ValidationSchema;

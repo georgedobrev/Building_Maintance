@@ -1,5 +1,6 @@
 package com.blankfactor.MaintainMe.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,16 +28,28 @@ public class Address {
     private String district;
 
     @Column(name = "postal_code", nullable = false)
-    private String postalCode;
+    private Integer postalCode;
 
     @Column(name = "street_name", nullable = false)
-    private String street_name;
+    private String streetName;
 
     @Column(name = "street_number", nullable = false)
-    private String street_number;
+    private Integer streetNumber;
 
 
     @OneToOne(mappedBy = "address", optional = false, orphanRemoval = true)
     private Building building;
 
+    @Override
+    public String toString() {
+        return "Address{" +
+                "country='" + country + '\'' +
+                ", region='" + region + '\'' +
+                ", city='" + city + '\'' +
+                ", district='" + district + '\'' +
+                ", postalCode=" + postalCode +
+                ", streetName='" + streetName + '\'' +
+                ", streetNumber=" + streetNumber +
+                '}';
+    }
 }

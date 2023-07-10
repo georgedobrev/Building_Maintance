@@ -94,11 +94,13 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const handleEditClick = (commentId: number, currentText: string) => {
     setEditCommentId(commentId);
     setEditCommentText(currentText);
+
     setEditCommentError(false);
   };
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditCommentText(e.target.value);
+
     setEditCommentError(false);
   };
 
@@ -176,6 +178,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
               </Button>
               <Typography variant="body2" sx={styles.commentTypography}>
                 {currentComment.length}
+
                 {currentComment.length === 1 ? " Comment" : " Comments"}
               </Typography>
             </Box>

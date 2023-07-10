@@ -18,6 +18,7 @@ const Announcements = ({ currentUser }: AnnouncementsProps) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+
         marginTop: "100px",
         width: "100%",
       }}

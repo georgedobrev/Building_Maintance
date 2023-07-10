@@ -28,7 +28,6 @@ const SignInSide = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
-
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 

@@ -73,5 +73,4 @@ const Notifications: FC<NotificationProps> = ({ currentUser }) => {
     </>
   );
 };
-
 export default Notifications;

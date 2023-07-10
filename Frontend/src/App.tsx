@@ -17,7 +17,6 @@ import AdminRegister from "./pages/register/registerManager/AdminRegister";
 
 let manager = false;
 let currentUser = false;
-
 const App = () => {
   const isDarkMode = useSelector((state: RootState) => state.theme.darkMode);
   const theme = createMyTheme(isDarkMode);
@@ -53,6 +52,7 @@ const App = () => {
               element={<Announcements currentUser={currentUser} />}
             />
           )}
+
           {manager && <Route path="/addbuilding" element={<AddBuilding />} />}
           {!currentUser && !manager && (
             <Route path="/register-admin" element={<AdminRegister />} />
