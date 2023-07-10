@@ -2,6 +2,7 @@ import { fetchWrapper } from "./fetchWrapper";
 import { config } from "../config/config";
 import { Building } from "./buildingRegisterInterface";
 import { CreateUser } from "../pages/register/registerManager/interfaces";
+import { Notification } from "../pages/notifications/NotificationInterface";
 
 const apiService = {
   getAllCountries: async () => {
@@ -14,6 +15,29 @@ const apiService = {
       const response = await fetchWrapper.post<CreateUser>(
         config.register_manager,
         manager
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  addBuilding: async (building: Building) => {
+    try {
+      const response = await fetchWrapper.post<Building>(
+        config.add_building,
+        building
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  createAnnouncement: async (notification: Notification) => {
+    try {
+      const response = await fetchWrapper.post<Notification>(
+        config.create_announcement,
+        notification
       );
       return response;
     } catch (error) {
@@ -33,30 +57,7 @@ const apiService = {
       throw error;
     }
   },
-  getUnitByBuildingId: async () => {
-    const buildingId = localStorage.getItem("buildingId");
-    if (!buildingId) {
-      throw new Error("No buildingId found in local storage");
-    }
-    try {
-      const url = config.get_building_units(buildingId);
-      const response = await fetchWrapper.get(url);
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  },
-  addBuilding: async (building: Building) => {
-    try {
-      const response = await fetchWrapper.post<Building>(
-        config.add_building,
-        building
-      );
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  },
+  getUnitByBuildingId: async () => {},
 };
 
 export default apiService;

@@ -1,5 +1,4 @@
-import { useState, FC } from "react";
-import { useDispatch } from "react-redux";
+import { useState, FC, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,6 +12,7 @@ import { addNotification } from "../../store/notification/notificationSlice";
 import "./CreateAnnouncement.scss";
 import { style } from "./ModalStyle";
 import users from "../users/Users.json";
+import apiService from "../../services/apiService";
 
 interface CreateAnnouncementProps {
   open: boolean;
@@ -20,34 +20,48 @@ interface CreateAnnouncementProps {
 }
 
 const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
+  const [managedBuildings, setManagedBuildings] = useState([]);
   const [formData, setFormData] = useState({
-    id: Date.now(),
     title: "",
     description: "",
     assignTo: "",
-    date: new Date().toLocaleString(),
   });
   const theme = useTheme();
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchManagedBuildings = async () => {
+      try {
+        const response = await apiService.getManagedBuildings();
+        localStorage.setItem("buildingId", response.data[0].buildingId);
+        console.log(response);
+        const buildingNames = response.data.map(
+          (b: { buildingName: string }) => b.buildingName
+        );
+        setManagedBuildings(buildingNames);
+      } catch (error) {}
+    };
+
+    fetchManagedBuildings();
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setFormData((prevState) => ({
       ...prevState,
       date: new Date().toLocaleString(),
     }));
 
-    dispatch(addNotification(formData));
-    setFormData({
-      id: Date.now(),
-      title: "",
-      description: "",
-      assignTo: "",
-      date: new Date().toLocaleString(),
-    });
+    try {
+      console.log(formData);
+      const response = await apiService.createAnnouncement(formData);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+
     handleClose();
   };
 
@@ -96,18 +110,16 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
         />
         <Autocomplete
           id="combo-box-demo"
-          options={users}
-          getOptionLabel={(option) =>
-            `${option.firstName} ${option.lastName} building ${option.buildingID} unit ${option.unitID}`
-          }
+          options={managedBuildings}
+          getOptionLabel={(option) => option}
           renderInput={(params) => (
             <TextField {...params} label="Assign To" margin="normal" />
           )}
-          value={users.find((user) => user.id === Number(formData.assignTo))}
+          value={formData.assignTo}
           onChange={(event, newValue) => {
             setFormData((prevState) => ({
               ...prevState,
-              assignTo: newValue ? newValue.id.toString() : "",
+              assignTo: newValue || "",
             }));
           }}
         />
