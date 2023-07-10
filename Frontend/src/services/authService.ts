@@ -1,6 +1,7 @@
 import { fetchWrapper } from "./fetchWrapper";
 import { config } from "../config/config";
 import { User } from "./loginUserInterface";
+import { RegisterUser } from "../store/users/interface";
 
 const login = async (body: User) => {
   try {
@@ -21,4 +22,12 @@ const getUserRole = async (token: string) => {
   return response.data;
 };
 
-export const authService = { login, getUserRole };
+const registerUser = async (body: RegisterUser) => {
+  const response = await fetchWrapper.post<RegisterUser>(
+    `${config.baseURL}${config.register_user}`,
+    body
+  );
+  return response.data;
+};
+
+export const authService = { login, getUserRole, registerUser };

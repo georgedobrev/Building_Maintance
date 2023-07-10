@@ -33,6 +33,19 @@ const apiService = {
       throw error;
     }
   },
+  getUnitByBuildingId: async () => {
+    const buildingId = localStorage.getItem("buildingId");
+    if (!buildingId) {
+      throw new Error("No buildingId found in local storage");
+    }
+    try {
+      const url = config.get_building_units(buildingId);
+      const response = await fetchWrapper.get(url);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   addBuilding: async (building: Building) => {
     try {
       const response = await fetchWrapper.post<Building>(
