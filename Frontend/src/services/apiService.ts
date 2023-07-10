@@ -57,7 +57,23 @@ const apiService = {
       throw error;
     }
   },
-  getUnitByBuildingId: async () => {},
+  getUnitByBuildingId: async () => {
+    const buildingId: string | undefined =
+      localStorage.getItem("buildingId") || undefined;
+    try {
+      if (buildingId) {
+        const response = await fetchWrapper.get(
+          config.get_building_units(buildingId)
+        );
+        return response; // this is where the response is returned
+      } else {
+        throw new Error("Building ID not found");
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
 };
 
 export default apiService;

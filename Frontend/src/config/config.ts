@@ -8,6 +8,6 @@ export const config = {
   register_user: "auth/manager/register/user",
   create_announcement: "notification/send",
   get_managed_buildings: `user/managed/buildings`,
-  get_building_units: (buildingId: string | number) =>
+  get_building_units: (buildingId: string) =>
     `units/managed/buildings/${buildingId}/units`,
 };
