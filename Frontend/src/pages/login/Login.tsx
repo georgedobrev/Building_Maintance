@@ -1,4 +1,5 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   IconButton,
   useTheme,
@@ -8,7 +9,6 @@ import {
   CssBaseline,
   FormControlLabel,
   InputAdornment,
-  Link,
   Paper,
   TextField,
   Typography,
@@ -18,19 +18,38 @@ import BuildingPic from "../../assets/backgroundBFM.jpg";
 import { FormValues } from "./LoginInterfaces";
 import useAuthValidations from "../../common/utils";
 import GoogleButton from "./GoogleButton";
+import { authService } from "../../services/authService";
+import "./ErrorStyles.scss";
 
 const SignInSide = () => {
   const theme = useTheme();
-
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { formValues, setFormValues, formErrors, validateField } =
     useAuthValidations();
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+
     Object.keys(formValues).forEach((field) =>
       validateField(field as keyof FormValues)
     );
-    console.log(formValues);
+
+    const user = {
+      email: formValues.email,
+      password: formValues.password,
+    };
+    try {
+      const response = await authService.login(user);
+      localStorage.setItem("token", response.data.jwt);
+      localStorage.setItem("userId", response.data.user.id);
+      navigate("/");
+    } catch (error) {
+      if (error.response?.status === 400) {
+        setErrorMessage("Invalid Email or Password");
+      } else {
+      }
+    }
   };
 
   const handleChange = (
@@ -43,7 +62,9 @@ const SignInSide = () => {
     });
   };
 
-  const handleClickShowPassword = () => {};
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <>
@@ -172,7 +193,7 @@ const SignInSide = () => {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 autoComplete="current-password"
                 value={formValues.password}
@@ -196,6 +217,7 @@ const SignInSide = () => {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+              {errorMessage && <p className="errorMessage">{errorMessage}</p>}
               <Button
                 type="submit"
                 fullWidth

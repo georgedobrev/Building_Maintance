@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled, useTheme } from "@mui/system";
 import {
@@ -18,6 +19,7 @@ import {
 import NavbarProps from "./NavbarProps";
 import DarkModeSwitch from "../DarkMode/DarkModeSwitch";
 import "./Navbar.scss";
+import { logout } from "../../store/loggedUser/loggedUser";
 
 const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -35,12 +37,9 @@ const StyledDropdownLink = styled(Link)(({ theme }) => ({
       : theme.palette.primary.main,
 }));
 
-const Navbar = ({
-  currentUser,
-  manager,
-  serviceCompanyAdmin,
-  serviceCompany,
-}: NavbarProps) => {
+const Navbar = ({ currentUser, manager }: NavbarProps) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLButtonElement>(
     null
   );
@@ -49,6 +48,11 @@ const Navbar = ({
   );
 
   const theme = useTheme();
+
+  const location = useLocation();
+  if (location.pathname === "/login") {
+    return null;
+  }
 
   const handleOpenNavMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -70,27 +74,32 @@ const Navbar = ({
     setAnchorElUser(null);
   };
 
+  const handleLogout = (event: React.MouseEvent<HTMLLIElement>) => {
+    dispatch(logout());
+    handleCloseUserMenu();
+    navigate("/login");
+    window.location.reload();
+  };
+
   let pages = ["Notifications", "Payments"];
-  let settings = ["Profile", "Account", "Logout"];
+  let settings = ["Profile", "Logout"];
 
   if (!currentUser) {
-    pages = ["About us", "Pricing", "Login"];
+    pages = ["About us", "Pricing", "New Manager", "Login"];
     settings = ["Login", "Products"];
   }
 
   if (manager) {
-    pages = ["Announcements", "Users", "Add User", "Payments", "Auctions"];
-    settings = ["Profile", "Account", "Logout"];
-  }
-
-  if (serviceCompanyAdmin) {
-    pages = ["Companies", "Add Company"];
-    settings = ["Profile", "Account", "Logout"];
-  }
-
-  if (serviceCompany) {
-    pages = ["Auctions", "Requests"];
-    settings = ["Profile", "Account", "Logout"];
+    pages = [
+      "Announcements",
+      "Users",
+      "Add User",
+      "Buildings",
+      "Add Building",
+      "Add Unit",
+      "Auctions",
+    ];
+    settings = ["Profile", "Logout"];
   }
 
   return (
@@ -218,6 +227,12 @@ const Navbar = ({
                   to={
                     page === "Add User"
                       ? "/register"
+                      : page === "New Manager"
+                      ? "/register-admin"
+                      : page === "Add Unit"
+                      ? "/add-unit"
+                      : page === "Add Building"
+                      ? "/add-building"
                       : `/${page.replace(/\s/g, "").toLowerCase()}`
                   }
                 >
@@ -257,11 +272,24 @@ const Navbar = ({
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={
+                    setting.toLowerCase() === "logout"
+                      ? handleLogout
+                      : handleCloseUserMenu
+                  }
+                >
                   <Typography textAlign="center">
-                    <StyledDropdownLink to={`/${setting.toLowerCase()}`}>
-                      {setting}
-                    </StyledDropdownLink>
+                    {setting.toLowerCase() === "logout" ? (
+                      <StyledDropdownLink to="/login">
+                        {setting}
+                      </StyledDropdownLink>
+                    ) : (
+                      <StyledDropdownLink to={`/${setting.toLowerCase()}`}>
+                        {setting}
+                      </StyledDropdownLink>
+                    )}
                   </Typography>
                 </MenuItem>
               ))}

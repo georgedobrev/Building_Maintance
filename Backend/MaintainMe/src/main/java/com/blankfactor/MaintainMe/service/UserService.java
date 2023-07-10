@@ -80,16 +80,17 @@ public class UserService {
     public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws Exception {
 
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding();
+
         User user;
 
-        user=localUserRepository.getUserByEmail(managerCreateUser.getRegistrationRequestUser().getEmail());
+        user=localUserRepository.getUserByEmail(managerCreateUser.getEmail());
 
         if (user==null) {
 
             user =new User();
-            user.setEmail(managerCreateUser.getRegistrationRequestUser().getEmail());
-            user.setFirstName(managerCreateUser.getRegistrationRequestUser().getFirstName());
-            user.setLastName(managerCreateUser.getRegistrationRequestUser().getLastName());
+            user.setEmail(managerCreateUser.getEmail());
+            user.setFirstName(managerCreateUser.getFirstName());
+            user.setLastName(managerCreateUser.getLastName());
 
             Building building = buildingRepository.findById(managerCreateUser.getBuildingID()).orElse(null);
             Role role = new Role();

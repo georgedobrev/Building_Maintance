@@ -21,8 +21,6 @@ const MenuProps = {
   },
 };
 
-const buildings = Users.map((user) => user.buildingID);
-
 const getStyles = (name: string, personName: string[], theme: Theme) => {
   return {
     fontWeight:
@@ -33,25 +31,31 @@ const getStyles = (name: string, personName: string[], theme: Theme) => {
 };
 
 interface SelectFieldProps {
+  label: string;
+  items: string[];
   value: number | string;
-  onChange: (value: number) => void;
+  onChange: (value: number | string) => void;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({ value, onChange }) => {
+const SelectField: React.FC<SelectFieldProps> = ({
+  label,
+  items,
+  value,
+  onChange,
+}) => {
   const theme = useTheme();
-  const [names, setNames] = useState<string[]>([]);
 
   const handleChange = ({
     target: { value },
   }: {
     target: { value: unknown };
   }) => {
-    onChange(value as number);
+    onChange(value as number | string);
   };
 
   return (
-    <FormControl sx={{ m: 1, width: "40vw" }}>
-      <InputLabel id="demo-multiple-name-label">Building</InputLabel>
+    <FormControl sx={{ m: 1, width: "100%" }}>
+      <InputLabel id="demo-multiple-name-label">{label}</InputLabel>
       <Select
         labelId="demo-multiple-name-label"
         id="demo-multiple-name"
@@ -60,11 +64,11 @@ const SelectField: React.FC<SelectFieldProps> = ({ value, onChange }) => {
         input={<OutlinedInput label="Name" />}
         MenuProps={MenuProps}
       >
-        {buildings.map((name) => (
+        {items.map((name) => (
           <MenuItem
             key={name}
             value={name}
-            style={getStyles(name, buildings, theme)}
+            style={getStyles(name, items, theme)}
           >
             {name}
           </MenuItem>
