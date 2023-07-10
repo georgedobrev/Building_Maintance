@@ -19,12 +19,17 @@ interface CreateAnnouncementProps {
   setOpen: (open: boolean) => void;
 }
 
+interface Building {
+  buildingName: string;
+  buildingId: string;
+}
+
 const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
-  const [managedBuildings, setManagedBuildings] = useState([]);
+  const [managedBuildings, setManagedBuildings] = useState<Building[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    assignTo: "",
+    assignTo: null,
   });
   const theme = useTheme();
 
@@ -32,15 +37,9 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
     const fetchManagedBuildings = async () => {
       try {
         const response = await apiService.getManagedBuildings();
-        localStorage.setItem("buildingId", response.data[0].buildingId);
-        console.log(response);
-        const buildingNames = response.data.map(
-          (b: { buildingName: string }) => b.buildingName
-        );
-        setManagedBuildings(buildingNames);
+        setManagedBuildings(response.data);
       } catch (error) {}
     };
-
     fetchManagedBuildings();
   }, []);
 
@@ -56,7 +55,11 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
 
     try {
       console.log(formData);
-      const response = await apiService.createAnnouncement(formData);
+      // Use formData.assignTo.buildingId to get the building ID for the backend
+      const response = await apiService.createAnnouncement({
+        ...formData,
+        assignTo: formData.assignTo ? formData.assignTo.buildingId : null,
+      });
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -111,15 +114,15 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
         <Autocomplete
           id="combo-box-demo"
           options={managedBuildings}
-          getOptionLabel={(option) => option}
+          getOptionLabel={(option: Building) => option.buildingName}
           renderInput={(params) => (
             <TextField {...params} label="Assign To" margin="normal" />
           )}
           value={formData.assignTo}
-          onChange={(event, newValue) => {
+          onChange={(event, newValue: Building | null) => {
             setFormData((prevState) => ({
               ...prevState,
-              assignTo: newValue || "",
+              assignTo: newValue,
             }));
           }}
         />

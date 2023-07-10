@@ -65,7 +65,7 @@ const apiService = {
         const response = await fetchWrapper.get(
           config.get_building_units(buildingId)
         );
-        return response; // this is where the response is returned
+        return response;
       } else {
         throw new Error("Building ID not found");
       }
