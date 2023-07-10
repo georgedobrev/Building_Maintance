@@ -79,6 +79,14 @@ const Register: React.FC = () => {
     }
   }, [managedBuildings]);
 
+  const selectUnit = (unitNumber: number) => {
+    const selectedUnit = units.find((unit) => unit.unitNumber === unitNumber);
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      unit: selectedUnit ? selectedUnit.id : 0,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -97,7 +105,7 @@ const Register: React.FC = () => {
     const newUser: RegisterUser = {
       ...userValues,
     };
-
+    console.log(newUser);
     // dispatch(addUser(newUser));
     const registerUser = async () => {
       try {
@@ -106,7 +114,7 @@ const Register: React.FC = () => {
       } catch (error) {}
     };
     registerUser();
-    // navigate("/users");
+    navigate("/users");
   };
 
   const areAllFieldsFilled = (
@@ -124,6 +132,8 @@ const Register: React.FC = () => {
       [fieldName]: event.target.value,
     });
   };
+
+  let selectedUnit = units.find((unit) => unit.id === formValues.unit);
 
   return (
     <Box
@@ -210,9 +220,9 @@ const Register: React.FC = () => {
         />
         <SelectField
           label="Unit"
-          items={units.join(",").split(",")}
-          value={formValues.unit === 0 ? "" : formValues.unit}
-          onChange={setUnit}
+          items={units.map((unit) => unit.unitNumber.toString())}
+          value={selectedUnit ? selectedUnit.unitNumber.toString() : ""}
+          onChange={(value) => selectUnit(Number(value))}
         />
         <Button
           type="submit"
