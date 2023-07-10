@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ValidationError } from "yup";
-import { FormErrors, FormValues } from "../pages/register/RegisterInterfaces";
+import { FormErrors, FormValues } from "./RegisterInterfaces";
 import ValidationSchema from "../pages/register/ValidationSchema";
 
 const useAuthValidations = () => {
@@ -8,12 +8,30 @@ const useAuthValidations = () => {
     firstName: "",
     lastName: "",
     email: "",
+    password: "",
     building: "",
+    unit: 0,
+    buildingName: "",
+    country: "",
+    region: "",
+    city: "",
+    district: "",
+    postalCode: 0,
+    streetName: "",
+    streetNumber: 0,
+    floors: 0,
+    entrances: 0,
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const setBuilding = (value: string | number) => {
+
+  const setBuilding = (value: number | string) => {
     setFormValues((prevState) => ({ ...prevState, building: value }));
+  };
+
+  const setUnit = (value: string | number) => {
+    const unitValue = typeof value === "string" ? parseInt(value) : value;
+    setFormValues((prevState) => ({ ...prevState, unit: unitValue }));
   };
 
   const validateField = async (fieldName: keyof FormValues) => {
@@ -39,7 +57,14 @@ const useAuthValidations = () => {
     }
   };
 
-  return { formValues, setFormValues, formErrors, validateField, setBuilding };
+  return {
+    formValues,
+    setFormValues,
+    formErrors,
+    validateField,
+    setBuilding,
+    setUnit,
+  };
 };
 
 export default useAuthValidations;

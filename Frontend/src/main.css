@@ -1,5 +1,7 @@
 :root {
   --scrollbar-track-color: #f1f1f1;
+
+  --error-color: rgb(182, 73, 73);
 }
 
 body {

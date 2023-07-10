@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Box,
   Collapse,
@@ -19,9 +20,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
-import usersData from "./Users.json";
+import { Payment } from "../../store/payment/paymentSlice";
+import { selectUsers } from "../../store/users/userSlice";
+import paymentData from "./Payments.json";
 
 interface User {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -29,21 +33,10 @@ interface User {
   unitID: number;
 }
 
-const createData = (user: User) => {
+const createData = (user: User, history: Payment[]) => {
   return {
     ...user,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
+    history,
   };
 };
 
@@ -72,7 +65,7 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 2 }}>
+            <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
                 Payment Details
               </Typography>
@@ -92,12 +85,16 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
                       <TableCell component="th" scope="row">
                         {historyRow.date}
                       </TableCell>
-                      <TableCell>{"Ivoice number goes here "}</TableCell>
+                      <TableCell>{historyRow.invoiceNumber}</TableCell>
                       <TableCell align="right">
-                        {"Building tax/repair tax here"}
+                        {historyRow.paymentType}
                       </TableCell>
-                      <TableCell align="right">{"Paypal"}</TableCell>
-                      <TableCell align="right">{"Total BGN paid"}</TableCell>
+                      <TableCell align="right">
+                        {historyRow.paymentMethod}
+                      </TableCell>
+                      <TableCell align="right">
+                        {historyRow.totalPrice}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -109,14 +106,22 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
     </>
   );
 };
-
-const rows = usersData.map((user) => createData(user));
-
 const CollapsibleTable: FC = () => {
-  const theme = useTheme();
-  const [buildingFilter, setBuildingFilter] = useState<number | null>(null);
+  const usersData = useSelector(selectUsers);
 
-  const applyFilter = (buildingId: number) => {
+  const rows = usersData.map((user) => {
+    const paymentHistory = paymentData.filter(
+      (payment) => payment.id === user.id
+    );
+    return createData(user, paymentHistory);
+  });
+
+  const theme = useTheme();
+  const [buildingFilter, setBuildingFilter] = useState<string | number | null>(
+    null
+  );
+
+  const applyFilter = (buildingId: string | number) => {
     setBuildingFilter(buildingId);
   };
 
@@ -135,10 +140,9 @@ const CollapsibleTable: FC = () => {
       <Box
         display="flex"
         flexDirection="column"
-        justifyContent="center"
         alignItems="center"
         height="100%"
-        marginTop="0%"
+        marginTop="64px"
         p={1}
         bgcolor={theme.palette.background.default}
       >
@@ -153,7 +157,7 @@ const CollapsibleTable: FC = () => {
           <Select
             sx={{ border: "none" }}
             value={buildingFilter || ""}
-            onChange={(e) => applyFilter(Number(e.target.value))}
+            onChange={(e) => applyFilter(e.target.value)}
             startAdornment={
               <IconButton disableRipple disableFocusRipple>
                 <FilterAltOutlinedIcon />
