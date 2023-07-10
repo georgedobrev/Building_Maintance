@@ -8,7 +8,11 @@ import com.blankfactor.MaintainMe.repository.InvoiceRepository;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.PaymentRepository;
 import com.blankfactor.MaintainMe.web.resource.PaymentRequest;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,9 @@ public class PaymentService {
     private final EmailService emailService;
     private final LocalUserRepository userRepository;
     private final PaymentProcessor paymentProcessor;
+
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     public Payment makePayment(PaymentRequest paymentRequest) {
 
@@ -84,6 +91,23 @@ public class PaymentService {
     public void autoPayment() {
 
         List<User> autoPayUsers = userRepository.getUserByAutoPay();
+
+        final int PAGE_SIZE = 100;
+        int page = 0;
+
+        Slice<Payment> paymentPage;
+        do {
+            paymentPage = paymentRepository.findAllByUserId(PageRequest.of(page, PAGE_SIZE), 26L);
+            for (Payment payment : paymentPage) {
+
+            }
+            entityManager.clear();
+            page++;
+        } while (paymentPage.hasNext());
+
+    }
+
+
 
         for (int i =0; i < autoPayUsers.size(); i++){
             List<Invoice> unpaidInvoices = invoiceRepository.findUnpaidInvoices(autoPayUsers.get(i).getUnit().getId());
