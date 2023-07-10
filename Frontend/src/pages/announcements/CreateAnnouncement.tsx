@@ -1,4 +1,4 @@
-import { useState, FC } from "react";
+import { useState, FC, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -13,6 +13,7 @@ import { addNotification } from "../../store/notification/notificationSlice";
 import "./CreateAnnouncement.scss";
 import { style } from "./ModalStyle";
 import users from "../users/Users.json";
+import apiService from "../../services/apiService";
 
 interface CreateAnnouncementProps {
   open: boolean;
@@ -20,6 +21,7 @@ interface CreateAnnouncementProps {
 }
 
 const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
+  const [managedBuildings, setManagedBuildings] = useState([]);
   const [formData, setFormData] = useState({
     id: Date.now(),
     title: "",
@@ -33,6 +35,22 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    const fetchManagedBuildings = async () => {
+      try {
+        const response = await apiService.getManagedBuildings();
+        localStorage.setItem("buildingId", response.data[0].buildingId);
+        console.log(response);
+        const buildingNames = response.data.map(
+          (b: { buildingName: string }) => b.buildingName
+        );
+        setManagedBuildings(buildingNames);
+      } catch (error) {}
+    };
+
+    fetchManagedBuildings();
+  }, []);
 
   const handleSubmit = () => {
     setFormData((prevState) => ({
