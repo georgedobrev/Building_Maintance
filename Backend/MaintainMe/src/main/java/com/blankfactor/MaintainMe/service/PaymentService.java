@@ -3,7 +3,7 @@ package com.blankfactor.MaintainMe.service;
 import com.blankfactor.MaintainMe.entity.Invoice;
 import com.blankfactor.MaintainMe.entity.Payment;
 import com.blankfactor.MaintainMe.entity.User;
-import com.blankfactor.MaintainMe.paymentProcessor.PaymentProcessorProxy;
+import com.blankfactor.MaintainMe.paymentProcessor.PaymentProcessor;
 import com.blankfactor.MaintainMe.repository.InvoiceRepository;
 import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.PaymentRepository;
@@ -26,7 +26,7 @@ public class PaymentService {
     private final InvoiceRepository invoiceRepository;
     private final EmailService emailService;
     private final LocalUserRepository userRepository;
-    private final PaymentProcessorProxy paymentProcessorProxy;
+    private final PaymentProcessor paymentProcessor;
 
     public Payment makePayment(PaymentRequest paymentRequest) {
 
@@ -47,7 +47,7 @@ public class PaymentService {
                         .date(date)
                         .build();
 
-                paymentProcessorProxy.makePayment(payment);
+                paymentProcessor.makePayment(payment);
                 paymentRepository.save(payment);
 
                 invoice.setTotalAmount(invoice.getTotalAmount() - payment.getPaymentAmount());
@@ -99,7 +99,7 @@ public class PaymentService {
                         .date(date)
                         .build();
 
-                paymentProcessorProxy.makePayment(payment);
+                paymentProcessor.makePayment(payment);
                 paymentRepository.save(payment);
 
                 unpaidInvoices.get(j).setTotalAmount(0F);
