@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ManagerCreateUser {
 
-    RegistrationRequestUser registrationRequestUser;
-    Long buildingID;
-    Long unitId;
+    public RegistrationRequestUser registrationRequestUser;
+    public Long buildingID;
+    public  Long unitId;
+    private Boolean jointStatus = false;
 }
