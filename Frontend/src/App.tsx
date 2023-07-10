@@ -52,8 +52,7 @@ const App = () => {
               element={<Announcements currentUser={currentUser} />}
             />
           )}
-
-          {manager && <Route path="/addbuilding" element={<AddBuilding />} />}
+          {manager && <Route path="/add-building" element={<AddBuilding />} />}
           {!currentUser && !manager && (
             <Route path="/register-admin" element={<AdminRegister />} />
           )}

@@ -11,14 +11,14 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = () => {
+  const token = localStorage.getItem("token");
   const dispatch = useDispatch();
 
-  const token = localStorage.getItem("token");
   if (token) {
     const getRole = async () => {
       let roleResponse;
       try {
-        roleResponse = await authService.getUserRole();
+        roleResponse = await authService.getUserRole(token);
         dispatch(setRole(roleResponse.roleId));
       } catch (roleError) {}
       return roleResponse ? roleResponse.roleId : null;
