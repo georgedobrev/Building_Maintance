@@ -76,13 +76,15 @@ public class UserService {
     @Transactional
     public void ManagerCreateUser(ManagerCreateUser managerCreateUser) throws UserAlreadyExistsException, MessagingException, UnsupportedEncodingException {
 
+        System.out.println(managerCreateUser.getBuildingId());
+
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding();
         User user = new User();
         user.setEmail(managerCreateUser.getEmail());
         user.setFirstName(managerCreateUser.getFirstName());
         user.setLastName(managerCreateUser.getLastName());
 
-        Building building = buildingRepository.findById(managerCreateUser.getBuildingID()).orElse(null);
+        Building building = buildingRepository.findById(managerCreateUser.getBuildingId()).orElse(null);
         Role role = new Role();
         role.setId(1L);
         user.setUnit(unitRepository.findById(managerCreateUser.getUnitId()).orElse(null));
@@ -96,8 +98,11 @@ public class UserService {
         String subject;
         String body;
 
+       String randomPassword = RandomPassword.generateRandomPassword();
         if (isGoogleMail) {
-            user.setPassword(RandomPassword.generateRandomPassword());
+
+
+            user.setPassword((encryptionService.encryptPassword(randomPassword)));
             subject = "Account Registration - Login Credentials";
             body = "Hello " + user.getFirstName() + ",\n\n"
                     + "Your account has been created. Here are your credentials:\n"
@@ -105,12 +110,12 @@ public class UserService {
                     + "Your account has been created. You can log in to the app using your Google profile or Your Credentials.\n"
                     + "Click the following link to log in: " + "https://example.com/google-login";
         } else {
-            user.setPassword(RandomPassword.generateRandomPassword());
+            user.setPassword(encryptionService.encryptPassword(randomPassword));
             // Send email with a link to login and the credentials (username and randomly generated password)
             subject = "Account Registration - Login Credentials";
             body = "Hello " + user.getFirstName() + ",\n\n"
                     + "Your account has been created. Here are your credentials:\n"
-                    + "Password: " + user.getPassword() + "\n\n"
+                    + "Password: " + randomPassword + "\n\n"
                     + "Please login and change your password for security reasons.";
         }
 
