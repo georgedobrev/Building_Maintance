@@ -89,51 +89,51 @@ public class PaymentService {
     }
 
     public void autoPayment() {
-
-        List<User> autoPayUsers = userRepository.getUserByAutoPay();
-
+        
         final int PAGE_SIZE = 100;
         int page = 0;
 
-        Slice<Payment> paymentPage;
+        Slice<User> userPage;
         do {
-            paymentPage = paymentRepository.findAllByUserId(PageRequest.of(page, PAGE_SIZE), 26L);
-            for (Payment payment : paymentPage) {
+            userPage = userRepository.findAllByAutoPay(PageRequest.of(page, PAGE_SIZE));
+            for (User user : userPage) {
+                System.out.println(user.getEmail());
 
+                List<Invoice> unpaidInvoices = invoiceRepository.findUnpaidInvoices(user.getUnit().getId());
+
+                System.out.println("unpaid invoices for user with id: " + user.getId() + "   :" + unpaidInvoices.size());
+
+                for (int j = 0; j < unpaidInvoices.size(); j++) {
+
+                    Date date = new Date();
+
+                    var payment = Payment.builder()
+                            .paymentAmount(unpaidInvoices.get(j).getTotalAmount())
+                            .user(user)
+                            .invoice(unpaidInvoices.get(j))
+                            .date(date)
+                            .build();
+
+                    paymentProcessor.makePayment(payment);
+                    paymentRepository.save(payment);
+
+                    unpaidInvoices.get(j).setTotalAmount(0F);
+                    unpaidInvoices.get(j).setIsFullyPaid(true);
+
+                    invoiceRepository.save(unpaidInvoices.get(j));
+
+                }
+                entityManager.clear();
+                page++;
             }
-            entityManager.clear();
-            page++;
-        } while (paymentPage.hasNext());
+        }while (userPage.hasNext());
 
-    }
-
+             }
+        }
 
 
-        for (int i =0; i < autoPayUsers.size(); i++){
-            List<Invoice> unpaidInvoices = invoiceRepository.findUnpaidInvoices(autoPayUsers.get(i).getUnit().getId());
 
-            for (int j =0; j<unpaidInvoices.size(); j++){
 
-                Date date = new Date();
-
-                var payment = Payment.builder()
-                        .paymentAmount(unpaidInvoices.get(j).getTotalAmount())
-                        .user(autoPayUsers.get(i))
-                        .invoice(unpaidInvoices.get(j))
-                        .date(date)
-                        .build();
-
-                paymentProcessor.makePayment(payment);
-                paymentRepository.save(payment);
-
-                unpaidInvoices.get(j).setTotalAmount(0F);
-                unpaidInvoices.get(j).setIsFullyPaid(true);
-
-                invoiceRepository.save(unpaidInvoices.get(j));
-            }
-          }
-        } 
-    }
 
 
 
