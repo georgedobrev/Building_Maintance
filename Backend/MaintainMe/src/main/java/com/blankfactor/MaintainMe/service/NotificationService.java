@@ -28,7 +28,6 @@ public class NotificationService {
     private final JWTService jwtService;
     private final LocalUserRepository userRepository;
 
-
     public List<Notification> getAllNotificationsByBuilding(Long id) {
         return notificationRepository.getNotificationByBuildingId(id);
     }
@@ -81,6 +80,8 @@ public class NotificationService {
             notification.setTitle(notificationEditRequest.getMessageTitle());
             notification.setBuilding(building);
             notificationRepository.save(notification);
+        }else {
+            throw new Exception("unable to edit foreign notifications");
         }
         return null;
     }

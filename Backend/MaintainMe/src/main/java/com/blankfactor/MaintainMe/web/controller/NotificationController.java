@@ -3,7 +3,6 @@ package com.blankfactor.MaintainMe.web.controller;
 import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.service.NotificationService;
 import com.blankfactor.MaintainMe.web.exception.InvalidNotificationException;
-import com.blankfactor.MaintainMe.web.resource.Notification.NotificationByBuildingRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationDeleteRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationEditRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationRequest;
