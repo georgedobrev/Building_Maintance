@@ -9,34 +9,24 @@ import {
   useTheme,
   Autocomplete,
 } from "@mui/material";
+import { addNotification } from "../../store/notification/notificationSlice";
 import "./CreateAnnouncement.scss";
 import { style } from "./ModalStyle";
-
-import apiService from "../../services/apiService";
+import users from "../users/Users.json";
 
 interface CreateAnnouncementProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-interface BuildingReq {
-  buildingName: string;
-  buildingId: number;
-}
-
-const token: string | null = localStorage.getItem("token");
-
 const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
-  const [managedBuildings, setManagedBuildings] = useState<BuildingReq[]>([]);
-  const [formData, setFormData] = useState<{
-    title: string;
-    description: string;
-    buildingId: number | null;
-  }>({
+  const [formData, setFormData] = useState({
+    id: Date.now(),
     title: "",
     description: "",
+    assignTo: "",
+    date: new Date().toLocaleString(),
   });
-
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -47,15 +37,17 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
   const handleSubmit = () => {
     setFormData((prevState) => ({
       ...prevState,
+      date: new Date().toLocaleString(),
     }));
 
-    try {
-      const response = await apiService.createAnnouncement({
-        ...formData,
-        token,
-      });
-    } catch (error) {}
-
+    dispatch(addNotification(formData));
+    setFormData({
+      id: Date.now(),
+      title: "",
+      description: "",
+      assignTo: "",
+      date: new Date().toLocaleString(),
+    });
     handleClose();
   };
 
@@ -104,19 +96,18 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
         />
         <Autocomplete
           id="combo-box-demo"
-          options={managedBuildings}
-          getOptionLabel={(option: BuildingReq) => option.buildingName}
+          options={users}
+          getOptionLabel={(option) =>
+            `${option.firstName} ${option.lastName} building ${option.buildingID} unit ${option.unitID}`
+          }
           renderInput={(params) => (
             <TextField {...params} label="Assign To" margin="normal" />
           )}
-          // Map the selected building to its id directly when setting the state
-          value={managedBuildings.find(
-            (building) => building.buildingId === formData.buildingId
-          )}
-          onChange={(event, newValue: BuildingReq | null) => {
+          value={users.find((user) => user.id === Number(formData.assignTo))}
+          onChange={(event, newValue) => {
             setFormData((prevState) => ({
               ...prevState,
-              buildingId: newValue ? newValue.buildingId : null,
+              assignTo: newValue ? newValue.id.toString() : "",
             }));
           }}
         />
@@ -127,7 +118,7 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
           color="primary"
           className="announcement-submit"
           disabled={
-            !formData.title || !formData.description || !formData.buildingId
+            !formData.title || !formData.description || !formData.assignTo
           }
         >
           Submit
