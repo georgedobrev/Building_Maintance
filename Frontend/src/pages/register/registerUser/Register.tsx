@@ -51,7 +51,6 @@ const Register: React.FC = () => {
       try {
         const response = await apiService.getManagedBuildings();
         localStorage.setItem("buildingId", response.data[0].buildingId);
-        console.log(response);
         const buildingNames = response.data.map(
           (b: { buildingName: string }) => b.buildingName
         );
@@ -69,8 +68,6 @@ const Register: React.FC = () => {
           const response = await apiService.getUnitByBuildingId();
 
           setUnits(response.data);
-          console.log(response);
-          console.log(response.data);
         } catch (error) {
           console.error(error);
         }
@@ -105,11 +102,8 @@ const Register: React.FC = () => {
     const newUser: RegisterUser = {
       ...userValues,
     };
-    console.log(newUser);
-    // dispatch(addUser(newUser));
     const registerUser = async () => {
       try {
-        console.log(newUser);
         const response = await authService.registerUser(newUser);
       } catch (error) {}
     };

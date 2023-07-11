@@ -7,6 +7,8 @@ export const config = {
   get_user_role: "user/role",
   register_user: "auth/manager/register/user",
   create_announcement: "notification/send",
+  get_notificationsById: (buildingId: string) =>
+    `notification/building/${buildingId}`,
   get_managed_buildings: `user/managed/buildings`,
   get_building_units: (buildingId: string) =>
     `units/managed/buildings/${buildingId}/units`,

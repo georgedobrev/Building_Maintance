@@ -44,6 +44,14 @@ const apiService = {
       throw error;
     }
   },
+  getNotificationsByBuildingId: async (buildingId: string) => {
+    try {
+      const response = await fetchWrapper.get(
+        config.get_notificationsById(buildingId)
+      );
+      return response;
+    } catch (error) {}
+  },
   getManagedBuildings: async () => {
     const token: string | undefined =
       localStorage.getItem("token") || undefined;
