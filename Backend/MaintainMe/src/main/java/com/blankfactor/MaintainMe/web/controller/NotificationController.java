@@ -30,7 +30,7 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.sendNotification(request));
     }
 
-    @PostMapping("/edit{id}")
+    @PostMapping("/edit/{id}")
     public ResponseEntity<Notification> editNotification(@RequestBody NotificationEditRequest request,@PathVariable("id") Long id) throws Exception {
         return ResponseEntity.ok(notificationService.editNotification(request, id));
     }
