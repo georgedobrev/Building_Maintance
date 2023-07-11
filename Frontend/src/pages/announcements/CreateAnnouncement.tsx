@@ -39,12 +39,18 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
 
   const theme = useTheme();
   const navigate = useNavigate();
+  // const role = localStorage.getItem("role");
+  // let user: boolean;
+  // if (role == "1") {
+  //   user = true;
+  // }
 
   useEffect(() => {
     const fetchManagedBuildings = async () => {
       try {
         const response = await apiService.getManagedBuildings();
         setManagedBuildings(response.data);
+        console.log(response.data);
       } catch (error) {}
     };
     fetchManagedBuildings();
@@ -67,7 +73,7 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
     } catch (error) {}
 
     handleClose();
-    navigate("/notifications");
+    navigate("/announcements");
   };
 
   const handleChange = (
