@@ -32,12 +32,11 @@ const post = async <T>(url: string, data: T) => {
   return handleResponse(await axiosInstance(url, requestOptions));
 };
 
-const _delete = async (url: string, token?: string) => {
-  const requestOptions: RequestOptions<undefined> = {
+const _delete = async (url: string, token: string) => {
+  const requestOptions: RequestOptions<{ token: string }> = {
     method: "delete",
-    headers: token
-      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-      : { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
+    data: { token },
   };
   return handleResponse(await axiosInstance(url, requestOptions));
 };

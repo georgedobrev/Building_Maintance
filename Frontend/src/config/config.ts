@@ -13,5 +13,7 @@ export const config = {
   get_building_units: (buildingId: string | number) =>
     `units/managed/buildings/${buildingId}/units`,
   delete_announcement: (announcementId: number) =>
-    `notification/building/${announcementId}`,
+    `notification/delete/${announcementId}`,
+  edit_announcement: (announcementId: number) =>
+    `notification/edit/${announcementId}`,
 };

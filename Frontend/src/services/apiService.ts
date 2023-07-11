@@ -44,22 +44,26 @@ const apiService = {
       throw error;
     }
   },
-  deleteAnnouncement: async (announcementId: number) => {
+  deleteAnnouncement: async (announcementId: number, token: string) => {
     try {
-      if (token) {
-        const response = await fetchWrapper.delete(
-          config.delete_announcement(announcementId),
-          token
-        );
-        return response;
-      } else {
-        console.error("No token found");
-      }
+      const response = await fetchWrapper.delete(
+        config.delete_announcement(announcementId),
+        token
+      );
+      return response;
     } catch (error) {
       console.error(error);
     }
   },
-
+  editAnnouncement: async (announcementId: number, token: string) => {
+    try {
+      const response = await fetchWrapper.post(
+        config.edit_announcement(announcementId),
+        token
+      );
+      return response;
+    } catch (error) {}
+  },
   getNotificationsByBuildingId: async () => {
     const buildingId: string | undefined =
       localStorage.getItem("buildingId") || undefined;

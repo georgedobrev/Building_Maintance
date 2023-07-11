@@ -28,7 +28,6 @@ import {
 } from "../../store/comment/commentSlice";
 import { Comment } from "../../store/comment/commentTypes";
 import { RootState } from "../../store/store";
-import { deleteNotification } from "../../store/notification/notificationSlice";
 import { NotificationCardProps } from "./notificationCardProps";
 import { getStyles } from "./styles";
 import apiService from "../../services/apiService";
@@ -48,6 +47,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const [editCommentError, setEditCommentError] = useState(false);
 
   let role: string | null = localStorage.getItem("role");
+  const token: string | undefined = localStorage.getItem("token") || undefined;
 
   let currentUser;
   if (role === "1") {
@@ -73,13 +73,21 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const handleDeleteClick = () => {
     const deleteAnnouncement = async () => {
       try {
-        const response = await apiService.deleteAnnouncement(id);
+        const response = await apiService.deleteAnnouncement(id, token);
         console.log(response);
       } catch (error) {
         console.error(error);
       }
     };
     deleteAnnouncement();
+  };
+
+  const handleEditAnnouncement = () => {
+    const editAnnouncement = async () => {
+      try {
+        const response = await apiService.editAnnouncement(id, token);
+      } catch (error) {}
+    };
   };
 
   const handleSendClick = () => {
@@ -204,14 +212,20 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
             <MessageOutlinedIcon />
           </Button>
           {!currentUser && (
-            <Button
-              sx={styles.deleteButton}
-              size="small"
-              onClick={handleDeleteClick}
-              title="Delete notification"
-            >
-              <DeleteOutlineOutlinedIcon />
-            </Button>
+            <>
+              <Button onClick={handleEditAnnouncement} size="small">
+                <ModeEditOutlineOutlinedIcon />
+              </Button>
+
+              <Button
+                sx={styles.deleteButton}
+                size="small"
+                onClick={handleDeleteClick}
+                title="Delete notification"
+              >
+                <DeleteOutlineOutlinedIcon />
+              </Button>
+            </>
           )}
         </CardActions>
 
