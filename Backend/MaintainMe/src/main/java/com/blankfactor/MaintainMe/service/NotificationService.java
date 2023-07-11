@@ -30,8 +30,8 @@ public class NotificationService {
     private final LocalUserRepository userRepository;
 
 
-    public List<Notification> getAllNotificationsByBuilding(NotificationByBuildingRequest request) {
-        return notificationRepository.getNotificationByBuildingId(request.getId());
+    public List<Notification> getAllNotificationsByBuilding(Long id) {
+        return notificationRepository.getNotificationByBuildingId(id);
     }
 
     public Notification sendNotification(NotificationRequest notificationRequest) throws Exception {
@@ -66,11 +66,14 @@ public class NotificationService {
     @Transactional(rollbackFor = Exception.class)
     public Notification editNotification(NotificationEditRequest notificationEditRequest) throws Exception {
 
+
         Building building =  buildingRepository.findById(notificationEditRequest.getBuildingId())
                 .orElseThrow(() -> new Exception("Building not found"));
 
         Notification notification = notificationRepository.findById(notificationEditRequest.getId())
                 .orElseThrow(() -> new Exception("Notification not found"));
+
+
 
         notification.setInformation(notificationEditRequest.getInformation());
         notification.setMessageTitle(notificationEditRequest.getMessageTitle());
@@ -79,7 +82,7 @@ public class NotificationService {
         return null;
     }
     public Notification deleteNotification(NotificationDeleteRequest notificationDeleteRequest) {
-        
+
         try {
             notificationRepository.deleteById(notificationDeleteRequest.getId());
         }catch (Exception ex){
