@@ -11,5 +11,7 @@ export const config = {
     `notification/building/${buildingId}`,
   get_managed_buildings: `user/managed/buildings`,
   get_building_units: (buildingId: string) =>
+  get_managed_buildings: (id: string | number) => `building/${id}`,
+  get_building_units: (buildingId: string | number) =>
     `units/managed/buildings/${buildingId}/units`,
 };

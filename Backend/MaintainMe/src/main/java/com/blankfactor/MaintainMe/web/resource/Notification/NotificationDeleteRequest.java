@@ -11,5 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NotificationDeleteRequest {
 
+    private String token;
+
     private Long id;
 }

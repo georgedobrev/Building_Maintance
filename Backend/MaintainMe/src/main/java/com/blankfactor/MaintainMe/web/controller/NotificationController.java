@@ -21,9 +21,9 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/building")
-    public List<Notification> getNotificationsByBuildingId(@RequestBody NotificationByBuildingRequest request) {
-        return notificationService.getAllNotificationsByBuilding(request);
+    @GetMapping("/building/{id}")
+    public List<Notification> getNotificationsByBuildingId(@PathVariable("id") Long id) {
+        return notificationService.getAllNotificationsByBuilding(id);
     }
 
     @PostMapping("/send")

@@ -40,4 +40,11 @@ public class Payment {
     @Column(name = "payment_amount", nullable = false)
     private  float paymentAmount;
 
+    @Column(name = "successful", nullable = false)
+    private boolean successful;
+
+
+
+
+
 }

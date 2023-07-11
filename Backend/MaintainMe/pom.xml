@@ -126,7 +126,17 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<!--        <dependency>-->
+        <dependency>
+            <groupId>org.microjpa</groupId>
+            <artifactId>microjpa</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+		<dependency>
+			<groupId>org.microjpa</groupId>
+			<artifactId>microjpa</artifactId>
+			<version>1.2.4</version>
+		</dependency>
+		<!--        <dependency>-->
 <!--            <groupId>javax</groupId>-->
 <!--            <artifactId>javaee-api</artifactId>-->
 <!--            <version>8.0.1</version>-->
