@@ -9,7 +9,6 @@ import com.blankfactor.MaintainMe.repository.NotificationRepository;
 import com.blankfactor.MaintainMe.repository.UserRoleBuildingRepository;
 
 import com.blankfactor.MaintainMe.web.exception.InvalidNotificationException;
-import com.blankfactor.MaintainMe.web.resource.Notification.NotificationByBuildingRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationDeleteRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationEditRequest;
 import com.blankfactor.MaintainMe.web.resource.Notification.NotificationRequest;
@@ -48,8 +47,8 @@ public class NotificationService {
         try {
 
             var notification = Notification.builder()
-                    .messageTitle(notificationRequest.getTitle())
-                    .information(notificationRequest.getDescription())
+                    .title(notificationRequest.getTitle())
+                    .description(notificationRequest.getDescription())
                     .date(date)
                     .building(building)
                     .user(authUser)
@@ -78,8 +77,8 @@ public class NotificationService {
                 .orElseThrow(() -> new Exception("Notification not found"));
 
         if(notification.getUser().getId() == authUser.getId()){
-            notification.setInformation(notificationEditRequest.getInformation());
-            notification.setMessageTitle(notificationEditRequest.getMessageTitle());
+            notification.setDescription(notificationEditRequest.getInformation());
+            notification.setTitle(notificationEditRequest.getMessageTitle());
             notification.setBuilding(building);
             notificationRepository.save(notification);
         }
