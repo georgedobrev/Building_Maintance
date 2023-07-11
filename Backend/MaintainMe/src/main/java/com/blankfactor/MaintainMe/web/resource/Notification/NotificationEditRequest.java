@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NotificationEditRequest {
 
+    private String token;
+
     private Long id;
 
     @NotBlank(message = "message title cannot be empty.")

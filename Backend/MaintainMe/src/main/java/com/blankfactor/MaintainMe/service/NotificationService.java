@@ -38,8 +38,10 @@ public class NotificationService {
 
         Building building =  buildingRepository.findById(notificationRequest.getBuildingId())
                 .orElseThrow(() -> new Exception("Building not found"));
+
         String email =   jwtService.getEmail(notificationRequest.getToken());
         User authUser = userRepository.getUserByEmail(email);
+
         Date date = new Date();
         List<String> emailsToSend = userRoleBuildingRepository.getUsersByBuildingId(building.getId());
 
@@ -66,6 +68,8 @@ public class NotificationService {
     @Transactional(rollbackFor = Exception.class)
     public Notification editNotification(NotificationEditRequest notificationEditRequest) throws Exception {
 
+        String email =   jwtService.getEmail(notificationEditRequest.getToken());
+        User authUser = userRepository.getUserByEmail(email);
 
         Building building =  buildingRepository.findById(notificationEditRequest.getBuildingId())
                 .orElseThrow(() -> new Exception("Building not found"));
@@ -73,17 +77,23 @@ public class NotificationService {
         Notification notification = notificationRepository.findById(notificationEditRequest.getId())
                 .orElseThrow(() -> new Exception("Notification not found"));
 
-
-
-        notification.setInformation(notificationEditRequest.getInformation());
-        notification.setMessageTitle(notificationEditRequest.getMessageTitle());
-        notification.setBuilding(building);
-        notificationRepository.save(notification);
+        if(notification.getUser().getId() == authUser.getId()){
+            notification.setInformation(notificationEditRequest.getInformation());
+            notification.setMessageTitle(notificationEditRequest.getMessageTitle());
+            notification.setBuilding(building);
+            notificationRepository.save(notification);
+        }
         return null;
     }
+
+
     public Notification deleteNotification(NotificationDeleteRequest notificationDeleteRequest) {
 
+        String email =   jwtService.getEmail(notificationDeleteRequest.getToken());
+        User authUser = userRepository.getUserByEmail(email);
+
         try {
+            if(authUser.getId() == notificationRepository.findById(notificationDeleteRequest.getId()).get().getId() )
             notificationRepository.deleteById(notificationDeleteRequest.getId());
         }catch (Exception ex){
             throw new InvalidNotificationException(ex.getMessage());
