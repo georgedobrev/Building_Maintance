@@ -87,14 +87,20 @@ public class NotificationService {
     }
 
 
-    public Notification deleteNotification(NotificationDeleteRequest notificationDeleteRequest) {
+    public Notification deleteNotification(NotificationDeleteRequest notificationDeleteRequest, Long id) {
 
         String email =   jwtService.getEmail(notificationDeleteRequest.getToken());
         User authUser = userRepository.getUserByEmail(email);
 
+        Notification deleteNotification = notificationRepository.getNotificationById(id);
+
+
+
         try {
-            if(authUser.getId() == notificationRepository.findById(notificationDeleteRequest.getId()).get().getId() )
-            notificationRepository.deleteById(notificationDeleteRequest.getId());
+            if(authUser.getId() == deleteNotification.getUser().getId() ) {
+                notificationRepository.deleteById(id);
+                System.out.println("deleted");
+            }
         }catch (Exception ex){
             throw new InvalidNotificationException(ex.getMessage());
         }

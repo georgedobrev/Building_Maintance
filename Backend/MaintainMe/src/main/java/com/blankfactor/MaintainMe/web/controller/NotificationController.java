@@ -35,9 +35,9 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.editNotification(request));
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<Notification> deleteNotification(@RequestBody NotificationDeleteRequest request) {
-        return ResponseEntity.ok(notificationService.deleteNotification(request));
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Notification> deleteNotification(@RequestBody NotificationDeleteRequest request,@PathVariable("id") Long id) {
+        return ResponseEntity.ok(notificationService.deleteNotification(request, id));
     }
 
     @ExceptionHandler(InvalidNotificationException.class)
