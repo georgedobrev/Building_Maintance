@@ -1,5 +1,5 @@
-import { useState, FC } from "react";
-import { useDispatch } from "react-redux";
+import { useState, FC, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -9,26 +9,47 @@ import {
   useTheme,
   Autocomplete,
 } from "@mui/material";
-import { addNotification } from "../../store/notification/notificationSlice";
 import "./CreateAnnouncement.scss";
 import { style } from "./ModalStyle";
-import users from "../users/Users.json";
+
+import apiService from "../../services/apiService";
 
 interface CreateAnnouncementProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
+interface BuildingReq {
+  buildingName: string;
+  buildingId: number;
+}
+
+const token: string | null = localStorage.getItem("token");
+
 const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
-  const [formData, setFormData] = useState({
-    id: Date.now(),
+  const [managedBuildings, setManagedBuildings] = useState<BuildingReq[]>([]);
+  const [formData, setFormData] = useState<{
+    title: string;
+    description: string;
+    buildingId: number | null;
+  }>({
     title: "",
     description: "",
-    assignTo: "",
-    date: new Date().toLocaleString(),
   });
+
   const theme = useTheme();
-  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchManagedBuildings = async () => {
+      try {
+        const response = await apiService.getManagedBuildings();
+        setManagedBuildings(response.data);
+      } catch (error) {}
+    };
+    fetchManagedBuildings();
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -37,18 +58,17 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
   const handleSubmit = () => {
     setFormData((prevState) => ({
       ...prevState,
-      date: new Date().toLocaleString(),
     }));
 
-    dispatch(addNotification(formData));
-    setFormData({
-      id: Date.now(),
-      title: "",
-      description: "",
-      assignTo: "",
-      date: new Date().toLocaleString(),
-    });
+    try {
+      const response = await apiService.createAnnouncement({
+        ...formData,
+        token,
+      });
+    } catch (error) {}
+
     handleClose();
+    navigate("/notifications");
   };
 
   const handleChange = (
@@ -96,18 +116,18 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
         />
         <Autocomplete
           id="combo-box-demo"
-          options={users}
-          getOptionLabel={(option) =>
-            `${option.firstName} ${option.lastName} building ${option.buildingID} unit ${option.unitID}`
-          }
+          options={managedBuildings}
+          getOptionLabel={(option: BuildingReq) => option.buildingName}
           renderInput={(params) => (
             <TextField {...params} label="Assign To" margin="normal" />
           )}
-          value={users.find((user) => user.id === Number(formData.assignTo))}
-          onChange={(event, newValue) => {
+          value={managedBuildings.find(
+            (building) => building.buildingId === formData.buildingId
+          )}
+          onChange={(event, newValue: BuildingReq | null) => {
             setFormData((prevState) => ({
               ...prevState,
-              assignTo: newValue ? newValue.id.toString() : "",
+              buildingId: newValue ? newValue.buildingId : null,
             }));
           }}
         />
@@ -118,7 +138,7 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
           color="primary"
           className="announcement-submit"
           disabled={
-            !formData.title || !formData.description || !formData.assignTo
+            !formData.title || !formData.description || !formData.buildingId
           }
         >
           Submit

@@ -40,6 +40,44 @@ const Register: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchManagedBuildings = async () => {
+      try {
+        const response = await apiService.getManagedBuildings();
+        localStorage.setItem("buildingId", response.data[0].buildingId);
+        const buildingNames = response.data.map(
+          (b: { buildingName: string }) => b.buildingName
+        );
+        setManagedBuildings(buildingNames);
+      } catch (error) {}
+    };
+
+    fetchManagedBuildings();
+  }, []);
+
+  useEffect(() => {
+    if (managedBuildings) {
+      const getBuildingUnits = async () => {
+        try {
+          const response = await apiService.getUnitByBuildingId();
+
+          setUnits(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      getBuildingUnits();
+    }
+  }, [managedBuildings]);
+
+  const selectUnit = (unitNumber: number) => {
+    const selectedUnit = units.find((unit) => unit.unitNumber === unitNumber);
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      unit: selectedUnit ? selectedUnit.id : 0,
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -58,8 +96,12 @@ const Register: React.FC = () => {
     const newUser: RegisterUser = {
       ...userValues,
     };
-
-    dispatch(addUser(newUser));
+    const registerUser = async () => {
+      try {
+        const response = await authService.registerUser(newUser);
+      } catch (error) {}
+    };
+    registerUser();
     navigate("/users");
   };
 
