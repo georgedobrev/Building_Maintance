@@ -31,6 +31,56 @@ const apiService = {
       throw error;
     }
   },
+
+  createAnnouncement: async (notification: Notification) => {
+    try {
+      const response = await fetchWrapper.post<Notification>(
+        config.create_announcement,
+        notification
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getNotificationsByBuildingId: async (buildingId: string) => {
+    try {
+      const response = await fetchWrapper.get(
+        config.get_notificationsById(buildingId)
+      );
+      return response;
+    } catch (error) {}
+  },
+  getManagedBuildings: async () => {
+    const token: string | undefined =
+      localStorage.getItem("token") || undefined;
+    try {
+      const response = await fetchWrapper.get(
+        config.get_managed_buildings,
+        token
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getUnitByBuildingId: async () => {
+    const buildingId: string | undefined =
+      localStorage.getItem("buildingId") || undefined;
+    try {
+      if (buildingId) {
+        const response = await fetchWrapper.get(
+          config.get_building_units(buildingId)
+        );
+        return response;
+      } else {
+        throw new Error("Building ID not found");
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
 };
 
 export default apiService;

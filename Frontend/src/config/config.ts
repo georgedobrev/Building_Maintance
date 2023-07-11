@@ -6,7 +6,10 @@ export const config = {
   api_all_countries: "https://restcountries.com/v3.1/all",
   get_user_role: "user/role",
   register_user: "auth/manager/register/user",
-  get_managed_buildings: (id: string | number) => `building/${id}`,
-  get_building_units: (buildingId: string | number) =>
+  create_announcement: "notification/send",
+  get_notificationsById: (buildingId: string) =>
+    `notification/building/${buildingId}`,
+  get_managed_buildings: `user/managed/buildings`,
+  get_building_units: (buildingId: string) =>
     `units/managed/buildings/${buildingId}/units`,
 };
