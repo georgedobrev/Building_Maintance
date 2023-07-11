@@ -1,5 +1,4 @@
-import { FC } from "react";
-import { useSelector } from "react-redux";
+import { FC, useEffect, useState } from "react";
 import {
   CssBaseline,
   Container,
@@ -8,16 +7,33 @@ import {
   Box,
 } from "@mui/material";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
-import { selectNotifications } from "../../store/notification/notificationSlice";
 import NotificationCard from "../../components/NotificationUI/NotificationCard";
+import apiService from "../../services/apiService";
 
 interface NotificationProps {
   currentUser: boolean;
 }
 
 const Notifications: FC<NotificationProps> = ({ currentUser }) => {
-  const notifications = useSelector(selectNotifications);
+  const [notifications, setNotifications] = useState([]);
   const theme = useTheme();
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await apiService.getNotificationsByBuildingId();
+        if (response && response.data) {
+          setNotifications(response.data);
+        } else {
+          console.error("No response data");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
 
   if (notifications.length === 0) {
     return (
@@ -63,7 +79,6 @@ const Notifications: FC<NotificationProps> = ({ currentUser }) => {
           <NotificationCard
             id={notification.id}
             key={notification.id}
-            currentUser={currentUser}
             title={notification.title}
             description={notification.description}
             date={notification.date}
