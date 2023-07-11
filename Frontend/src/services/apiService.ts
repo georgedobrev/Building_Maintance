@@ -3,7 +3,7 @@ import { config } from "../config/config";
 import { Building } from "./buildingRegisterInterface";
 import { CreateUser } from "../pages/register/registerManager/interfaces";
 import { Notification } from "../pages/notifications/NotificationInterface";
-
+const token: string | undefined = localStorage.getItem("token") || undefined;
 const apiService = {
   getAllCountries: async () => {
     const countries = await fetchWrapper.get(config.api_all_countries);
@@ -44,6 +44,22 @@ const apiService = {
       throw error;
     }
   },
+  deleteAnnouncement: async (announcementId: number) => {
+    try {
+      if (token) {
+        const response = await fetchWrapper.delete(
+          config.delete_announcement(announcementId),
+          token
+        );
+        return response;
+      } else {
+        console.error("No token found");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
   getNotificationsByBuildingId: async () => {
     const buildingId: string | undefined =
       localStorage.getItem("buildingId") || undefined;
@@ -56,8 +72,6 @@ const apiService = {
   },
 
   getManagedBuildings: async () => {
-    const token: string | undefined =
-      localStorage.getItem("token") || undefined;
     try {
       const response = await fetchWrapper.get(
         config.get_managed_buildings,
@@ -68,6 +82,7 @@ const apiService = {
       throw error;
     }
   },
+  postComment: async () => {},
   getUnitByBuildingId: async () => {
     const buildingId: string | undefined =
       localStorage.getItem("buildingId") || undefined;

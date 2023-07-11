@@ -9,13 +9,17 @@ import {
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
 import NotificationCard from "../../components/NotificationUI/NotificationCard";
 import apiService from "../../services/apiService";
+import { NotificationCardProps } from "../../components/NotificationUI/notificationCardProps";
 
 interface NotificationProps {
   currentUser: boolean;
 }
 
 const Notifications: FC<NotificationProps> = ({ currentUser }) => {
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<NotificationCardProps[]>(
+    []
+  );
+  console.log(notifications);
   const theme = useTheme();
 
   useEffect(() => {

@@ -31,6 +31,7 @@ import { RootState } from "../../store/store";
 import { deleteNotification } from "../../store/notification/notificationSlice";
 import { NotificationCardProps } from "./notificationCardProps";
 import { getStyles } from "./styles";
+import apiService from "../../services/apiService";
 
 const NotificationCard: React.FC<NotificationCardProps> = ({
   id,
@@ -70,7 +71,15 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   };
 
   const handleDeleteClick = () => {
-    dispatch(deleteNotification(id));
+    const deleteAnnouncement = async () => {
+      try {
+        const response = await apiService.deleteAnnouncement(id);
+        console.log(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    deleteAnnouncement();
   };
 
   const handleSendClick = () => {
