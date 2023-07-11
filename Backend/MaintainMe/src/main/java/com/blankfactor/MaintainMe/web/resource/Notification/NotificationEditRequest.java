@@ -15,16 +15,12 @@ public class NotificationEditRequest {
 
     private String token;
 
-    private Long id;
-
     @NotBlank(message = "message title cannot be empty.")
     @NotEmpty
-    private String messageTitle;
+    private String title;
 
     @NotBlank(message = "message information cannot be empty.")
     @NotEmpty
-    private String information;
-
-    private Long buildingId;
+    private String description;
 
 }

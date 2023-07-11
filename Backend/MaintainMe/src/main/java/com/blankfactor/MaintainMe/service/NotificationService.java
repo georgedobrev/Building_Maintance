@@ -64,21 +64,17 @@ public class NotificationService {
         return null;
     }
     @Transactional(rollbackFor = Exception.class)
-    public Notification editNotification(NotificationEditRequest notificationEditRequest) throws Exception {
+    public Notification editNotification(NotificationEditRequest notificationEditRequest, Long id) throws Exception {
 
         String email =   jwtService.getEmail(notificationEditRequest.getToken());
         User authUser = userRepository.getUserByEmail(email);
 
-        Building building =  buildingRepository.findById(notificationEditRequest.getBuildingId())
-                .orElseThrow(() -> new Exception("Building not found"));
-
-        Notification notification = notificationRepository.findById(notificationEditRequest.getId())
+        Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new Exception("Notification not found"));
 
         if(notification.getUser().getId() == authUser.getId()){
-            notification.setDescription(notificationEditRequest.getInformation());
-            notification.setTitle(notificationEditRequest.getMessageTitle());
-            notification.setBuilding(building);
+            notification.setDescription(notificationEditRequest.getDescription());
+            notification.setTitle(notificationEditRequest.getTitle());
             notificationRepository.save(notification);
         }else {
             throw new Exception("unable to edit foreign notifications");
