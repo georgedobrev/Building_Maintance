@@ -4,7 +4,6 @@ import logo from "../../assets/blankfactor-logo.svg";
 import { useDispatch } from "react-redux";
 import { setRole } from "../../store/loggedUser/loggedUser";
 import { authService } from "../../services/authService";
-import apiService from "../../services/apiService";
 
 interface HomeProps {
   manager: boolean;
@@ -26,15 +25,6 @@ const Home: React.FC<HomeProps> = () => {
 
     getRole();
   }
-
-  const getRelatedBuildingId = async () => {
-    try {
-      const response = await apiService.getManagedBuildings();
-      localStorage.setItem("buildingId", response.data[0].buildingId);
-    } catch (error) {}
-  };
-
-  getRelatedBuildingId();
 
   return (
     <div

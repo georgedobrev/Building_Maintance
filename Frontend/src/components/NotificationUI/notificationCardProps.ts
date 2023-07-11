@@ -1,6 +1,7 @@
 export interface NotificationCardProps {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-}
+    id: number;
+    title: string;
+    description: string;
+    currentUser: boolean;
+    date: string;
+  }
