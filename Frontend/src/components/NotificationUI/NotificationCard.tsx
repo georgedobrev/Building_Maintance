@@ -11,7 +11,6 @@ import {
   Typography,
   useTheme,
   Tooltip,
-  FormHelperText,
 } from "@mui/material";
 import {
   MessageOutlinedIcon,
@@ -29,7 +28,6 @@ import {
 } from "../../store/comment/commentSlice";
 import { Comment } from "../../store/comment/commentTypes";
 import { RootState } from "../../store/store";
-import DisabledTabs from "./NotificationTabs";
 import { deleteNotification } from "../../store/notification/notificationSlice";
 import { NotificationCardProps } from "./notificationCardProps";
 import { getStyles } from "./styles";
@@ -38,7 +36,6 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   id,
   title,
   description,
-  currentUser,
   date,
 }) => {
   const [showMessageInput, setShowMessageInput] = useState(false);
@@ -48,6 +45,13 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const [editCommentText, setEditCommentText] = useState("");
   const [commentError, setCommentError] = useState(false);
   const [editCommentError, setEditCommentError] = useState(false);
+
+  let role: string | null = localStorage.getItem("role");
+
+  let currentUser;
+  if (role === "1") {
+    currentUser = true;
+  }
 
   const currentComment = useSelector((state: RootState) =>
     state.comment.filter((comment: Comment) => comment.notificationId === id)
@@ -131,7 +135,6 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
 
   return (
     <Box sx={styles.outerBox}>
-      {currentUser && <DisabledTabs />}
       <Card sx={styles.card}>
         <CardContent>
           <Typography

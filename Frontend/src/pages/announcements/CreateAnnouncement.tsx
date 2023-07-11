@@ -1,5 +1,5 @@
-import { useState, FC } from "react";
-import { useDispatch } from "react-redux";
+import { useState, FC, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -38,7 +38,18 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
   });
 
   const theme = useTheme();
-  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchManagedBuildings = async () => {
+      try {
+        const response = await apiService.getManagedBuildings();
+        setManagedBuildings(response.data);
+      } catch (error) {}
+    };
+    fetchManagedBuildings();
+  }, []);
 
   const handleClose = () => {
     setOpen(false);
@@ -57,6 +68,7 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
     } catch (error) {}
 
     handleClose();
+    navigate("/notifications");
   };
 
   const handleChange = (
@@ -109,7 +121,6 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
           renderInput={(params) => (
             <TextField {...params} label="Assign To" margin="normal" />
           )}
-          // Map the selected building to its id directly when setting the state
           value={managedBuildings.find(
             (building) => building.buildingId === formData.buildingId
           )}
