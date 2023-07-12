@@ -4,6 +4,7 @@ import com.blankfactor.MaintainMe.entity.Comment;
 import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.entity.User;
 import com.blankfactor.MaintainMe.repository.CommentRepository;
+import com.blankfactor.MaintainMe.repository.LocalUserRepository;
 import com.blankfactor.MaintainMe.repository.NotificationRepository;
 import com.blankfactor.MaintainMe.web.exception.InvalidCommentException;
 import com.blankfactor.MaintainMe.web.resource.Comment.CommentByNotificationRequest;
@@ -23,16 +24,19 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final NotificationRepository notificationRepository;
+    private final JWTService jwtService;
+    private final LocalUserRepository userRepository;
 
-    public List<Comment> getCommentByNotificationId(CommentByNotificationRequest request){
-        return commentRepository.getCommentByNotificationId(request.getId());
+    public List<Comment> getCommentByNotificationId(Long id){
+        return commentRepository.getCommentByNotificationId(id);
     }
 
-    public Comment sendComment(CommentRequest commentRequest) throws Exception {
+    public Comment sendComment(CommentRequest commentRequest, Long id) throws Exception {
 
-        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        String email =   jwtService.getEmail(commentRequest.getToken());
+        User authUser = userRepository.getUserByEmail(email);
 
-        Notification notification = notificationRepository.findById(commentRequest.getNotificationId())
+        Notification notification = notificationRepository.findById(id)
                 .orElseThrow(() -> new Exception("Notification not found"));
 
         Date date = new Date();

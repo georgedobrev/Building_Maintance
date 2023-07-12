@@ -1,6 +1,7 @@
 package com.blankfactor.MaintainMe.web.controller;
 
 import com.blankfactor.MaintainMe.entity.Comment;
+import com.blankfactor.MaintainMe.entity.Notification;
 import com.blankfactor.MaintainMe.service.CommentService;
 import com.blankfactor.MaintainMe.web.exception.InvalidCommentException;
 import com.blankfactor.MaintainMe.web.resource.Comment.CommentByNotificationRequest;
@@ -21,14 +22,14 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/notification")
-    public List<Comment> getCommentByNotificationId(@RequestBody CommentByNotificationRequest request) {
-        return commentService.getCommentByNotificationId(request);
+    @GetMapping("/notification/{id}")
+    public List<Comment> getCommentByNotificationId(@PathVariable("id") Long id) {
+        return commentService.getCommentByNotificationId(id);
     }
 
-    @PostMapping("/send")
-    public ResponseEntity<Comment> sendComment(@RequestBody CommentRequest request) throws Exception {
-        return ResponseEntity.ok(commentService.sendComment(request));
+    @PostMapping("/send/{id}")
+    public ResponseEntity<Comment> sendComment(@PathVariable("id") Long id,@RequestBody CommentRequest request) throws Exception {
+        return ResponseEntity.ok(commentService.sendComment(request, id));
     }
 
     @PostMapping("/edit")
