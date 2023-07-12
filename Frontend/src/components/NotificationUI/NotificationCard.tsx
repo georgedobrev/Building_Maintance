@@ -35,7 +35,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   date,
 }) => {
   const [showMessageInput, setShowMessageInput] = useState(false);
-  const [comment, setComment] = useState("");
+  const [text, setText] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [editCommentId, setEditCommentId] = useState<null | number>(null);
   const [editCommentText, setEditCommentText] = useState("");
@@ -88,7 +88,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   };
 
   const handleSendClick = async () => {
-    if (comment.trim() === "") {
+    if (text.trim() === "") {
       setCommentError(true);
       return;
     }
@@ -96,16 +96,16 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       const announcementId = id;
       console.log({
         announcementId,
-        comment,
+        text,
         token,
       });
       const response = await apiService.postComment(
         announcementId,
-        comment,
+        text,
         token
       );
       if (response) {
-        setComment("");
+        setText("");
         setCommentError(false);
       }
     } catch (error) {
@@ -151,7 +151,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setComment(e.target.value);
+    setText(e.target.value);
     setCommentError(false);
   };
 
@@ -185,7 +185,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
                 variant="outlined"
                 placeholder="Post a comment..."
                 fullWidth
-                value={comment}
+                value={text}
                 onChange={handleCommentChange}
                 sx={styles.textField}
               />

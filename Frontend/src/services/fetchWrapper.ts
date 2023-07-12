@@ -23,10 +23,9 @@ const get = async (url: string, token?: string | undefined) => {
   return handleResponse(await axiosInstance(url, requestOptions));
 };
 
-const post = async <T>(url: string, data: T, headers: any) => {
+const post = async <T>(url: string, data: T) => {
   const requestOptions: RequestOptions<T> = {
     method: "post",
-    headers: { ...headers },
     data,
   };
   return handleResponse(await axiosInstance(url, requestOptions));

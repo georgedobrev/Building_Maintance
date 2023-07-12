@@ -14,8 +14,7 @@ const apiService = {
     try {
       const response = await fetchWrapper.post<CreateUser>(
         config.register_manager,
-        manager,
-        {}
+        manager
       );
       return response;
     } catch (error) {
@@ -39,8 +38,7 @@ const apiService = {
     try {
       const response = await fetchWrapper.post<Notification>(
         config.create_announcement,
-        notification,
-        {}
+        notification
       );
       return response;
     } catch (error) {
@@ -69,8 +67,7 @@ const apiService = {
     try {
       const response = await fetchWrapper.post(
         config.edit_announcement(announcementId),
-        token,
-        {}
+        token
       );
       return response;
     } catch (error) {}
@@ -86,10 +83,6 @@ const apiService = {
         config.add_comment(announcementId),
         {
           text: comment,
-        },
-        {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         }
       );
       return response;
