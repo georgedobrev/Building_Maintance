@@ -7,13 +7,15 @@ const login = async (body: User) => {
   try {
     const response = await fetchWrapper.post<User>(
       `${config.baseURL}${config.login}`,
-      body
+      body,
+      {}
     );
     return response;
   } catch (error) {
     throw error;
   }
 };
+
 const getUserRole = async (token: string) => {
   const response = await fetchWrapper.get(
     `${config.baseURL}${config.get_user_role}`,
@@ -25,7 +27,8 @@ const getUserRole = async (token: string) => {
 const registerUser = async (body: RegisterUser) => {
   const response = await fetchWrapper.post<RegisterUser>(
     `${config.baseURL}${config.register_user}`,
-    body
+    body,
+    {}
   );
   return response.data;
 };

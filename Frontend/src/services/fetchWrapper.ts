@@ -23,10 +23,10 @@ const get = async (url: string, token?: string) => {
   return handleResponse(await axiosInstance(url, requestOptions));
 };
 
-const post = async <T>(url: string, data: T) => {
+const post = async <T>(url: string, data: T, headers: any) => {
   const requestOptions: RequestOptions<T> = {
     method: "post",
-    headers: { "Content-Type": "application/json" },
+    headers: { ...headers },
     data,
   };
   return handleResponse(await axiosInstance(url, requestOptions));

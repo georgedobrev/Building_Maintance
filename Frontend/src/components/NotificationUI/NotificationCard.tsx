@@ -90,22 +90,28 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
     };
   };
 
-  const handleSendClick = () => {
+  const handleSendClick = async () => {
     if (comment.trim() === "") {
       setCommentError(true);
       return;
     }
-
-    dispatch(
-      addComment({
-        id: Date.now(),
-        notificationId: id,
-        text: comment,
-        commenter: "currentUser",
-      })
-    );
-    setComment("");
-    setCommentError(false);
+    try {
+      const announcementId = id;
+      console.log(comment);
+      console.log(id);
+      console.log(token);
+      const response = await apiService.postComment(
+        announcementId,
+        token,
+        comment
+      );
+      if (response) {
+        setComment("");
+        setCommentError(false);
+      }
+    } catch (error) {
+      console.error("Error while posting the comment: ", error);
+    }
   };
 
   const handleDeleteComment = (commentId: number) => {
