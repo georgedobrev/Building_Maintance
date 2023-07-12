@@ -15,10 +15,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class CommentRequest {
 
+    String token;
+
     @NotBlank(message = "comment information cannot be empty.")
     @NotEmpty
     private String text;
 
-    private Long notificationId;
+
 
 }
