@@ -16,4 +16,5 @@ export const config = {
     `notification/delete/${announcementId}`,
   edit_announcement: (announcementId: number) =>
     `notification/edit/${announcementId}`,
+  add_comment: (announcementId: number) => `comment/send/${announcementId}`,
 };

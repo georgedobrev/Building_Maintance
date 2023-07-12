@@ -64,6 +64,17 @@ const apiService = {
       return response;
     } catch (error) {}
   },
+  postComment: async (announcementId: number) => {
+    try {
+      const response = await fetchWrapper.post(
+        config.add_comment(announcementId),
+        token
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
   getNotificationsByBuildingId: async () => {
     const buildingId: string | undefined =
       localStorage.getItem("buildingId") || undefined;
@@ -86,7 +97,6 @@ const apiService = {
       throw error;
     }
   },
-  postComment: async () => {},
   getUnitByBuildingId: async () => {
     const buildingId: string | undefined =
       localStorage.getItem("buildingId") || undefined;
