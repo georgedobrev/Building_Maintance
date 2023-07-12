@@ -52,6 +52,7 @@ const apiService = {
     token: string | undefined
   ) => {
     try {
+      console.log(token);
       const response = await fetchWrapper.delete(
         config.delete_announcement(announcementId),
         token
@@ -61,7 +62,10 @@ const apiService = {
       console.error(error);
     }
   },
-  editAnnouncement: async (announcementId: number, token: string) => {
+  editAnnouncement: async (
+    announcementId: number,
+    token: string | undefined
+  ) => {
     try {
       const response = await fetchWrapper.post(
         config.edit_announcement(announcementId),
@@ -74,9 +78,10 @@ const apiService = {
   postComment: async (
     announcementId: number,
     comment: string,
-    token: string
+    token: string | undefined
   ) => {
     try {
+      console.log(token);
       const response = await fetchWrapper.post(
         config.add_comment(announcementId),
         {
@@ -84,7 +89,7 @@ const apiService = {
         },
         {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Assuming a Bearer token, adjust according to your token type
+          Authorization: `Bearer ${token}`,
         }
       );
       return response;

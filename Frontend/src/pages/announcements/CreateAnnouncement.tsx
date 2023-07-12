@@ -76,9 +76,7 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
     navigate("/announcements");
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,

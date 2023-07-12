@@ -59,7 +59,7 @@ const SignInSide = () => {
         };
         getUserBuildingId();
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.response?.status === 400) {
         setErrorMessage("Invalid Email or Password");
       } else {

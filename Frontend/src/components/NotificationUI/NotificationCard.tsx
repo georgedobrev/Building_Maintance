@@ -21,11 +21,7 @@ import {
   ModeEditOutlineOutlinedIcon,
   CheckCircleOutlineOutlinedIcon,
 } from "./notificationIcons";
-import {
-  addComment,
-  deleteComment,
-  editComment,
-} from "../../store/comment/commentSlice";
+import { deleteComment, editComment } from "../../store/comment/commentSlice";
 import { Comment } from "../../store/comment/commentTypes";
 import { RootState } from "../../store/store";
 import { NotificationCardProps } from "./notificationCardProps";
@@ -88,6 +84,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
         const response = await apiService.editAnnouncement(id, token);
       } catch (error) {}
     };
+    editAnnouncement();
   };
 
   const handleSendClick = async () => {
@@ -97,13 +94,15 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
     }
     try {
       const announcementId = id;
-      console.log(comment);
-      console.log(id);
-      console.log(token);
+      console.log({
+        announcementId,
+        comment,
+        token,
+      });
       const response = await apiService.postComment(
         announcementId,
-        token,
-        comment
+        comment,
+        token
       );
       if (response) {
         setComment("");
