@@ -32,7 +32,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/**").fullyAuthenticated()
                 .and()
                 .csrf().disable()
-                .cors().and()
+                .cors().disable()
               //  .authorizeRequests().anyRequest().permitAll()
                // .and()
                 .oauth2Login().and().build();
