@@ -33,7 +33,10 @@ public class CommentService {
 
     public Comment sendComment(CommentRequest commentRequest, Long id) throws Exception {
 
-        String email =   jwtService.getEmail(commentRequest.getToken());
+        System.out.println("token:" + commentRequest.getToken());
+        System.out.println(commentRequest.getText());
+
+        String email =  jwtService.getEmail(commentRequest.getToken());
         User authUser = userRepository.getUserByEmail(email);
 
         Notification notification = notificationRepository.findById(id)

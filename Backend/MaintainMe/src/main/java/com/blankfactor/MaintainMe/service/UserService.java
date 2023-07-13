@@ -67,10 +67,8 @@ public class UserService {
         role.setId(2L);
 
         UserRoleBuilding userRoleBuilding = new UserRoleBuilding(user, role, savedBuilding);
-
         userRoleBuildingRepository.save(userRoleBuilding);
-
-
+        authenticate(user);
     }
 
     @Transactional
@@ -82,7 +80,7 @@ public class UserService {
         user.setFirstName(managerCreateUser.getFirstName());
         user.setLastName(managerCreateUser.getLastName());
 
-        Building building = buildingRepository.findById(managerCreateUser.getBuildingID()).orElse(null);
+        Building building = buildingRepository.findById(managerCreateUser.getBuildingId()).orElse(null);
         Role role = new Role();
         role.setId(1L);
         user.setUnit(unitRepository.findById(managerCreateUser.getUnitId()).orElse(null));
@@ -96,21 +94,25 @@ public class UserService {
         String subject;
         String body;
 
+        String password = RandomPassword.generateRandomPassword();
+        user.setPassword(encryptionService.encryptPassword(password));
+
         if (isGoogleMail) {
             user.setPassword(RandomPassword.generateRandomPassword());
             subject = "Account Registration - Login Credentials";
             body = "Hello " + user.getFirstName() + ",\n\n"
                     + "Your account has been created. Here are your credentials:\n"
-                    + "Password: " + user.getPassword() + "\n\n"
+                    + "Password: " + password + "\n\n"
                     + "Your account has been created. You can log in to the app using your Google profile or Your Credentials.\n"
                     + "Click the following link to log in: " + "https://example.com/google-login";
         } else {
-            user.setPassword(RandomPassword.generateRandomPassword());
+
+
             // Send email with a link to login and the credentials (username and randomly generated password)
             subject = "Account Registration - Login Credentials";
             body = "Hello " + user.getFirstName() + ",\n\n"
                     + "Your account has been created. Here are your credentials:\n"
-                    + "Password: " + user.getPassword() + "\n\n"
+                    + "Password: " + password + "\n\n"
                     + "Please login and change your password for security reasons.";
         }
 
@@ -201,7 +203,6 @@ public class UserService {
     public Map<String, Object> getRoleInBuilding() {
 
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
 
         Map<String, Object> roleInBuilding = userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
         return roleInBuilding;
