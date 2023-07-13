@@ -27,6 +27,7 @@ const post = async <T>(url: string, data: T) => {
   const requestOptions: RequestOptions<T> = {
     method: "post",
     data,
+    headers: { "Content-Type": "application/json" },
   };
   return handleResponse(await axiosInstance(url, requestOptions));
 };

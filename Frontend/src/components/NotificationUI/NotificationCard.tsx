@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
@@ -21,7 +21,11 @@ import {
   ModeEditOutlineOutlinedIcon,
   CheckCircleOutlineOutlinedIcon,
 } from "./notificationIcons";
-import { deleteComment, editComment } from "../../store/comment/commentSlice";
+import {
+  addComment,
+  deleteComment,
+  editComment,
+} from "../../store/comment/commentSlice";
 import { Comment } from "../../store/comment/commentTypes";
 import { RootState } from "../../store/store";
 import { NotificationCardProps } from "./notificationCardProps";
@@ -36,6 +40,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
 }) => {
   const [showMessageInput, setShowMessageInput] = useState(false);
   const [text, setText] = useState("");
+  const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [editCommentId, setEditCommentId] = useState<null | number>(null);
   const [editCommentText, setEditCommentText] = useState("");
@@ -74,6 +79,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       } catch (error) {
         console.error(error);
       }
+      window.location.reload();
     };
     deleteAnnouncement();
   };
@@ -112,6 +118,21 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       console.error("Error while posting the comment: ", error);
     }
   };
+
+  useEffect(() => {
+    const getAnnouncementComments = async () => {
+      const announcementId = id;
+      try {
+        const response = await apiService.getComment(announcementId);
+        response.data.forEach((comment) => {
+          console.log(comment);
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getAnnouncementComments();
+  }, [id]);
 
   const handleDeleteComment = (commentId: number) => {
     dispatch(deleteComment(commentId));

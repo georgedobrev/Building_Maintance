@@ -18,30 +18,32 @@ import java.util.Arrays;
 
 @Configuration
 public class WebSecurityConfig {
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.cors().and().authorizeRequests().anyRequest().permitAll();
-//        return http.build();
-//    }
-
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-       return http
-                .authorizeRequests()
-                .requestMatchers("/**").fullyAuthenticated()
-                .and()
-                .csrf().disable()
-                .cors().and()
-              //  .authorizeRequests().anyRequest().permitAll()
-               // .and()
-                .oauth2Login().and().build();
+    public SecurityFilterChain filterChain(HttpSecurity http,CorsConfigurationSource corsConfigurationSource) throws Exception {
+        http.csrf().disable();
+        http.cors().configurationSource(corsConfigurationSource);
+        http.oauth2Login();
+        return http.build();
 
     }
 
+//    @Bean
+//    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+//       return http
+//                .authorizeRequests()
+//                .requestMatchers("/**").fullyAuthenticated()
+//                .and()
+//                .csrf().disable()
+//                .cors().and()
+//                .authorizeRequests().anyRequest().permitAll()
+//                .and()
+//                .oauth2Login().and().build();
+//
+//    }
+
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:5175", "http://127.0.0.1:5173", "http://localhost:5173")); // Allow specific origins

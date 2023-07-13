@@ -54,9 +54,9 @@ const SignInSide = () => {
               "buildingId",
               userBuildingId.data[0].buildingId
             );
-            navigate("/");
           } catch (error) {}
         };
+        navigate("/");
         getUserBuildingId();
       }
     } catch (error: any) {

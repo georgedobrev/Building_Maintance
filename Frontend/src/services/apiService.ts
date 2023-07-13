@@ -25,8 +25,7 @@ const apiService = {
     try {
       const response = await fetchWrapper.post<Building>(
         config.add_building,
-        building,
-        {}
+        building
       );
       return response;
     } catch (error) {
@@ -45,6 +44,7 @@ const apiService = {
       throw error;
     }
   },
+
   deleteAnnouncement: async (
     announcementId: number,
     token: string | undefined
@@ -78,17 +78,35 @@ const apiService = {
     token: string | undefined
   ) => {
     try {
-      console.log(token);
+      console.log("Token before post request: ", token);
       const response = await fetchWrapper.post(
         config.add_comment(announcementId),
         {
           text: comment,
+          token,
         }
       );
       return response;
     } catch (error) {
       throw error;
     }
+  },
+
+  getComment: async (announcementId: number) => {
+    try {
+      const response = await fetchWrapper.get(
+        config.get_announcements_comments(announcementId)
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  sendGoogleToken: async () => {
+    try {
+      const response = await fetchWrapper.post(config.google_login);
+    } catch (error) {}
   },
 
   getNotificationsByBuildingId: async () => {

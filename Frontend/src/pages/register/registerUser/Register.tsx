@@ -104,6 +104,7 @@ const Register: React.FC = () => {
     };
     const registerUser = async () => {
       try {
+        console.log(userValues);
         const response = await authService.registerUser(newUser);
       } catch (error) {}
     };

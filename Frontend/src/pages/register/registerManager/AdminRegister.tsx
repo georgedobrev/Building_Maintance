@@ -97,6 +97,7 @@ const AdminRegister: React.FC = () => {
       },
     };
     try {
+      console.log(manager);
       await apiService.registerManager(manager);
       navigate("/");
     } catch (error) {}
