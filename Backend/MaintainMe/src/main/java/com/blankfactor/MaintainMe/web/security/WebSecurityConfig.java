@@ -1,5 +1,4 @@
 package com.blankfactor.MaintainMe.web.security;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,20 +11,19 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfiguration;
-
+import java.security.Security;
 import java.util.Arrays;
-
 @Configuration
 public class WebSecurityConfig {
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable();
+//        http.cors().and().authorizeRequests().anyRequest().permitAll();
+//        return http.build();
+//    }
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.cors().and().authorizeRequests().anyRequest().permitAll();
-        return http.build();
-    }
-
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+       return http
                 .authorizeRequests()
                 .requestMatchers("/**").fullyAuthenticated()
                 .and()
@@ -33,10 +31,8 @@ public class WebSecurityConfig {
                 .cors().and()
               //  .authorizeRequests().anyRequest().permitAll()
                // .and()
-                .oauth2Login(Customizer.withDefaults());
+                .oauth2Login().and().build();
     }
-
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -47,5 +43,4 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
