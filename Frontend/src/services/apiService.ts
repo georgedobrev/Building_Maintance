@@ -25,7 +25,8 @@ const apiService = {
     try {
       const response = await fetchWrapper.post<Building>(
         config.add_building,
-        building
+        building,
+        {}
       );
       return response;
     } catch (error) {
@@ -44,8 +45,12 @@ const apiService = {
       throw error;
     }
   },
-  deleteAnnouncement: async (announcementId: number, token: string) => {
+  deleteAnnouncement: async (
+    announcementId: number,
+    token: string | undefined
+  ) => {
     try {
+      console.log(token);
       const response = await fetchWrapper.delete(
         config.delete_announcement(announcementId),
         token
@@ -55,7 +60,10 @@ const apiService = {
       console.error(error);
     }
   },
-  editAnnouncement: async (announcementId: number, token: string) => {
+  editAnnouncement: async (
+    announcementId: number,
+    token: string | undefined
+  ) => {
     try {
       const response = await fetchWrapper.post(
         config.edit_announcement(announcementId),
@@ -64,17 +72,25 @@ const apiService = {
       return response;
     } catch (error) {}
   },
-  postComment: async (announcementId: number) => {
+  postComment: async (
+    announcementId: number,
+    comment: string,
+    token: string | undefined
+  ) => {
     try {
+      console.log(token);
       const response = await fetchWrapper.post(
         config.add_comment(announcementId),
-        token
+        {
+          text: comment,
+        }
       );
       return response;
     } catch (error) {
       throw error;
     }
   },
+
   getNotificationsByBuildingId: async () => {
     const buildingId: string | undefined =
       localStorage.getItem("buildingId") || undefined;

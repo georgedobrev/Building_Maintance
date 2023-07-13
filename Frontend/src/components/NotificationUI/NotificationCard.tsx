@@ -21,11 +21,7 @@ import {
   ModeEditOutlineOutlinedIcon,
   CheckCircleOutlineOutlinedIcon,
 } from "./notificationIcons";
-import {
-  addComment,
-  deleteComment,
-  editComment,
-} from "../../store/comment/commentSlice";
+import { deleteComment, editComment } from "../../store/comment/commentSlice";
 import { Comment } from "../../store/comment/commentTypes";
 import { RootState } from "../../store/store";
 import { NotificationCardProps } from "./notificationCardProps";
@@ -39,7 +35,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   date,
 }) => {
   const [showMessageInput, setShowMessageInput] = useState(false);
-  const [comment, setComment] = useState("");
+  const [text, setText] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [editCommentId, setEditCommentId] = useState<null | number>(null);
   const [editCommentText, setEditCommentText] = useState("");
@@ -88,24 +84,33 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
         const response = await apiService.editAnnouncement(id, token);
       } catch (error) {}
     };
+    editAnnouncement();
   };
 
-  const handleSendClick = () => {
-    if (comment.trim() === "") {
+  const handleSendClick = async () => {
+    if (text.trim() === "") {
       setCommentError(true);
       return;
     }
-
-    dispatch(
-      addComment({
-        id: Date.now(),
-        notificationId: id,
-        text: comment,
-        commenter: "currentUser",
-      })
-    );
-    setComment("");
-    setCommentError(false);
+    try {
+      const announcementId = id;
+      console.log({
+        announcementId,
+        text,
+        token,
+      });
+      const response = await apiService.postComment(
+        announcementId,
+        text,
+        token
+      );
+      if (response) {
+        setText("");
+        setCommentError(false);
+      }
+    } catch (error) {
+      console.error("Error while posting the comment: ", error);
+    }
   };
 
   const handleDeleteComment = (commentId: number) => {
@@ -146,7 +151,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setComment(e.target.value);
+    setText(e.target.value);
     setCommentError(false);
   };
 
@@ -180,7 +185,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
                 variant="outlined"
                 placeholder="Post a comment..."
                 fullWidth
-                value={comment}
+                value={text}
                 onChange={handleCommentChange}
                 sx={styles.textField}
               />

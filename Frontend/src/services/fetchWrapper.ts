@@ -13,7 +13,7 @@ type RequestOptions<T> = {
   data?: T;
 };
 
-const get = async (url: string, token?: string) => {
+const get = async (url: string, token?: string | undefined) => {
   const requestOptions: RequestOptions<undefined> = {
     method: "get",
     headers: token
@@ -26,14 +26,13 @@ const get = async (url: string, token?: string) => {
 const post = async <T>(url: string, data: T) => {
   const requestOptions: RequestOptions<T> = {
     method: "post",
-    headers: { "Content-Type": "application/json" },
     data,
   };
   return handleResponse(await axiosInstance(url, requestOptions));
 };
 
-const _delete = async (url: string, token: string) => {
-  const requestOptions: RequestOptions<{ token: string }> = {
+const _delete = async (url: string, token: string | undefined) => {
+  const requestOptions: RequestOptions<{ token: string | undefined }> = {
     method: "delete",
     headers: { "Content-Type": "application/json" },
     data: { token },

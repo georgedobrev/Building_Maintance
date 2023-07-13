@@ -70,15 +70,14 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
         ...formData,
         token,
       });
+      // window.location.reload();
     } catch (error) {}
 
     handleClose();
-    navigate("/announcements");
+    navigate("/");
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,

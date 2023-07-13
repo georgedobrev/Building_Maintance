@@ -21,6 +21,6 @@ public class CommentRequest {
     @NotEmpty
     private String text;
 
-    private Long notificationId;
+
 
 }
