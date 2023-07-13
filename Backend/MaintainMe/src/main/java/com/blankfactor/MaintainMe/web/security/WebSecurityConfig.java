@@ -13,19 +13,21 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.security.Security;
 import java.util.Arrays;
 
 @Configuration
 public class WebSecurityConfig {
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.cors().and().authorizeRequests().anyRequest().permitAll();
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable();
+//        http.cors().and().authorizeRequests().anyRequest().permitAll();
+//        return http.build();
+//    }
 
-    protected void configure(HttpSecurity http) throws Exception {
-        http
+    @Bean
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+       return http
                 .authorizeRequests()
                 .requestMatchers("/**").fullyAuthenticated()
                 .and()
@@ -33,7 +35,8 @@ public class WebSecurityConfig {
                 .cors().and()
               //  .authorizeRequests().anyRequest().permitAll()
                // .and()
-                .oauth2Login(Customizer.withDefaults());
+                .oauth2Login().and().build();
+
     }
 
 

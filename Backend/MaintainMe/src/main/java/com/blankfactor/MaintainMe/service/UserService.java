@@ -142,8 +142,6 @@ public class UserService {
     public void updateResetPasswordToken(String token, String email) throws Exception {
 
         PasswordResetToken passwordResetToken = new PasswordResetToken();
-
-
         User user = localUserRepository.getUserByEmail(email);
         resetTokenRepository.deleteAllByUser_Id(user.getId());
 
@@ -178,8 +176,8 @@ public class UserService {
 
         PasswordResetToken passwordResetToken = resetTokenRepository.getPasswordResetTokenByEmail(user.getEmail());
         resetTokenRepository.delete(passwordResetToken);
-
         localUserRepository.save(user);
+
     }
 
     private String getEmailFromToken(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
@@ -201,9 +199,7 @@ public class UserService {
 
 
     public Map<String, Object> getRoleInBuilding() {
-
         User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
         Map<String, Object> roleInBuilding = userRoleBuildingRepository.findRoleAndBuildingByUserId(authUser.getId());
         return roleInBuilding;
     }
