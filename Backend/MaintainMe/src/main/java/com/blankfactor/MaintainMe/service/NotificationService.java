@@ -37,7 +37,7 @@ public class NotificationService {
         Building building =  buildingRepository.findById(notificationRequest.getBuildingId())
                 .orElseThrow(() -> new Exception("Building not found"));
 
-        String email =   jwtService.getEmail(notificationRequest.getToken());
+        String email =  jwtService.getEmail(notificationRequest.getToken());
         User authUser = userRepository.getUserByEmail(email);
 
         Date date = new Date();
