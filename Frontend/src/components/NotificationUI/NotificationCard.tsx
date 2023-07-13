@@ -99,17 +99,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       return;
     }
     try {
-      const announcementId = id;
-      console.log({
-        announcementId,
-        text,
-        token,
-      });
-      const response = await apiService.postComment(
-        announcementId,
-        text,
-        token
-      );
+      const response = await apiService.postComment(id, text, token);
       if (response) {
         setText("");
         setCommentError(false);
@@ -123,10 +113,12 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
     const getAnnouncementComments = async () => {
       const announcementId = id;
       try {
-        const response = await apiService.getComment(announcementId);
-        response.data.forEach((comment) => {
-          console.log(comment);
-        });
+        const response = await apiService.getComments(announcementId);
+        if (response) {
+          response.data.forEach((comment) => {
+            console.log(comment);
+          });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -176,6 +168,16 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
     setCommentError(false);
   };
 
+  const formatDateTime = (dateTimeString: string) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    const dateTime = new Date(dateTimeString);
+    return dateTime.toLocaleString(undefined, options);
+  };
+
   return (
     <Box sx={styles.outerBox}>
       <Card sx={styles.card}>
@@ -185,7 +187,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
             component="div"
             sx={styles.subtitleTypography}
           >
-            {date}
+            {formatDateTime(date)}
           </Typography>
 
           <Typography variant="h5" component="div" sx={styles.h5Typography}>

@@ -70,11 +70,11 @@ const CreateAnnouncement: FC<CreateAnnouncementProps> = ({ open, setOpen }) => {
         ...formData,
         token,
       });
-      // window.location.reload();
+      window.location.reload();
+      navigate("/announcements");
     } catch (error) {}
 
     handleClose();
-    navigate("/");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -79,15 +79,18 @@ const Notifications: FC<NotificationProps> = ({ currentUser }) => {
     <>
       <CssBaseline />
       <Container maxWidth="sm">
-        {notifications.map((notification) => (
-          <NotificationCard
-            id={notification.id}
-            key={notification.id}
-            title={notification.title}
-            description={notification.description}
-            date={notification.date}
-          />
-        ))}
+        {notifications
+          .slice()
+          .reverse()
+          .map((notification) => (
+            <NotificationCard
+              id={notification.id}
+              key={notification.id}
+              title={notification.title}
+              description={notification.description}
+              date={notification.date}
+            />
+          ))}
       </Container>
     </>
   );

@@ -17,6 +17,8 @@ export const config = {
   edit_announcement: (announcementId: number) =>
     `notification/edit/${announcementId}`,
   add_comment: (announcementId: number) => `comment/send/${announcementId}`,
+  get_comments: (announcementId: number) =>
+    `comment/notification/${announcementId}`,
   get_announcements_comments: (announcementId: number) =>
     `comment/notification/${announcementId}`,
   google_login: "login/oauth2/code/google",
