@@ -21,7 +21,7 @@ public class ProfileController {
         return profileService.getInfo(request);
     }
 
-    @PostMapping("/editInfo")
+    @PostMapping("/edit")
     public ResponseEntity<User> editInfo(@RequestBody ProfileEditRequest request){
         return ResponseEntity.ok(profileService.editInfo(request));
     }

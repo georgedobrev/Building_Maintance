@@ -27,7 +27,7 @@ public class ProfileService {
 
 
     public UserInfoResponse getInfo(ProfileInfoRequest request){
-        
+
         String email =  jwtService.getEmail(request.getToken());
         User authUser = userRepository.getUserByEmail(email);
 
@@ -42,7 +42,8 @@ public class ProfileService {
     @Transactional(rollbackFor = Exception.class)
     public User editInfo( ProfileEditRequest request){
 
-        User authUser = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        String email =  jwtService.getEmail(request.getToken());
+        User authUser = userRepository.getUserByEmail(email);
 
         authUser.setEmail(request.getEmail());
         authUser.setPassword(encryptionService.encryptPassword(request.getPassword()));
