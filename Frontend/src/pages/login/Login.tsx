@@ -43,26 +43,30 @@ const SignInSide = () => {
     };
     try {
       const response = await authService.login(user);
-      localStorage.setItem("token", response.data.jwt);
-      localStorage.setItem("userId", response.data.user.id);
-      const token = localStorage.getItem("token");
-      if (token) {
-        const getUserBuildingId = async () => {
-          try {
-            const userBuildingId = await apiService.getManagedBuildings();
-            localStorage.setItem(
-              "buildingId",
-              userBuildingId.data[0].buildingId
-            );
-          } catch (error) {}
-        };
+      const token = response.data.jwt;
+      const userId = response.data.user.id;
+
+      try {
+        const userBuildingIdResponse = await apiService.getManagedBuildings();
+        const buildingId = userBuildingIdResponse.data[0].buildingId;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("buildingId", buildingId);
+
+        console.log("Token: ", token);
+        console.log("userId: ", userId);
+        console.log("buildingId: ", buildingId);
+
         navigate("/");
-        getUserBuildingId();
+      } catch (error) {
+        console.error("Failed to get buildingId:", error);
       }
     } catch (error: any) {
       if (error.response?.status === 400) {
         setErrorMessage("Invalid Email or Password");
       } else {
+        console.error("Login failed:", error);
       }
     }
   };

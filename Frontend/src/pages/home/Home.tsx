@@ -14,6 +14,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = () => {
   const token = localStorage.getItem("token");
   const dispatch = useDispatch();
+  // window.location.reload();
 
   if (token) {
     const getRole = async () => {
@@ -26,17 +27,17 @@ const Home: React.FC<HomeProps> = () => {
     };
 
     getRole();
+
+    const getRelatedBuildingId = async () => {
+      try {
+        const response = await apiService.getManagedBuildings();
+        localStorage.setItem("buildingId", response.data[0].buildingId);
+        console.log(response);
+      } catch (error) {}
+    };
+
+    getRelatedBuildingId();
   }
-
-  const getRelatedBuildingId = async () => {
-    try {
-      const response = await apiService.getManagedBuildings();
-      localStorage.setItem("buildingId", response.data[0].buildingId);
-      console.log(response);
-    } catch (error) {}
-  };
-
-  getRelatedBuildingId();
 
   return (
     <div
