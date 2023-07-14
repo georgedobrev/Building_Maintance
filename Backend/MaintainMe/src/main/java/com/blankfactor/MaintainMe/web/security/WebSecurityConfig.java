@@ -18,26 +18,27 @@ import java.util.Arrays;
 
 @Configuration
 public class WebSecurityConfig {
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.cors().and().authorizeRequests().anyRequest().permitAll();
-//        return http.build();
-//    }
-
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-       return http
-                .authorizeRequests()
-                .requestMatchers("/**").fullyAuthenticated()
-                .and()
-                .csrf().disable()
-                .cors().disable()
-              //  .authorizeRequests().anyRequest().permitAll()
-               // .and()
-                .oauth2Login().and().build();
-
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.cors().and().authorizeRequests().anyRequest().permitAll();
+        return http.build();
     }
+
+//    @Bean
+//    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+//       return http
+//                .authorizeRequests()
+//                .requestMatchers("/**").fullyAuthenticated()
+//                .and()
+//                .csrf().disable()
+//                .cors().disable()
+//              //  .authorizeRequests().anyRequest().permitAll()
+//               // .and()
+//                .oauth2Login().and()
+//               .build();
+//
+//    }
 
 
     @Bean

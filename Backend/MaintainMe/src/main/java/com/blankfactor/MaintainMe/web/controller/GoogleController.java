@@ -21,7 +21,7 @@ public class GoogleController {
 
     @GetMapping()
     public ResponseEntity<User> getCurrentUser(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
-        return ResponseEntity.ok( userService.getCurrentUser(oAuth2AuthenticationToken));
+        return ResponseEntity.ok(userService.getCurrentUser(oAuth2AuthenticationToken));
     }
 
 }

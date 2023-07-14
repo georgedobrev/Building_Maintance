@@ -1,6 +1,5 @@
 package com.blankfactor.MaintainMe.web.resource;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentRequest {
+public class PaymentHistoryRequest {
 
     private String token;
-    private Long invoiceId;
-    private Float payedAmount;
+
 }
